@@ -1,7 +1,7 @@
 const { pipe } = require('ramda')
 const {
     zPos,
-    counterClockwise,
+    zNeg,
     down,
     up,
     left,
@@ -22,14 +22,14 @@ module.exports = {
     L: down(0, size),
     Li: up(0, size),
     F: zPos(0, size),
-    Fi: counterClockwise(0), size,
-    B: counterClockwise(last, size),
+    Fi: zNeg(0), size,
+    B: zNeg(last, size),
     Bi: zPos(last, size),
     E: right(1, size),
     Ei: left(1, size),
     M: down(1, size),
     Mi: up(1, size),
     S: zPos(1, size),
-    Si: counterClockwise(1, size)
+    Si: zNeg(1, size)
 
 }

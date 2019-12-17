@@ -1,7 +1,7 @@
 
 module.exports = {
     zPos: require('./zPos'),
-    counterClockwise: require('./counterClockwise'),
+    zNeg: require('./zNeg'),
     down: require('./down'),
     up: require('./up'),
     left: require('./left'),
