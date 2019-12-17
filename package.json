@@ -1,0 +1,36 @@
+{
+  "name": "rubik",
+  "version": "1.0.0",
+  "description": "Model of Rubik's Cube",
+  "main": "console/index.js",
+  "repository": "(later)",
+  "author": "Michael Hildebrand-Faust",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "start": "node ./src/console/index.js",
+    "test": "mocha 'src/**/*.test.js'"
+  },
+  "dependencies": {
+    "chalk": "^3.0.0",
+    "keypress": "^0.2.1",
+    "ramda": "^0.26.1"
+  },
+  "jest": {
+    "verbose": true,
+    "moduleDirectories": [
+      "node_modules",
+      "src"
+    ],
+    "transform": {
+      "^.+\\.js$": "babel-jest"
+    }
+  },
+  "devDependencies": {
+    "babel-jest": "^24.9.0",
+    "chai": "^4.2.0",
+    "jest": "^24.9.0",
+    "majestic": "^1.6.1",
+    "mocha": "^6.2.2"
+  }
+}
