@@ -1,13 +1,6 @@
-const {
-    zPos,
-    zNeg,
-    xPos,
-    xNeg,
-    yNeg,
-    yPos,
-} = require('../layerRotations')
+const { zPos, zNeg, xPos, xNeg, yNeg, yPos, } = require('../layerRotations')
 
-module.exports = {
+const fns = {
     up: yNeg(0, 3),
     up_inverted: yPos(0, 3),
     right: xNeg(2, 3),
@@ -19,5 +12,7 @@ module.exports = {
     front: zPos(0, 3),
     front_inverted: zNeg(0, 3),
     back: zNeg(2, 3),
-    back_inverted: zPos(2, 3)
+    back_inverted: zPos(2, 3),
 }
+
+const fnKeys = Object.keys(fns)

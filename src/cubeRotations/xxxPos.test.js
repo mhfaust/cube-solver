@@ -1,12 +1,12 @@
 const { expect } = require('chai')
-const south = require('./south')
+const xxxPos = require('./xxxPos')
 const { allUniqueTilesCube } = require('../test.utils')
 const { faceClockwise, faceCounterClockwise, face180 } = require('../cubeUtils')
 
-describe('south', () => {
+describe('xxxPos', () => {
     it('rotates a 3-cube in the x-positive direction correctly', () => {
         const initial = allUniqueTilesCube(3)
-        const transform = south(3)
+        const transform = xxxPos(3)
         const rotated = transform(initial)
 
         expect(rotated.top).to.deep.equal(face180('back')(initial))

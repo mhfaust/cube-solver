@@ -1,12 +1,12 @@
 const { U, Ui, D, Di, L, Li, R, Ri, B, Bi, F, Fi } = require('../layerRotations/advancedNotation')
 
 const {
-    north,
-    south,
-    east,
-    west,
-    tighten,
-    loosen,
+    xxxNeg,
+    xxxPos,
+    yyyPos,
+    yyyNeg,
+    zzzPos,
+    zzzNeg,
 } = require('../cubeRotations')
 
 
@@ -23,10 +23,10 @@ module.exports = (cubeSize) => ({
     B: Bi,
     f: F,
     F: Fi,
-    '0': north(cubeSize),
-    ')': south(cubeSize),
-    '-': east(cubeSize),
-    '_': west(cubeSize),
-    '=': tighten(cubeSize),
-    '+': loosen(cubeSize)
+    '0': xxxNeg(cubeSize),
+    ')': xxxPos(cubeSize),
+    '-': yyyPos(cubeSize),
+    '_': yyyNeg(cubeSize),
+    '=': zzzPos(cubeSize),
+    '+': zzzNeg(cubeSize)
 })

@@ -5,14 +5,14 @@ const { U, Ui, U2, R, Ri, L, Li, F, Fi, B, Bi, M, Mi, S, Si } = require('../laye
 const { xPos, xNeg, yNeg, yPos, zPos, counterWise } = require('./index')
 const { identity } = require('../cubeUtils')
 
-const { north, east } = require('../cubeRotations')
+const { xxxNeg, yyyPos } = require('../cubeRotations')
 const 
 
 superFlip = [
     Mi, U, Mi, U, Mi, U, Mi, U,
-    north(3), east(3),
+    xxxNeg(3), yyyPos(3),
     Mi, U, Mi, U, Mi, U, Mi, U,
-    north(3), east(3),
+    xxxNeg(3), yyyPos(3),
     Mi, U, Mi, U, Mi, U, Mi, U,
 ]
 

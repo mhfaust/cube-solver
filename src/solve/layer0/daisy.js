@@ -1,6 +1,7 @@
 const coloredEdges = require('./coloredEdges')
 const { equatorFaces, oppositeFaces } = require('../../constants')
 const { xNeg } = require('../../layerRotations')
+const { newSequence } = require('../sequence')
 
 const upLeft = xNeg(0)
 const upRight = xNeg(2)
@@ -19,19 +20,20 @@ const canPromoteteEdge = (col, cube) => {
 
 
 
+
 const isEdgeOnEquator = (edge) => equatorFacesSet.has(edge.face) && edge.row === 1 && edge.col !== 1
 
 const promoteAllEquatorialEdges = (cube) => {
-    let nextCube = cube
+
     const color = oppositeFaces[cube.top[1][1]]
 
-    sequence = []
+    sequence = newSequence(cube)
     
     coloredEdges(color, top)
         .filter(isEdgeOnEquator)
         .forEach(edge => {
-            while(!canPromoteteEdge(edge.col, nextCube)){
-                nextCube
+            while(!canPromoteteEdge(edge.col, sequence.result)){
+                
             }
     })
 }

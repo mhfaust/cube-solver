@@ -1,8 +1,8 @@
 module.exports = {
-    tighten: require('./tighten'),
-    loosen: require('./loosen'),
-    north: require('./north'),
-    south: require('./south'),
-    east: require('./east'),
-    west: require('./west'),
+    zzzPos: require('./zzzPos'),
+    zzzNeg: require('./zzzNeg'),
+    xxxNeg: require('./xxxNeg'),
+    xxxPos: require('./xxxPos'),
+    yyyPos: require('./yyyPos'),
+    yyyNeg: require('./yyyNeg'),
 }
