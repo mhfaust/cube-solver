@@ -2,7 +2,7 @@ const { pipe } = require('ramda')
 const newCube = require('../newCube')
 const printCube = require('../console/printCube')
 const { U, Ui, U2, R, Ri, L, Li, F, Fi, B, Bi, M, Mi, S, Si } = require('../layerRotations/advancedNotation')
-const { xPos, up, left, right, zPos, counterWise } = require('./index')
+const { xPos, xNeg, left, right, zPos, counterWise } = require('./index')
 const { identity } = require('../cubeUtils')
 
 const { north, east } = require('../cubeRotations')
@@ -22,7 +22,7 @@ const step5 = [Ri, U, U, R, U, Ri, U, R, U]
 const step6 = [Ri, F, Ri, B, B, R, Fi, Ri, B, B, R, R]
 const step7 = [R, Ui, R, U, R, U, R, Ui, Ri, Ui, R, R]
 
-describe('up', () => {
+describe('xNeg', () => {
     it('rotates the front right face up correctly', () => {
         const cube = newCube(3)
         const transform = pipe(...superFlip, ...superFlip)
