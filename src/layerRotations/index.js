@@ -2,7 +2,7 @@
 module.exports = {
     zPos: require('./zPos'),
     zNeg: require('./zNeg'),
-    down: require('./down'),
+    xPos: require('./xPos'),
     up: require('./up'),
     left: require('./left'),
     right: require('./right'),

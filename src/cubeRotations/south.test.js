@@ -4,7 +4,7 @@ const { allUniqueTilesCube } = require('../test.utils')
 const { faceClockwise, faceCounterClockwise, face180 } = require('../cubeUtils')
 
 describe('south', () => {
-    it('rotates a 3-cube down correctly', () => {
+    it('rotates a 3-cube in the x-positive direction correctly', () => {
         const initial = allUniqueTilesCube(3)
         const transform = south(3)
         const rotated = transform(initial)
