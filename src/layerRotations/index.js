@@ -1,6 +1,6 @@
 
 module.exports = {
-    clockwise: require('./clockwise'),
+    zPos: require('./zPos'),
     counterClockwise: require('./counterClockwise'),
     down: require('./down'),
     up: require('./up'),

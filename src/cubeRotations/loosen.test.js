@@ -4,7 +4,7 @@ const { allUniqueTilesCube } = require('../test.utils')
 const { faceClockwise, faceCounterClockwise } = require('../cubeUtils')
 
 describe('loosen', () => {
-    it('rotates a 3-cube out/counter-clockwise correctly', () => {
+    it('rotates a 3-cube negatively on the z-axis correctly', () => {
         const initial = allUniqueTilesCube(3)
         const transform = loosen(3)
         const rotated = transform(initial)

@@ -1,5 +1,5 @@
 const {
-    clockwise,
+    zPos,
     counterClockwise,
     down,
     up,
@@ -16,8 +16,8 @@ module.exports = {
     up_inverted: down(0, 3),
     down: right(2, 3),
     down_inverted: left(2, 3),
-    front: clockwise(0, 3),
+    front: zPos(0, 3),
     front_inverted: counterClockwise(0, 3),
     back: counterClockwise(2, 3),
-    back_inverted: clockwise(2, 3)
+    back_inverted: zPos(2, 3)
 }

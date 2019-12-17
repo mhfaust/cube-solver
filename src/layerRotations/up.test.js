@@ -2,7 +2,7 @@ const { pipe } = require('ramda')
 const newCube = require('../newCube')
 const printCube = require('../console/printCube')
 const { U, Ui, U2, R, Ri, L, Li, F, Fi, B, Bi, M, Mi, S, Si } = require('../layerRotations/advancedNotation')
-const { down, up, left, right, clockwise, counterWise } = require('./index')
+const { down, up, left, right, zPos, counterWise } = require('./index')
 const { identity } = require('../cubeUtils')
 
 const { north, east } = require('../cubeRotations')
