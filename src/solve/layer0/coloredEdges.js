@@ -16,11 +16,11 @@ const coloredEdges = (color, cube) => {
         .reduce((accum, arr) => accum.concat(arr), [])
 }
 
-edgesBelongingOnTop = (cube) => {
-    const color = cube.top[1][1]
-    return coloredEdges(color, top)
-}
+// edgesBelongingOnTop = (cube) => {
+//     const color = cube.top[1][1]
+//     return coloredEdges(color, top)
+// }
 
 
 
-module.exports = { coloredEdges, edgesBelongingOnTop }
+module.exports = { coloredEdges }

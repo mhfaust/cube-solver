@@ -25,7 +25,7 @@ describe('coloredEdges', function(){
             "face": "bottom",
             "row": 2
         }]
-
+// const x = coloredEdges(G, cube)
         expect(coloredEdges(G, cube)).to.deep.equal(expected)
     })
 })

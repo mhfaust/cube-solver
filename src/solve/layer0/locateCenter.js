@@ -1,5 +1,7 @@
-const { faceHaving } = require('./index')
+const { faceNames } = require('../../constants')
 
-const locateCenter = (color, cube) => faceHaving(f => f[1][1] === color, cube)
+const locateCenter = (color, cube) => {
+    return faceNames.find(faceName => cube[faceName][1][1] === color)
+}
 
 module.exports = { locateCenter }
