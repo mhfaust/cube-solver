@@ -4,6 +4,6 @@ module.exports = {
     zNeg: require('./zNeg'),
     xPos: require('./xPos'),
     xNeg: require('./xNeg'),
-    left: require('./left'),
+    yNeg: require('./yNeg'),
     right: require('./right'),
 }
