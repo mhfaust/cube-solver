@@ -5,7 +5,7 @@ const {
     xPos,
     xNeg,
     yNeg,
-    right,
+    yPos,
 } = require('.')
 
 const size = 3
@@ -13,8 +13,8 @@ const last = size -1
 
 module.exports = {
     U: yNeg(0, size),
-    Ui: right(0, size),
-    D: right(last, size),
+    Ui: yPos(0, size),
+    D: yPos(last, size),
     Di: yNeg(last, size),
     U2: pipe(yNeg(0, size), yNeg(0, size)),
     R: xNeg(last, size),
@@ -25,7 +25,7 @@ module.exports = {
     Fi: zNeg(0), size,
     B: zNeg(last, size),
     Bi: zPos(last, size),
-    E: right(1, size),
+    E: yPos(1, size),
     Ei: yNeg(1, size),
     M: xPos(1, size),
     Mi: xNeg(1, size),

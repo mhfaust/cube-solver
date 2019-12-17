@@ -5,5 +5,5 @@ module.exports = {
     xPos: require('./xPos'),
     xNeg: require('./xNeg'),
     yNeg: require('./yNeg'),
-    right: require('./right'),
+    yPos: require('./yPos'),
 }
