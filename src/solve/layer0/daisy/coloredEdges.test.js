@@ -10,19 +10,19 @@ describe('coloredEdges', function(){
 
         const expected = [{
             "col": 1,
-            "face": "bottom",
+            "faceName": "bottom",
             "row": 0
         },{
             "col": 0,
-            "face": "bottom",
+            "faceName": "bottom",
             "row": 1
         },{
             "col": 2,
-            "face": "bottom",
+            "faceName": "bottom",
             "row": 1
         },{
             "col": 1,
-            "face": "bottom",
+            "faceName": "bottom",
             "row": 2
         }]
 // const x = coloredEdges(G, cube)

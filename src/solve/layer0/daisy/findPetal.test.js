@@ -13,15 +13,15 @@ describe('findPetal', function(){
             left: 'GGG-BBB-BBB',
             top: 'OWY-OWY-OWY',
             bottom: 'RRR-WYR-WYR' 
-          })
+        })
 
-          const edge = findPetal(initialCube)
+        const edge = findPetal(initialCube)
 
-          expect(edge).to.deep.equal({
-              face: 'front',
-              row: 1,
-              col: 2,
-          })
+        expect(edge).to.deep.equal({
+            faceName: 'front',
+            row: 1,
+            col: 2,
+        })
     })
 
     it('finds a bottom edge', function(){
@@ -36,7 +36,7 @@ describe('findPetal', function(){
         const edge = findPetal(initialCube)
 
         expect(edge).to.deep.equal({
-            face: 'bottom',
+            faceName: 'bottom',
             row: 2,
             col: 1,
         })

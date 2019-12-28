@@ -8,7 +8,7 @@ const coloredEdges = (color, cube) => {
         return edgeCoords
             .filter(([r,c]) => face[r][c] === color)
             .map(([row, col]) => ({
-                face: faceName,
+                faceName,
                 row,
                 col
             }))

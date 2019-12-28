@@ -13,7 +13,7 @@ function findPetal(cube){
     for(let faceName of equatorFaces){
         for(col of [0, 2]){
             if(cube[faceName][1][col] === petalColor){
-                return { face: faceName, row: 1, col }
+                return { faceName, row: 1, col }
             }
         }
     }
@@ -21,14 +21,14 @@ function findPetal(cube){
     for(let coords of bottomEdgeCoords){
         const { col, row } = coords
         if(cube.bottom[row][col] === petalColor){
-            return { face: 'bottom', row, col }
+            return { faceName: 'bottom', row, col }
         }
     }
     //north and south edges:
     for(let faceName of equatorFaces){
         for(let row of [0, 2]){
             if(cube[faceName][row][1] === petalColor){
-                return { face: faceName, row, col: 1 }
+                return { faceName, row, col: 1 }
             }
         }
     }

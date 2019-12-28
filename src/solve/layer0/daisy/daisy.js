@@ -13,7 +13,7 @@ const isDaisyDone = cube => {
 }
 
 const handler = (edge) => {
-    if(edge.face === BOTTOM){
+    if(edge.faceName === BOTTOM){
         return promoteBottomEdge
     }
     return {

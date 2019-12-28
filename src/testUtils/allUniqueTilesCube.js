@@ -2,9 +2,9 @@ const { nnArray } = require('../utils')
 
 const allUniqueTilesCube = () => ['front', 'back', 'right', 'left', 'top', 'bottom']
 .reduce(
-    (cube, face) => ({
+    (cube, faceName) => ({
         ...cube,
-        [face]: nnArray(3)((i,j) => `.${face}[${i}][${j}]`)
+        [faceName]: nnArray(3)((i,j) => `.${faceName}[${i}][${j}]`)
     })
     , {}
 )

@@ -26,7 +26,7 @@ describe('promoteEquatorialEdge', function(){
 
         // const sequenceBuilder = newSequenceBuilder(initialCube)
 
-        const { cube, sequence } = promoteEquatorialEdge(initialCube, { face: 'front', col: 2 })
+        const { cube, sequence } = promoteEquatorialEdge(initialCube, { faceName: 'front', col: 2 })
 
         expect(cube).to.deep.equal(expectedResultCube)
         expect(sequence).to.deep.equal(['up', 'right'])

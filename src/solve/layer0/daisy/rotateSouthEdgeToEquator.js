@@ -18,12 +18,12 @@ const canRotate = (faceName, cube) => {
     return displacements[faceName](cube) !== petalColor
 }
 
-const rotateSouthEdgeToEquator = (cube, { face }) => {
+const rotateSouthEdgeToEquator = (cube, { faceName }) => {
     const builder = newSequenceBuilder(cube)
-    while(!canRotate(face, builder.getCube())){
+    while(!canRotate(faceName, builder.getCube())){
         builder.push(up)
     }
-    builder.push(face)
+    builder.push(faceName)
 
     return {
         cube: builder.getCube(),

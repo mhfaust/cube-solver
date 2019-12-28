@@ -31,20 +31,20 @@ const promotions = {
     [RIGHT]: { 0: front_inverted, 2: back },
 }
 
-const canPromote = (col, face, cube ) => {
+const canPromote = (col, faceName, cube ) => {
     const color = cube.bottom[1][1]
-    if(cube[face][1][col] !== color){
+    if(cube[faceName][1][col] !== color){
        throw Error('Cube not valid for this algorithm.')
     }
-    return displacedTopEdge[face][col](cube) !== color  
+    return displacedTopEdge[faceName][col](cube) !== color  
 }
 
-const promoteEquatorialEdge = (initialCube, { face, col }) => {
+const promoteEquatorialEdge = (initialCube, { faceName, col }) => {
     const  builder = newSequenceBuilder(initialCube)
-    while(!canPromote(col, face, builder.getCube())){
+    while(!canPromote(col, faceName, builder.getCube())){
         builder.push(up)
     }
-    builder.push(promotions[face][col])
+    builder.push(promotions[faceName][col])
     return {
         cube: builder.getCube(),
         sequence: builder.getSequence()

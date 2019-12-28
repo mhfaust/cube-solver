@@ -1,11 +1,11 @@
 const solutionNotation = require('../../solutionNotation')
 
-const rotateNorthEdgeToEquator = (cube, { faceName: face }) => {
+const rotateNorthEdgeToEquator = (cube, { faceName }) => {
     console.log('rotateNorthEdgeToEquator')
     return {
-        cube: solutionNotation[face](cube),
+        cube: solutionNotation[faceName](cube),
         //this works because the convenience of the notation matching equatorial face-names
-        sequence: [face] 
+        sequence: [faceName] 
     }
 }
 
