@@ -1,6 +1,6 @@
 const { expect } = require('chai')
 const east = require('./yyyPos')
-const { allUniqueTilesCube } = require('../test.utils')
+const { allUniqueTilesCube } = require('../testUtils')
 const { faceClockwise, faceCounterClockwise }= require('../cubeUtils')
 
 const bottomRotatedClockwise = faceClockwise('bottom')

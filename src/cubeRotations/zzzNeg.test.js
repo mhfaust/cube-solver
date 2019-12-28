@@ -1,6 +1,6 @@
 const { expect } = require('chai')
 const zzzNeg = require('./zzzNeg')
-const { allUniqueTilesCube } = require('../test.utils')
+const { allUniqueTilesCube } = require('../testUtils')
 const { faceClockwise, faceCounterClockwise } = require('../cubeUtils')
 
 describe('zzzNeg', () => {

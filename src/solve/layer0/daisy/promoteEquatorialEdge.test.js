@@ -1,6 +1,6 @@
 const { expect } = require('chai')
 const { promoteEquatorialEdge } = require('./promoteEquatorialEdge')
-const { parseFaces } = require('../../../parseFaces')
+const { parseFaces } = require('../../../testUtils')
 
 describe('promoteEquatorialEdge', function(){
 

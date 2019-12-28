@@ -1,6 +1,6 @@
 const { expect } = require('chai')
 const { daisy } = require('./daisy')
-const { parseFaces } = require('../../../parseFaces')
+const { parseFaces } = require('../../../testUtils')
 const newCube = require('../../../newCube')
 
 describe('daisy', function(){
