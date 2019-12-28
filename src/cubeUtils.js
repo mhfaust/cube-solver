@@ -34,13 +34,6 @@ const cloneCube = (cube) => {
          return c 
     }, {} )
 }
-const replaceFace = (faceName, replacementFace, cube) => {
-    return {
-        ...cube,
-        [faceName]: replacementFace
-    }
-}
-
 const faceClockwise = curry((faceName, cube)  => {
     const srcFace = cube[faceName]
     return nArray(size(cube))(i => invert(col(i, srcFace)))
@@ -78,6 +71,21 @@ const oppositeFace = faceName => {
     return oppositeFaces[faceName]
 }
 
+const crossTiles = (face) => [
+    face[0][1], 
+    face[1][0], 
+    face[1][1], 
+    face[1][2], 
+    face[2][1], 
+]
+
+const crossEnds = (face) => [
+    face[0][1], 
+    face[1][0], 
+    face[1][2], 
+    face[2][1], 
+]
+
 const frontFace = face(FRONT)
 const rightFace = face(RIGHT)
 const backFace = face(BACK)
@@ -106,4 +114,6 @@ module.exports = {
     leftFace,
     topFace,
     bottomFace,
+    crossTiles,
+    crossEnds
 }

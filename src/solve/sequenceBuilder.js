@@ -10,10 +10,12 @@ class Sequence {
     push (fnName){
         this.stack.push(fnName)
         this.cube = solutionNotation[fnName](this.cube )
+        return this
     }
 
     concat(sequence){
         sequence.forEach(fnName => this.push(fnName))
+        return this
     }
 
     getSequence (){
