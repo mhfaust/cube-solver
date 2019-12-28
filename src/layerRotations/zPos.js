@@ -5,8 +5,8 @@ const {
     invert,
     replaceRow,
     replaceCol,
-    maybefaceClockwise,
-    maybefaceCounterClockwise,
+    clockwiseIf,
+    counterClockwiseIf,
     rightFace, 
     leftFace, 
     topFace, 
@@ -24,8 +24,8 @@ module.exports = (z, cubeSize = 3) => {
     const rowOppositeZ = row(zFromEnd)
 
     return nextCube({
-        front: maybefaceClockwise(z === 0),
-        back: maybefaceCounterClockwise(z === lastIndex),
+        front: clockwiseIf(z === 0),
+        back: counterClockwiseIf(z === lastIndex),
         right: replaceCol(z, [topFace, rowOppositeZ]),
         left: replaceCol(zFromEnd, [bottomFace, rowZ]),
         top: replaceRow(zFromEnd, [leftFace, colOppositeZ, invert]),

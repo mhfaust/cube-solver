@@ -6,7 +6,7 @@ module.exports = {
         .reduce(
             (cube, face) => ({
                 ...cube,
-                [face]: nnArray(3)((i,j) => `${face} face, row ${i}, column ${j}`)
+                [face]: nnArray(3)((i,j) => `.${face}[${i}][${j}]`)
             })
             , {}
         )

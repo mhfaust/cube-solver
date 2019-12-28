@@ -1,0 +1,54 @@
+const { FRONT, BACK, LEFT, RIGHT } = require('../../../constants')
+const { tile } = require('../../../cubeUtils')
+const { fnKeys } = require('../../solutionNotation')
+const { newSequenceBuilder } = require('../../sequenceBuilder')
+
+const {
+    front, 
+    front_inverted, 
+    back, 
+    back_inverted, 
+    left, 
+    left_inverted,
+    right,
+    right_inverted,
+    up,
+ } = fnKeys
+
+const topTile = tile('top')
+
+const displacedTopEdge = {
+    [FRONT]: { 0: topTile(1, 0), 2: topTile(1, 2) },
+    [BACK]: { 0: topTile(1, 2), 2: topTile(1, 0) },
+    [LEFT]: { 0: topTile(0, 1), 2: topTile(2, 1) },
+    [RIGHT]: { 0: topTile(2, 1), 2: topTile(0, 1) },
+}
+
+const promotions = {
+    [FRONT]: { 0: left_inverted, 2: right },
+    [BACK]: { 0: right_inverted,2:  left },
+    [LEFT]: { 0: back_inverted, 2: front },
+    [RIGHT]: { 0: front_inverted, 2: back },
+}
+
+const canPromote = (col, face, cube ) => {
+    const color = cube.bottom[1][1]
+    if(cube[face][1][col] !== color){
+       throw Error('Cube not valid for this algorithm.')
+    }
+    return displacedTopEdge[face][col](cube) !== color  
+}
+
+const promoteEquatorialEdge = (initialCube, { face, col }) => {
+    const  builder = newSequenceBuilder(initialCube)
+    while(!canPromote(col, face, builder.getCube())){
+        builder.push(up)
+    }
+    builder.push(promotions[face][col])
+    return {
+        cube: builder.getCube(),
+        sequence: builder.getSequence()
+    }
+}
+
+module.exports = { promoteEquatorialEdge }

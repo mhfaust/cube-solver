@@ -1,8 +1,8 @@
 const { expect } = require('chai')
 const { coloredEdges } = require('./coloredEdges')
 
-const newCube = require('../../newCube')
-const { R, G, B, Y, O, W } = require('../../constants').colors
+const newCube = require('../../../newCube')
+const { R, G, B, Y, O, W } = require('../../../constants').colors
 
 describe('coloredEdges', function(){
     it('finds all the edges belonging to a specific color', function(){

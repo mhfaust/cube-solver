@@ -2,8 +2,8 @@ const nextCube = require('../nextCube')
 const { 
     row,
     replaceRow,
-    maybefaceClockwise,
-    maybefaceCounterClockwise,
+    clockwiseIf,
+    counterClockwiseIf,
     frontFace, 
     rightFace, 
     backFace, 
@@ -21,8 +21,8 @@ module.exports = (y, cubeSize = 3) => {
         back: replaceRow(y, [leftFace, rowY]),
         right: replaceRow(y, [backFace, rowY]),
         left: replaceRow(y, [frontFace, rowY]),
-        top: maybefaceClockwise(y === 0),
-        bottom: maybefaceCounterClockwise(y === lastIndex),
+        top: clockwiseIf(y === 0),
+        bottom: counterClockwiseIf(y === lastIndex),
     })
 }
 

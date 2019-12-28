@@ -1,11 +1,14 @@
 const { curry, pipe } = require('ramda')
 const { nArray } = require('./utils')
+const { FRONT, RIGHT, BACK, LEFT, TOP, BOTTOM } = require('./constants')
 
 const face = curry((faceName, cube) => cube[faceName])
 
 const row = curry((rowIndex, face) => [...face[rowIndex]])
 
 const col = curry((colIndex, face) => face.map(col => col[colIndex]))
+
+const tile = curry((faceName, row, col, cube) => cube[faceName][row][col])
 
 const invert = (line) => line.slice(0).reverse()
 
@@ -42,7 +45,7 @@ const faceClockwise = curry((faceName, cube)  => {
     const srcFace = cube[faceName]
     return nArray(size(cube))(i => invert(col(i, srcFace)))
 })
-const maybefaceClockwise = (condition) => condition 
+const clockwiseIf = (condition) => condition 
     ? faceClockwise 
     : cloneFace
     
@@ -51,7 +54,7 @@ const faceCounterClockwise = curry((faceName, cube)  => {
     const cubeSize = size(cube)
     return nArray(cubeSize)(i => col(cubeSize -1 - i, srcFace))
 })
-const maybefaceCounterClockwise = (condition) => condition 
+const counterClockwiseIf = (condition) => condition 
     ? faceCounterClockwise 
     : cloneFace
 
@@ -63,26 +66,40 @@ const face180 = curry((faceName, cube) => {
     return faceClockwise(faceName, rotated90)
 })
 
-const frontFace =  face('front')
-const rightFace =  face('right')
-const backFace =  face('back')
-const leftFace =  face('left')
-const topFace =  face('top')
-const bottomFace =  face('bottom')
+const oppositeFaces = Object.freeze({
+    [FRONT]: BACK,
+    [BACK]: FRONT,
+    [LEFT]: RIGHT,
+    [RIGHT]: LEFT,
+    [TOP]: BOTTOM,
+    [BOTTOM]: TOP
+})
+const oppositeFace = faceName => {
+    return oppositeFaces[faceName]
+}
+
+const frontFace = face(FRONT)
+const rightFace = face(RIGHT)
+const backFace = face(BACK)
+const leftFace = face(LEFT)
+const topFace = face(TOP)
+const bottomFace = face(BOTTOM)
 
 module.exports = {
     row,
     col,
+    tile,
     invert,
     replaceRow,
     replaceCol,
     cloneCube,
     faceClockwise,
     faceCounterClockwise,
-    maybefaceClockwise,
-    maybefaceCounterClockwise,
+    clockwiseIf,
+    counterClockwiseIf,
     face,
     face180,
+    oppositeFace,
     frontFace,
     rightFace,
     backFace,

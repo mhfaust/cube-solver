@@ -2,6 +2,7 @@ const { expect } = require('chai')
 const xxxNeg = require('./xxxNeg')
 const { allUniqueTilesCube } = require('../test.utils')
 const { faceClockwise, faceCounterClockwise, face180 } = require('../cubeUtils')
+const newCube = require('../newCube')
 
 describe('xxxNeg', () => {
     it('rotates a 3-cube up correctly', () => {
