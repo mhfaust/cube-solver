@@ -1,7 +1,7 @@
 const solutionNotation = require('./solutionNotation')
 const { cloneCube } = require('../cubeUtils')
 
-class Sequence {
+class SequenceBuilder {
     constructor(cube){
         this.cube = cube
         this.stack = []
@@ -30,5 +30,5 @@ class Sequence {
 
 
 module.exports = {
-    newSequenceBuilder: (cube) => new Sequence(cube)
+    newSequenceBuilder: (cube) => new SequenceBuilder(cube)
 }
