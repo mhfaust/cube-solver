@@ -12,7 +12,7 @@ const isDaisyDone = cube => {
     return [a,b,c,d].every(tile => tile === petalColor)
 }
 
-const handler = (edge) => {
+const getCaseHandler = (edge) => {
     if(edge.faceName === BOTTOM){
         return promoteBottomEdge
     }
@@ -30,7 +30,8 @@ const daisy = (cube) => {
     while(!isDaisyDone(builder.getCube())){
         const nextCube = builder.getCube()
         const edge = findPetal(nextCube)
-        const { sequence } = handler(edge)(nextCube, edge)
+
+        const { sequence } = getCaseHandler(edge)(nextCube, edge)
         builder.concat(sequence)
     }
     
@@ -40,4 +41,7 @@ const daisy = (cube) => {
     }
 }
 
-module.exports = { daisy }
+module.exports = { 
+    daisy,
+    isDaisyDone
+}

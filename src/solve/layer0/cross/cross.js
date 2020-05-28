@@ -1,6 +1,10 @@
 const { newSequenceBuilder } = require('../../sequenceBuilder')
 const { equatorFaces } = require('../../../constants')
 const { crossEnds } = require('../../../cubeUtils')
+const { isDaisyDone } = require('../daisy/daisy')
+const { fnKeys } = require('../../solutionNotation')
+
+const { up } = fnKeys
 
 const crossIsSolved = (cube) => {
     
@@ -9,8 +13,12 @@ const crossIsSolved = (cube) => {
 }
 
 const cross = (cube) => {
+    if(!isDaisyDone(cube)){
+        throw Error('Cross expects a cube already solved to daisy.')
+    }
+
     const builder = newSequenceBuilder(cube)
-    let c = 0
+
     while(!crossIsSolved(builder.getCube())){
 
         equatorFaces.forEach(faceName => {
@@ -20,7 +28,7 @@ const cross = (cube) => {
             }
         })
         if(!crossIsSolved(builder.getCube())){
-            builder.push('up')
+            builder.push(up)
         }
 
     }

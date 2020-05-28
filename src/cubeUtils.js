@@ -28,16 +28,18 @@ const replaceCol = curry((destColIndex, srcPipeline, destFaceName, cube) => {
 })  
 
 const cloneFace = (faceName, cube) => cube[faceName].map(row => row.slice(0))
+
 const cloneCube = (cube) => {
-    Object.keys(cube).reduce((c, name) => {
-         c[name] = cloneFace(name, cube)
-         return c 
+    Object.keys(cube).reduce((clone, name) => {
+         clone[name] = cloneFace(name, cube)
+         return clone
     }, {} )
 }
 const faceClockwise = curry((faceName, cube)  => {
     const srcFace = cube[faceName]
     return nArray(size(cube))(i => invert(col(i, srcFace)))
 })
+
 const clockwiseIf = (condition) => condition 
     ? faceClockwise 
     : cloneFace
@@ -47,6 +49,7 @@ const faceCounterClockwise = curry((faceName, cube)  => {
     const cubeSize = size(cube)
     return nArray(cubeSize)(i => col(cubeSize -1 - i, srcFace))
 })
+
 const counterClockwiseIf = (condition) => condition 
     ? faceCounterClockwise 
     : cloneFace
@@ -67,10 +70,12 @@ const oppositeFaces = Object.freeze({
     [TOP]: BOTTOM,
     [BOTTOM]: TOP
 })
+
 const oppositeFace = faceName => {
     return oppositeFaces[faceName]
 }
 
+//coords for 5 tiles of a face that form the "cross" pattern, including the center
 const crossTiles = (face) => [
     face[0][1], 
     face[1][0], 
@@ -79,6 +84,7 @@ const crossTiles = (face) => [
     face[2][1], 
 ]
 
+//coords for 4 tiles of a face that form the "cross" pattern, excluding the center
 const crossEnds = (face) => [
     face[0][1], 
     face[1][0], 

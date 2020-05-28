@@ -1,6 +1,7 @@
+const { faceNames } = require('../../../constants')
+
 const edgeCoords = [[0,1],[1,0],[1,2],[2,1]]
 
-const { faceNames } = require('../../../constants')
 
 const coloredEdges = (color, cube) => {
     return faceNames.map(faceName => {

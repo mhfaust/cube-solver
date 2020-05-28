@@ -15,8 +15,6 @@ function nextCorner(cube){
             }
         }
 
-    }
-
-
-    module.exports = { nextCorner }
+    }ß
 }
+module.exports = { nextCorner }

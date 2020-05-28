@@ -19,8 +19,6 @@ module.exports =  (x, cubeSize = 3) => {
     const colX = col(x)
     const colOppositeX = col(xFromEnd)
 
-    const d = x => x
-
     return nextCube({
         front: replaceCol(x, [bottomFace, colX]),
         back: replaceCol(xFromEnd, [topFace, colX, invert]),
