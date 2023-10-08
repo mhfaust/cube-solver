@@ -1,26 +1,24 @@
 {
-  "name": "rubik",
-  "version": "1.0.0",
-  "description": "Model of Rubik's Cube",
-  "main": "console/index.js",
-  "repository": "(later)",
-  "author": "Michael Hildebrand-Faust",
-  "license": "MIT",
-  "private": false,
+  "name": "cube-solver",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "start": "node ./src/console/index.js",
-    "test": "mocha 'src/**/*.test.js'"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "chalk": "^3.0.0",
-    "keypress": "^0.2.1",
-    "ramda": "^0.26.1"
+    "react": "^18",
+    "react-dom": "^18",
+    "next": "13.5.4"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "eslint": "^7.1.0",
-    "eslint-plugin-import": "^2.20.2",
-    "majestic": "^1.6.1",
-    "mocha": "^6.2.2"
+    "typescript": "^5",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "13.5.4"
   }
 }
