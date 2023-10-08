@@ -1,8 +1,8 @@
-const { expect } = require('chai')
-const { parseFaces } = require('../../../testUtils')
-const { cross } = require('./cross')
-const { crossTiles, crossEnds } = require('../../../cubeUtils')
-const { equatorFaces } = require('../../../constants')
+import { expect } from 'chai'
+import { parseFaces } from '../../../testUtils'
+import { cross } from './cross'
+import { crossTiles, crossEnds } from '../../../cubeUtils'
+import { equatorFaces } from '../../../constants'
 
 describe('cross', function(){
 

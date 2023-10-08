@@ -1,6 +1,6 @@
-const { nnArray } = require('../utils')
+import { nnArray } from '../utils'
 
-const allUniqueTilesCube = () => ['front', 'back', 'right', 'left', 'top', 'bottom']
+export const allUniqueTilesCube = () => ['front', 'back', 'right', 'left', 'top', 'bottom']
 .reduce(
     (cube, faceName) => ({
         ...cube,
@@ -8,5 +8,3 @@ const allUniqueTilesCube = () => ['front', 'back', 'right', 'left', 'top', 'bott
     })
     , {}
 )
-
-module.exports = { allUniqueTilesCube }

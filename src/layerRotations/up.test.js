@@ -1,11 +1,11 @@
-const { pipe } = require('ramda')
-const newCube = require('../newCube')
-const printCube = require('../console/printCube')
-const { U, Ui, U2, R, Ri, L, Li, F, Fi, B, Bi, M, Mi, S, Si } = require('../layerRotations/advancedNotation')
-const { xPos, xNeg, yNeg, yPos, zPos, counterWise } = require('./index')
-const { identity } = require('../cubeUtils')
+import { pipe } from 'ramda'
+import newCube from '../newCube'
+import printCube from '../console/printCube'
+import { U, Ui, U2, R, Ri, L, Li, F, Fi, B, Bi, M, Mi, S, Si } from '../layerRotations/advancedNotation'
+import { xPos, xNeg, yNeg, yPos, zPos, counterWise } from './index'
+import { identity } from '../cubeUtils'
 
-const { xxxNeg, yyyPos } = require('../cubeRotations')
+import { xxxNeg, yyyPos } from '../cubeRotations'
 const 
 
 superFlip = [

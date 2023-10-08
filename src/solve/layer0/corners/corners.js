@@ -1,4 +1,4 @@
-const { newSequenceBuilder } = require('../../sequenceBuilder')
+import { newSequenceBuilder } from '../../sequenceBuilder'
 
 function corners(cube){
     const builder = newSequenceBuilder(cube)

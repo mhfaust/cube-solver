@@ -1,5 +1,3 @@
-module.exports = {
-    allUniqueTilesCube: require('./allUniqueTilesCube').allUniqueTilesCube,
-    parseFaces: require('./parseFaces').parseFaces,
-    serializeFaces: require('./serializeFaces').serializeFaces
-}
+export {allUniqueTilesCube} from './allUniqueTilesCube'
+export {parseFaces} from './parseFaces'
+export {serializeFaces} from './serializeFaces'

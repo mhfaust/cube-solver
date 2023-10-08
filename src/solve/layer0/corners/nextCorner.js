@@ -1,8 +1,6 @@
-const { equatorFaces } = require('../../../constants')
+import { equatorFaces } from '../../../constants'
 
-
-
-function nextCorner(cube){
+export function nextCorner(cube){
     const bottomColor = cube.bottom[1][1]
 
     for(let faceName of equatorFaces){
@@ -10,11 +8,8 @@ function nextCorner(cube){
             if(cube[faceName][2][col] === bottomColor){
                 return {
                     faceName,
-                    
                 }
             }
         }
-
-    }ß
+    }
 }
-module.exports = { nextCorner }

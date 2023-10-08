@@ -1,7 +1,7 @@
-const { expect } = require('chai')
-const zzzPos = require('./zzzPos')
-const { allUniqueTilesCube } = require('../testUtils')
-const { faceClockwise, faceCounterClockwise, face180 } = require('../cubeUtils')
+import { expect } from 'chai'
+import zzzPos from './zzzPos'
+import { allUniqueTilesCube } from '../testUtils'
+import { faceClockwise, faceCounterClockwise, face180 } from '../cubeUtils'
 
 describe('zzzPos', () => {
     it('rotates a 3-cube positive on the z-axis correctly', () => {

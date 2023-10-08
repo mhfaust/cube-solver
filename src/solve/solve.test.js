@@ -1,9 +1,9 @@
-const { expect } = require('chai')
-const { solve } = require('./solve')
-const { parseFaces } = require('./../testUtils')
+import { expect } from 'chai'
+import { solve } from './solve'
+import { parseFaces } from './../testUtils'
 
-const { crossTiles, crossEnds } = require('../cubeUtils')
-const { equatorFaces } = require('../constants')
+import { crossTiles, crossEnds } from '../cubeUtils'
+import { equatorFaces } from '../constants'
 
 describe('daisy', function(){
 

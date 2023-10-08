@@ -1,9 +1,9 @@
-const { faceNames } = require('../../../constants')
+import { faceNames } from '../../../constants'
 
 const edgeCoords = [[0,1],[1,0],[1,2],[2,1]]
 
 
-const coloredEdges = (color, cube) => {
+export const coloredEdges = (color, cube) => {
     return faceNames.map(faceName => {
         const face = cube[faceName]
         return edgeCoords
@@ -16,10 +16,3 @@ const coloredEdges = (color, cube) => {
         })
         .reduce((accum, arr) => accum.concat(arr), [])
 }
-
-
-
-
-
-
-module.exports = { coloredEdges }

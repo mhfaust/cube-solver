@@ -1,7 +1,9 @@
-const { expect } = require('chai')
-const { locateCenter } = require('./locateCenter')
-const newCube = require('../../newCube')
-const { R, G, B, Y, O, W } = require('../../constants').colors
+import { expect } from 'chai'
+import { locateCenter } from './locateCenter'
+import newCube from '../../newCube'
+import colors from '../../constants'
+
+const { R, G, B, Y, O, W } = colors
 
 describe('locateCenter', function(){
     it('gets the name of the face with the center tile of a given color', function(){

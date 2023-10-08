@@ -1,7 +1,7 @@
-const { FRONT, BACK, LEFT, RIGHT } = require('../../../constants')
-const { tile } = require('../../../cubeUtils')
-const { fnKeys } = require('../../solutionNotation')
-const { newSequenceBuilder } = require('../../sequenceBuilder')
+import { FRONT, BACK, LEFT, RIGHT } from '../../../constants'
+import { tile } from '../../../cubeUtils'
+import { fnKeys } from '../../solutionNotation'
+import { newSequenceBuilder } from '../../sequenceBuilder'
 
 const {
     front, 
@@ -39,7 +39,7 @@ const canPromote = (col, faceName, cube ) => {
     return displacedTopEdge[faceName][col](cube) !== color  
 }
 
-const promoteEquatorialEdge = (initialCube, { faceName, col }) => {
+export const promoteEquatorialEdge = (initialCube, { faceName, col }) => {
     const  builder = newSequenceBuilder(initialCube)
     while(!canPromote(col, faceName, builder.getCube())){
         builder.push(up)
@@ -50,5 +50,3 @@ const promoteEquatorialEdge = (initialCube, { faceName, col }) => {
         sequence: builder.getSequence()
     }
 }
-
-module.exports = { promoteEquatorialEdge }

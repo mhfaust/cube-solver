@@ -1,5 +1,4 @@
-const solutionNotation = require('./solutionNotation')
-const { cloneCube } = require('../cubeUtils')
+import solutionNotation from './solutionNotation'
 
 class SequenceBuilder {
     constructor(cube){
@@ -28,7 +27,4 @@ class SequenceBuilder {
     }
 }
 
-
-module.exports = {
-    newSequenceBuilder: (cube) => new SequenceBuilder(cube)
-}
+export const  newSequenceBuilder = (cube) => new SequenceBuilder(cube)

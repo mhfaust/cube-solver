@@ -1,26 +1,26 @@
-const { curry, pipe } = require('ramda')
-const { nArray } = require('./utils')
-const { FRONT, RIGHT, BACK, LEFT, TOP, BOTTOM } = require('./constants')
+import { curry, pipe } from 'ramda'
+import { nArray } from './utils'
+import { FRONT, RIGHT, BACK, LEFT, TOP, BOTTOM } from './constants'
 
-const face = curry((faceName, cube) => cube[faceName])
+export const face = (faceName) => (cube) => cube[faceName]
 
-const row = curry((rowIndex, face) => [...face[rowIndex]])
+export const row = curry((rowIndex, face) => [...face[rowIndex]])
 
-const col = curry((colIndex, face) => face.map(col => col[colIndex]))
+export const col = curry((colIndex, face) => face.map(col => col[colIndex]))
 
-const tile = curry((faceName, row, col, cube) => cube[faceName][row][col])
+export const tile = curry((faceName, row, col, cube) => cube[faceName][row][col])
 
-const invert = (line) => line.slice(0).reverse()
+export const invert = (line) => line.slice(0).reverse()
 
 const size = (cube) => (cube['front'] || []).length
 
-const replaceRow =  curry((destRowIndex, srcPipeline, destFaceName, cube) => {
+export const replaceRow =  curry((destRowIndex, srcPipeline, destFaceName, cube) => {
     return cube[destFaceName].map((row, i) => i == destRowIndex 
         ? pipe(...srcPipeline)(cube) 
         : row.slice(0))
 })
 
-const replaceCol = curry((destColIndex, srcPipeline, destFaceName, cube) => {
+export const replaceCol = curry((destColIndex, srcPipeline, destFaceName, cube) => {
     const repl = pipe(...srcPipeline)(cube)
     return cube[destFaceName].map((row, rowIndex) => {
         return row.map((tile, i) => i === destColIndex ? repl[rowIndex] : tile)
@@ -29,7 +29,7 @@ const replaceCol = curry((destColIndex, srcPipeline, destFaceName, cube) => {
 
 const cloneFace = (faceName, cube) => cube[faceName].map(row => row.slice(0))
 
-const cloneCube = (cube) => {
+export const cloneCube = (cube) => {
     Object.keys(cube).reduce((clone, name) => {
          clone[name] = cloneFace(name, cube)
          return clone
@@ -40,7 +40,7 @@ const faceClockwise = curry((faceName, cube)  => {
     return nArray(size(cube))(i => invert(col(i, srcFace)))
 })
 
-const clockwiseIf = (condition) => condition 
+export const clockwiseIf = (condition) => condition 
     ? faceClockwise 
     : cloneFace
     
@@ -50,11 +50,11 @@ const faceCounterClockwise = curry((faceName, cube)  => {
     return nArray(cubeSize)(i => col(cubeSize -1 - i, srcFace))
 })
 
-const counterClockwiseIf = (condition) => condition 
+export const counterClockwiseIf = (condition) => condition 
     ? faceCounterClockwise 
     : cloneFace
 
-const face180 = curry((faceName, cube) => {
+export const face180 = curry((faceName, cube) => {
     const rotated90 = {
         ...cube,
         [faceName]: faceClockwise(faceName, cube)
@@ -71,12 +71,12 @@ const oppositeFaces = Object.freeze({
     [BOTTOM]: TOP
 })
 
-const oppositeFace = faceName => {
+export const oppositeFace = faceName => {
     return oppositeFaces[faceName]
 }
 
 //coords for 5 tiles of a face that form the "cross" pattern, including the center
-const crossTiles = (face) => [
+export const crossTiles = (face) => [
     face[0][1], 
     face[1][0], 
     face[1][1], 
@@ -85,21 +85,21 @@ const crossTiles = (face) => [
 ]
 
 //coords for 4 tiles of a face that form the "cross" pattern, excluding the center
-const crossEnds = (face) => [
+export const crossEnds = (face) => [
     face[0][1], 
     face[1][0], 
     face[1][2], 
     face[2][1], 
 ]
 
-const frontFace = face(FRONT)
-const rightFace = face(RIGHT)
-const backFace = face(BACK)
-const leftFace = face(LEFT)
-const topFace = face(TOP)
-const bottomFace = face(BOTTOM)
+export const frontFace = face(FRONT)
+export const rightFace = face(RIGHT)
+export const backFace = face(BACK)
+export const leftFace = face(LEFT)
+export const topFace = face(TOP)
+export const bottomFace = face(BOTTOM)
 
-module.exports = {
+export default  {
     row,
     col,
     tile,
@@ -114,12 +114,6 @@ module.exports = {
     face,
     face180,
     oppositeFace,
-    frontFace,
-    rightFace,
-    backFace,
-    leftFace,
-    topFace,
-    bottomFace,
     crossTiles,
     crossEnds
 }

@@ -1,8 +1,10 @@
-const { expect } = require('chai')
-const { coloredEdges } = require('./coloredEdges')
+import { expect } from 'chai'
+import { coloredEdges } from './coloredEdges'
 
-const newCube = require('../../../newCube')
-const { R, G, B, Y, O, W } = require('../../../constants').colors
+import newCube from '../../../newCube'
+import colors from '../../../constants'
+
+const { R, G, B, Y, O, W } = colors
 
 describe('coloredEdges', function(){
     it('finds all the edges belonging to a specific color', function(){

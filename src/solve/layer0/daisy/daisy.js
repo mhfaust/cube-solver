@@ -1,12 +1,12 @@
-const { BOTTOM, TOP } = require('../../../constants')
-const { promoteBottomEdge } = require('./promoteBottomEdge')
-const { promoteEquatorialEdge } = require('./promoteEquatorialEdge')
-const { rotateNorthEdgeToEquator } = require('./rotateNorthEdgeToEquator')
-const { rotateSouthEdgeToEquator } = require('./rotateSouthEdgeToEquator')
-const { findPetal } = require('./findPetal')
-const { newSequenceBuilder } = require('../../sequenceBuilder')
+import { BOTTOM, TOP } from '../../../constants'
+import { promoteBottomEdge } from './promoteBottomEdge'
+import { promoteEquatorialEdge } from './promoteEquatorialEdge'
+import { rotateNorthEdgeToEquator } from './rotateNorthEdgeToEquator'
+import { rotateSouthEdgeToEquator } from './rotateSouthEdgeToEquator'
+import { findPetal } from './findPetal'
+import { newSequenceBuilder } from '../../sequenceBuilder'
 
-const isDaisyDone = cube => {
+export const isDaisyDone = cube => {
     const petalColor = cube.bottom[1][1]
     const { top: [ [ , a, ], [b, , c],[ , d, ] ] } = cube
     return [a,b,c,d].every(tile => tile === petalColor)
@@ -24,7 +24,7 @@ const getCaseHandler = (edge) => {
 }
 
 
-const daisy = (cube) => {
+export const daisy = (cube) => {
     const builder = newSequenceBuilder(cube)
     let c = 0
     while(!isDaisyDone(builder.getCube())){
@@ -39,9 +39,4 @@ const daisy = (cube) => {
         cube: builder.getCube(),
         sequence: builder.getSequence() 
     }
-}
-
-module.exports = { 
-    daisy,
-    isDaisyDone
 }

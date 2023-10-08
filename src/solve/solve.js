@@ -1,8 +1,8 @@
-const { daisy } = require('./layer0/daisy/daisy')
-const { cross } = require('./layer0/cross/cross')
-const { newSequenceBuilder } = require('./sequenceBuilder')
+import { daisy } from './layer0/daisy/daisy'
+import { cross } from './layer0/cross/cross'
+import { newSequenceBuilder } from './sequenceBuilder'
 
-function solve (cube) {
+export function solve (cube) {
     const builder = newSequenceBuilder(cube)
     
     const pipeline = [
@@ -20,5 +20,3 @@ function solve (cube) {
         sequence: builder.getSequence()
     }
 }
-
-module.exports = { solve }

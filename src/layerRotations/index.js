@@ -1,9 +1,6 @@
-
-module.exports = {
-    zPos: require('./zPos'),
-    zNeg: require('./zNeg'),
-    xPos: require('./xPos'),
-    xNeg: require('./xNeg'),
-    yNeg: require('./yNeg'),
-    yPos: require('./yPos'),
-}
+export { zPos } from './zPos'
+export { zNeg } from './zNeg'
+export { xPos } from './xPos'
+export { xNeg } from './xNeg'
+export { yNeg } from './yNeg'
+export { yPos } from './yPos'

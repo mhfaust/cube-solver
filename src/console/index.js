@@ -1,9 +1,10 @@
-const readline = require('readline');
-const printCube = require('../console/printCube')
-const newCube = require('../newCube')
+import readline from 'readline';
+import printCube from './printCube'
+import newCube from '../newCube'
+import keyTransforms from './keyTransforms'
+import { cloneCube } from '../cubeUtils'
+
 const ctrlC = '\u0003'
-const keyTransforms = require('./keyTransforms')
-const { cloneCube } = require('../cubeUtils')
 
 const { stdin, stdout, exit } = process
 

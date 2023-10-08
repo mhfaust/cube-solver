@@ -1,8 +1,6 @@
-const solutionNotation = require('./solutionNotation')
-const { pipe } = require('ramda')
+import solutionNotation from './solutionNotation'
+import { pipe } from 'ramda'
 
-function runSequence(sequence, cube){
+export function runSequence(sequence, cube){
     return pipe(...sequence.map(i => solutionNotation[i]))
 }
-
-module.exports = { runSequence }

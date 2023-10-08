@@ -1,4 +1,4 @@
-const { equatorFaces } = require('../../../constants')
+import { equatorFaces } from '../../../constants'
 
 const bottomEdgeCoords = [
     { row: 0, col: 1 },
@@ -7,7 +7,7 @@ const bottomEdgeCoords = [
     { row: 2, col: 1 },
 ]
 
-function findPetal(cube){
+export function findPetal(cube){
     const petalColor = cube.bottom[1][1]
     //equatorial edges:
     for(let faceName of equatorFaces){
@@ -34,4 +34,3 @@ function findPetal(cube){
     }
 }
 
-module.exports = { findPetal }

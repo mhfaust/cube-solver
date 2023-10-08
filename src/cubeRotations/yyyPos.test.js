@@ -1,7 +1,7 @@
-const { expect } = require('chai')
-const east = require('./yyyPos')
-const { allUniqueTilesCube } = require('../testUtils')
-const { faceClockwise, faceCounterClockwise }= require('../cubeUtils')
+import { expect } from 'chai'
+import east from './yyyPos'
+import { allUniqueTilesCube } from '../testUtils'
+import { faceClockwise, faceCounterClockwise } from '../cubeUtils'
 
 const bottomRotatedClockwise = faceClockwise('bottom')
 const topRotatedCounterClockwise = faceCounterClockwise('top')

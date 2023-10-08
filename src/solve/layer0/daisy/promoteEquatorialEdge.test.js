@@ -1,6 +1,6 @@
-const { expect } = require('chai')
-const { promoteEquatorialEdge } = require('./promoteEquatorialEdge')
-const { parseFaces } = require('../../../testUtils')
+import { expect } from 'chai'
+import { promoteEquatorialEdge } from './promoteEquatorialEdge'
+import { parseFaces } from '../../../testUtils'
 
 describe('promoteEquatorialEdge', function(){
 

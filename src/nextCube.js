@@ -1,6 +1,6 @@
-const { curry } = require('ramda')
+import { curry } from 'ramda'
 
-module.exports = (transforms) => {
+export default  (transforms) => {
     return (prevCube) => Object.entries(transforms).reduce((accum, [sideName, transform]) => {
         accum[sideName] = transform(sideName, prevCube)
         return accum

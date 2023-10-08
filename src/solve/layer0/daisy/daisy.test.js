@@ -1,6 +1,6 @@
-const { expect } = require('chai')
-const { daisy } = require('./daisy')
-const { parseFaces } = require('../../../testUtils')
+import { expect } from 'chai'
+import { daisy } from './daisy'
+import { parseFaces } from '../../../testUtils'
 
 describe('daisy', function(){
 

@@ -1,16 +1,16 @@
-const { U, Ui, D, Di, L, Li, R, Ri, B, Bi, F, Fi } = require('../layerRotations/advancedNotation')
+import { U, Ui, D, Di, L, Li, R, Ri, B, Bi, F, Fi } from '../layerRotations/advancedNotation'
 
-const {
+import {
     xxxNeg,
     xxxPos,
     yyyPos,
     yyyNeg,
     zzzPos,
     zzzNeg,
-} = require('../cubeRotations')
+} from '../cubeRotations'
 
 
-module.exports = (cubeSize) => ({
+export default  (cubeSize) => ({
     u: U,
     U: Ui,
     d: D,

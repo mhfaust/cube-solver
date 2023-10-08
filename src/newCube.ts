@@ -1,8 +1,9 @@
-const { W, R, Y, O, B, G, } = require('./constants').colors
+import { colors } from './constants'
+const { W, R, Y, O, B, G, } = colors
 
 const nSquareOfColor = (n, color) => Array(n).fill('').map(a => Array(n).fill(color))
 
-module.exports = (n = 3) => ({
+export default (n = 3) => ({
     front:  nSquareOfColor(n, W),
     right:  nSquareOfColor(n, R), 
     back:   nSquareOfColor(n, Y), 

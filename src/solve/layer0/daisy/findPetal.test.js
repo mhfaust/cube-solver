@@ -1,6 +1,6 @@
-const { expect } = require('chai')
-const { findPetal } = require('./findPetal')
-const { parseFaces } = require('../../../testUtils')
+import { expect } from 'chai'
+import { findPetal } from './findPetal'
+import { parseFaces } from '../../../testUtils'
 
 
 describe('findPetal', function(){

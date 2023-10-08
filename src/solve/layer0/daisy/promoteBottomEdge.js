@@ -1,6 +1,6 @@
-const { tile } = require('../../../cubeUtils')
-const { fnKeys } = require('../../solutionNotation')
-const { newSequenceBuilder } = require('../../sequenceBuilder')
+import { tile } from '../../../cubeUtils'
+import { fnKeys } from '../../solutionNotation'
+import { newSequenceBuilder } from '../../sequenceBuilder'
 const { up, front2, left2, right2, back2 } = fnKeys
 
 const topTile = tile('top')
@@ -16,7 +16,7 @@ const promotions = [
     [      , back2 ,       ],
 ]
 
-const promoteBottomEdge = (cube, { row, col }) => {
+export const promoteBottomEdge = (cube, { row, col }) => {
     const builder = newSequenceBuilder(cube)
     while(!canPromote(row, col, builder.getCube())){
         builder.push(up)
@@ -28,5 +28,3 @@ const promoteBottomEdge = (cube, { row, col }) => {
         sequence: builder.getSequence()
     }
 }
-
-module.exports = { promoteBottomEdge }

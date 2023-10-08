@@ -1,5 +1,5 @@
-const nextCube = require('../nextCube')
-const { 
+import nextCube from '../nextCube'
+import { 
     col,
     invert,
     replaceCol,
@@ -9,10 +9,10 @@ const {
     topFace, 
     frontFace, 
     backFace
-} = require('../cubeUtils')
+} from'../cubeUtils'
 
 
-module.exports =  (x, cubeSize = 3) => {
+export default   (x, cubeSize = 3) => {
     
     const lastIndex = cubeSize - 1
     const xFromEnd = lastIndex - x

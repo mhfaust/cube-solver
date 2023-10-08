@@ -1,7 +1,7 @@
-const solutionNotation = require('../../solutionNotation')
-const { tile } = require('../../../cubeUtils')
-const { fnKeys } = require('../../solutionNotation')
-const { newSequenceBuilder } = require('../../sequenceBuilder')
+import solutionNotation from '../../solutionNotation'
+import { tile } from '../../../cubeUtils'
+import { fnKeys } from '../../solutionNotation'
+import { newSequenceBuilder } from '../../sequenceBuilder'
 const { up, front, left, right, back } = fnKeys
 
 const topTile = tile('top')
@@ -18,7 +18,7 @@ const canRotate = (faceName, cube) => {
     return displacements[faceName](cube) !== petalColor
 }
 
-const rotateSouthEdgeToEquator = (cube, { faceName }) => {
+export const rotateSouthEdgeToEquator = (cube, { faceName }) => {
     const builder = newSequenceBuilder(cube)
     while(!canRotate(faceName, builder.getCube())){
         builder.push(up)
@@ -30,5 +30,3 @@ const rotateSouthEdgeToEquator = (cube, { faceName }) => {
         sequence: builder.getSequence()
     }
 }
-
-module.exports = { rotateSouthEdgeToEquator: rotateSouthEdgeToEquator }

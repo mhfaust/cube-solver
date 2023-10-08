@@ -1,5 +1,5 @@
-const { pipe } = require('ramda')
-const { yPos } = require('../layerRotations')
-const { nArray } = require('../utils')
+import { pipe } from 'ramda'
+import { yPos } from '../layerRotations'
+import { nArray } from '../utils'
 
-module.exports = (cubeSize = 3) => pipe(...nArray(cubeSize)(yPos))
+export default  (cubeSize = 3) => pipe(...nArray(cubeSize)(yPos))

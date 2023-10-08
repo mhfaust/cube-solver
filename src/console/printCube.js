@@ -1,5 +1,5 @@
-const chalk  = require("chalk");
-const { nArray } = require('../utils')
+import chalk from 'chalk';
+import { nArray } from '../utils'
 
 const chalkColors = {
     R: 'red',
@@ -17,7 +17,7 @@ const equatorialRow = nthRowOfEachFace(['left', 'front', 'right', 'back'])
 const southRow = nthRowOfEachFace(['bottom'])
 
 
-module.exports = (cube) => {
+const printCube = (cube) => {
     
     const size = cube['front'].length
     const rowOfInts = nArray(size)(i => i)
@@ -29,3 +29,4 @@ module.exports = (cube) => {
     ].join('\n\n')
 }
 
+export default printCube

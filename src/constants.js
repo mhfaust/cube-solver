@@ -1,18 +1,10 @@
-const FRONT = 'front'
-const RIGHT = 'right'
-const BACK = 'back'
-const LEFT = 'left'
-const TOP = 'top'
-const BOTTOM = 'bottom'
+export const FRONT = 'front'
+export const RIGHT = 'right'
+export const BACK = 'back'
+export const LEFT = 'left'
+export const TOP = 'top'
+export const BOTTOM = 'bottom'
 
-module.exports = {
-    colors: Object.freeze({ R: 'R', B: 'B', G: 'G', Y: 'Y', O: 'O', W: 'W'}),
-    faceNames: Object.freeze([FRONT, RIGHT, BACK, LEFT, TOP, BOTTOM]),
-    equatorFaces:  Object.freeze([FRONT, RIGHT, BACK, LEFT]),
-    FRONT,
-    RIGHT,
-    BACK,
-    LEFT,
-    TOP,
-    BOTTOM,
-} 
+export const colors = Object.freeze({ R: 'R', B: 'B', G: 'G', Y: 'Y', O: 'O', W: 'W'})
+export const faceNames = Object.freeze([FRONT, RIGHT, BACK, LEFT, TOP, BOTTOM])
+export const equatorFaces =  Object.freeze([FRONT, RIGHT, BACK, LEFT])

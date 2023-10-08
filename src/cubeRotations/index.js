@@ -1,8 +1,6 @@
-module.exports = {
-    zzzPos: require('./zzzPos'),
-    zzzNeg: require('./zzzNeg'),
-    xxxNeg: require('./xxxNeg'),
-    xxxPos: require('./xxxPos'),
-    yyyPos: require('./yyyPos'),
-    yyyNeg: require('./yyyNeg'),
-}
+export { zzzPos } from './zzzPos'
+export { zzzNeg } from './zzzNeg'
+export { xxxNeg } from './xxxNeg'
+export { xxxPos } from './xxxPos'
+export { yyyPos } from './yyyPos'
+export { yyyNeg } from './yyyNeg'

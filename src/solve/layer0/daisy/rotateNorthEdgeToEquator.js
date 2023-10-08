@@ -1,6 +1,6 @@
-const solutionNotation = require('../../solutionNotation')
+import solutionNotation from '../../solutionNotation'
 
-const rotateNorthEdgeToEquator = (cube, { faceName }) => {
+export const rotateNorthEdgeToEquator = (cube, { faceName }) => {
     console.log('rotateNorthEdgeToEquator')
     return {
         cube: solutionNotation[faceName](cube),
@@ -8,5 +8,3 @@ const rotateNorthEdgeToEquator = (cube, { faceName }) => {
         sequence: [faceName] 
     }
 }
-
-module.exports = { rotateNorthEdgeToEquator: rotateNorthEdgeToEquator }
