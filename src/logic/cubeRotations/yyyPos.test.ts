@@ -1,20 +1,17 @@
 import { expect } from 'chai'
-import east from './yyyPos'
+import yyyPos from './yyyPos'
 import { allUniqueTilesCube } from '../testUtils'
 import { faceClockwise, faceCounterClockwise } from '../cubeUtils'
 
-const bottomRotatedClockwise = faceClockwise('bottom')
-const topRotatedCounterClockwise = faceCounterClockwise('top')
 
 describe('east', () => {
     it('rotates a 3-cube right correctly', () => {
         const initial = allUniqueTilesCube()
-        const transform = east(3)
-        const rotatedCube = transform(initial)
+        const rotatedCube = yyyPos(initial)
         
-        expect(rotatedCube.top).to.deep.equal(topRotatedCounterClockwise(initial))
+        expect(rotatedCube.top).to.deep.equal(faceCounterClockwise('top', initial))
         expect(rotatedCube.back).to.deep.equal(initial.right)
-        expect(rotatedCube.bottom).to.deep.equal(bottomRotatedClockwise(initial))
+        expect(rotatedCube.bottom).to.deep.equal(faceClockwise('bottom', initial))
         expect(rotatedCube.front).to.deep.equal(initial.left)
         expect(rotatedCube.left).to.deep.equal(initial.back)
         expect(rotatedCube.right).to.deep.equal(initial.front)

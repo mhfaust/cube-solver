@@ -1,8 +1,9 @@
 import readline from 'readline';
 import printCube from './printCube'
-import newCube from '../newCube'
+import newCube, { Cube } from '../newCube'
 import keyTransforms from './keyTransforms'
 import { cloneCube } from '../cubeUtils'
+import { FnName } from '../solve/solutionNotation';
 
 const ctrlC = '\u0003'
 
@@ -13,7 +14,7 @@ stdin.resume()
 stdin.setEncoding( 'utf8' )
 
 const recordings = []
-let currentSequence = null
+let currentSequence: FnName[] = []
 let currentRecordingStart = null
 let isRecording = () => Boolean(currentSequence)
 
@@ -28,14 +29,14 @@ const clear = () => {
     readline.clearScreenDown(process.stdout)
 }
 
-const render = (cube) => {
+const render = (cube: Cube) => {
     clear()
     stdout.write(printCube(cube))
     notifyRecordingStatus()
 }
 
 const startRecording = () => {
-    if(currentSequence) return
+    if(currentSequence.length) return
     currentRecordingStart = cloneCube(cube)
     currentSequence = []
     notifyRecordingStatus()

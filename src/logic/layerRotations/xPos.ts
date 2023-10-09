@@ -9,22 +9,23 @@ import {
     backFace, 
     topFace, 
     bottomFace,
+    I,
 } from '../cubeUtils'
 
+const xPos = (x: I) => {
 
-export default  (x, cubeSize = 3) => {
-
-    const lastIndex = cubeSize - 1
-    const xFromEnd = lastIndex - x
+    const xFromEnd = 2 - x as I
     const colX = col(x)
     const colOppositeX = col(xFromEnd)
 
     return nextCube({
-        front: replaceCol(x, [topFace, colX]),
-        back: replaceCol(xFromEnd, [bottomFace, colX, invert]),
-        right: counterClockwiseIf(x === lastIndex),
+        front: replaceCol(x, cube => colX(topFace(cube))),
+        back: replaceCol(xFromEnd, cube =>  invert(colX(bottomFace(cube)))),
+        right: counterClockwiseIf(x === 2),
         left: clockwiseIf(x === 0),
-        top: replaceCol(x, [backFace, colOppositeX, invert]),
-        bottom: replaceCol(x, [frontFace, colX]),
+        top: replaceCol(x, cube => invert(colOppositeX(backFace(cube)))),
+        bottom: replaceCol(x, cube =>  colX(frontFace(cube))),
     })
 }
+
+export default xPos

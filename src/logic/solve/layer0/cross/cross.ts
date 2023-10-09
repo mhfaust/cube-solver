@@ -2,17 +2,15 @@ import { newSequenceBuilder } from '../../sequenceBuilder'
 import { equatorFaces } from '../../../constants'
 import { crossEnds } from '../../../cubeUtils'
 import { isDaisyDone } from '../daisy/daisy'
-import { fnKeys } from '../../solutionNotation'
+import { Cube } from '@/logic/newCube'
 
-const { up } = fnKeys
-
-const crossIsSolved = (cube) => {
+const crossIsSolved = (cube: Cube) => {
     
     return crossEnds(cube.bottom).every(tile => tile === cube.bottom[1][1])
         && equatorFaces.every(faceName => cube[faceName][1][1] === cube[faceName][2][1])
 }
 
-export const cross = (cube) => {
+export const cross = (cube: Cube) => {
     if(!isDaisyDone(cube)){
         throw Error('Cross expects a cube already solved to daisy.')
     }
@@ -28,7 +26,7 @@ export const cross = (cube) => {
             }
         })
         if(!crossIsSolved(builder.getCube())){
-            builder.push(up)
+            builder.push('up')
         }
 
     }

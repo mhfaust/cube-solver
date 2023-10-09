@@ -1,10 +1,10 @@
-import { nnArray } from '../utils'
+import { Cube } from '../newCube'
 
-export const allUniqueTilesCube = () => ['front', 'back', 'right', 'left', 'top', 'bottom']
+export const allUniqueTilesCube = (): Cube => ['front', 'back', 'right', 'left', 'top', 'bottom']
 .reduce(
     (cube, faceName) => ({
         ...cube,
-        [faceName]: nnArray(3)((i,j) => `.${faceName}[${i}][${j}]`)
+        [faceName]: [[0,1,2],[0,1,2],[0,1,2]].map((i,j) => `.${faceName}[${i}][${j}]`)
     })
-    , {}
+    , {} as Cube
 )

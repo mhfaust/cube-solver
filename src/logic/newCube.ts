@@ -1,13 +1,20 @@
-import { colors } from './constants'
-const { W, R, Y, O, B, G, } = colors
+import { Color, FaceName } from './constants'
 
-const nSquareOfColor = (n, color) => Array(n).fill('').map(a => Array(n).fill(color))
+export type Line = [Color, Color, Color]
+export type Face = [Line, Line, Line]
 
-export default (n = 3) => ({
-    front:  nSquareOfColor(n, W),
-    right:  nSquareOfColor(n, R), 
-    back:   nSquareOfColor(n, Y), 
-    left:   nSquareOfColor(n, O), 
-    top:    nSquareOfColor(n, B), 
-    bottom: nSquareOfColor(n, G), 
+export type Cube = Record<FaceName, Face>
+
+const lineOf = (color: Color): [Color, Color, Color] => [color, color, color]
+export const faceOf = (color: Color):Face => [lineOf(color), lineOf(color), lineOf(color)]
+
+const newCube = (): Cube => ({
+    front: faceOf('white'),
+    right: faceOf('red'),
+    back: faceOf('yellow'),
+    left: faceOf('orange'),
+    top: faceOf('blue'),
+    bottom: faceOf('green'),
 })
+
+export default newCube

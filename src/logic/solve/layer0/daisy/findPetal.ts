@@ -1,3 +1,4 @@
+import { Cube } from '@/logic/newCube'
 import { equatorFaces } from '../../../constants'
 
 const bottomEdgeCoords = [
@@ -7,11 +8,11 @@ const bottomEdgeCoords = [
     { row: 2, col: 1 },
 ]
 
-export function findPetal(cube){
+export function findPetal(cube: Cube){
     const petalColor = cube.bottom[1][1]
     //equatorial edges:
     for(let faceName of equatorFaces){
-        for(col of [0, 2]){
+        for(const col of [0, 2]){
             if(cube[faceName][1][col] === petalColor){
                 return { faceName, row: 1, col }
             }

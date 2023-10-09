@@ -11,13 +11,13 @@ import {
     leftFace, 
     topFace, 
     bottomFace,
+    I,
 } from '../cubeUtils'
 
 
-export default  (z, cubeSize = 3) => {
+const zNeg = (z: I) => {
 
-    const lastIndex = cubeSize - 1
-    const zFromEnd = lastIndex - z
+    const zFromEnd = 2 - z as I
     const rowZ = row(z)
     const colZ = col(z)
     const colOppositeZ = col(zFromEnd)
@@ -25,10 +25,12 @@ export default  (z, cubeSize = 3) => {
 
     return nextCube({
         front: counterClockwiseIf(z === 0),
-        back: clockwiseIf(z === lastIndex),
-        right: replaceCol(z, [bottomFace, rowZ, invert]),
-        left: replaceCol(zFromEnd, [topFace, rowOppositeZ, invert]),
-        top: replaceRow(zFromEnd, [rightFace, colZ]),
-        bottom: replaceRow(z, [leftFace, colOppositeZ]),
+        back: clockwiseIf(z === 2),
+        right: replaceCol(z, cube => invert(rowZ(bottomFace(cube)))),
+        left: replaceCol(zFromEnd, cube => invert(rowOppositeZ(topFace(cube)))),
+        top: replaceRow(zFromEnd, cube => colZ(rightFace(cube))),
+        bottom: replaceRow(z, cube => colOppositeZ(leftFace(cube))),
     })
 }
+
+export default zNeg

@@ -7,21 +7,23 @@ import {
     frontFace, 
     rightFace, 
     backFace, 
-    leftFace 
+    leftFace, 
+    I
 } from '../cubeUtils'
 
 
-export default  (y, cubeSize = 3) => {
+const yPos = (y: I) => {
 
-    const lastIndex = cubeSize - 1
     const rowY = row(y)
 
     return nextCube({
-        front: replaceRow(y, [leftFace, rowY]),
-        back: replaceRow(y, [rightFace, rowY]),
-        right: replaceRow(y, [frontFace, rowY]),
-        left: replaceRow(y, [backFace, rowY]),
+        front: replaceRow(y, cube => rowY(leftFace(cube))),
+        back: replaceRow(y, cube => rowY(rightFace(cube))),
+        right: replaceRow(y, cube => rowY(frontFace(cube))),
+        left: replaceRow(y, cube => rowY(backFace(cube))),
         top: counterClockwiseIf(y === 0),
-        bottom: clockwiseIf(y === lastIndex),
+        bottom: clockwiseIf(y === 2),
     })
 }
+
+export default yPos

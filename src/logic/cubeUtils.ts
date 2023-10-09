@@ -1,66 +1,77 @@
-import { curry, pipe } from 'ramda'
-import { nArray } from './utils'
-import { FRONT, RIGHT, BACK, LEFT, TOP, BOTTOM } from './constants'
+import { FRONT, RIGHT, BACK, LEFT, TOP, BOTTOM, FaceName } from './constants'
+import { Cube, Face, Line } from './newCube'
+import { CubeTransform } from './nextCube'
 
-export const face = (faceName) => (cube) => cube[faceName]
+export type I = 0 | 1 | 2
 
-export const row = curry((rowIndex, face) => [...face[rowIndex]])
+export const face = (faceName: FaceName) => (cube: Cube) => cube[faceName]
 
-export const col = curry((colIndex, face) => face.map(col => col[colIndex]))
+export const row = (rowIndex: number) => (face: Face): Line => [...face[rowIndex]]
 
-export const tile = curry((faceName, row, col, cube) => cube[faceName][row][col])
+export const col = (i: number) => (face: Face): Line => [face[i][0], face[i][1], face[i][2]]
 
-export const invert = (line) => line.slice(0).reverse()
+export const tile = (faceName: FaceName) => (row: number, col: number) =>  (cube: Cube) => cube[faceName][row][col]
 
-const size = (cube) => (cube['front'] || []).length
+export const invert = ([a, b, c]: Line): Line => [b, c, a]
 
-export const replaceRow =  curry((destRowIndex, srcPipeline, destFaceName, cube) => {
-    return cube[destFaceName].map((row, i) => i == destRowIndex 
-        ? pipe(...srcPipeline)(cube) 
-        : row.slice(0))
-})
+type GetLine = (cube: Cube) => Line
 
-export const replaceCol = curry((destColIndex, srcPipeline, destFaceName, cube) => {
-    const repl = pipe(...srcPipeline)(cube)
-    return cube[destFaceName].map((row, rowIndex) => {
-        return row.map((tile, i) => i === destColIndex ? repl[rowIndex] : tile)
-    })
-})  
+export const replaceRow =  (destRowIndex: I, getLine: GetLine) => {
+    return (destFaceName: FaceName, cube: Cube): Face => {
+        return (cube[destFaceName].map(([a,b,c], i) => i == destRowIndex 
+                ? (getLine(cube))
+                : [a,b,c]
+            ) as Face)
+}}
 
-const cloneFace = (faceName, cube) => cube[faceName].map(row => row.slice(0))
+export const replaceCol = (destColIndex: I, getLine: GetLine) => { 
+    return (destFaceName: FaceName, cube: Cube): Face => {
+        const repl = getLine(cube)
+        return cube[destFaceName].map((row, rowIndex) => {
+            return row.map((tile, i) => i === destColIndex ? repl[rowIndex] : tile) as Line
+        }) as Face
+}}
 
-export const cloneCube = (cube) => {
-    Object.keys(cube).reduce((clone, name) => {
-         clone[name] = cloneFace(name, cube)
-         return clone
-    }, {} )
+const cloneFace = (faceName: FaceName, cube: Cube): Face =>  {
+    const [[a1, b1, c1], [a2, b2, c2], [a3, b3, c3]] = cube[faceName]
+    return [[a1, b1, c1], [a2, b2, c2], [a3, b3, c3]]
 }
-const faceClockwise = curry((faceName, cube)  => {
-    const srcFace = cube[faceName]
-    return nArray(size(cube))(i => invert(col(i, srcFace)))
-})
 
-export const clockwiseIf = (condition) => condition 
+export const cloneCube = (cube: Cube): Cube => {
+    return {
+        front: cloneFace('front', cube),
+        right: cloneFace('right', cube),
+        back: cloneFace('back', cube),
+        left: cloneFace('left', cube),
+        top: cloneFace('top', cube),
+        bottom: cloneFace('bottom', cube),
+    }
+}
+export const faceClockwise = (faceName: FaceName, cube: Cube) => {
+    const srcFace = cube[faceName]
+    return [0,1,2].map((i) => invert(col(i)(srcFace))) as Face
+}
+
+export const clockwiseIf = (condition: Boolean) => condition 
     ? faceClockwise 
     : cloneFace
     
-const faceCounterClockwise = curry((faceName, cube)  => {
+export const faceCounterClockwise = (faceName: FaceName, cube: Cube)  => {
     const srcFace = cube[faceName]
-    const cubeSize = size(cube)
-    return nArray(cubeSize)(i => col(cubeSize -1 - i, srcFace))
-})
+    return [0,1,2].map((i) => col(2 - i)(srcFace)) as Face
+}
 
-export const counterClockwiseIf = (condition) => condition 
+export const counterClockwiseIf = (condition: Boolean) => condition 
     ? faceCounterClockwise 
     : cloneFace
 
-export const face180 = curry((faceName, cube) => {
+export const face180 = (faceName: FaceName, cube: Cube) => {
     const rotated90 = {
         ...cube,
         [faceName]: faceClockwise(faceName, cube)
     }
     return faceClockwise(faceName, rotated90)
-})
+}
 
 const oppositeFaces = Object.freeze({
     [FRONT]: BACK,
@@ -71,12 +82,12 @@ const oppositeFaces = Object.freeze({
     [BOTTOM]: TOP
 })
 
-export const oppositeFace = faceName => {
+export const oppositeFace = (faceName: FaceName) => {
     return oppositeFaces[faceName]
 }
 
 //coords for 5 tiles of a face that form the "cross" pattern, including the center
-export const crossTiles = (face) => [
+export const crossTiles = (face: Face) => [
     face[0][1], 
     face[1][0], 
     face[1][1], 
@@ -85,7 +96,7 @@ export const crossTiles = (face) => [
 ]
 
 //coords for 4 tiles of a face that form the "cross" pattern, excluding the center
-export const crossEnds = (face) => [
+export const crossEnds = (face: Face) => [
     face[0][1], 
     face[1][0], 
     face[1][2], 
@@ -99,21 +110,12 @@ export const leftFace = face(LEFT)
 export const topFace = face(TOP)
 export const bottomFace = face(BOTTOM)
 
-export default  {
-    row,
-    col,
-    tile,
-    invert,
-    replaceRow,
-    replaceCol,
-    cloneCube,
-    faceClockwise,
-    faceCounterClockwise,
-    clockwiseIf,
-    counterClockwiseIf,
-    face,
-    face180,
-    oppositeFace,
-    crossTiles,
-    crossEnds
+const recursePipe = (cube: Cube, transforms: CubeTransform[], i: number): Cube => {
+    return transforms[i](i === transforms.length - 1 
+        ? cube 
+        : recursePipe(cube, transforms, i + 1)
+)}
+
+export const pipe = (...transforms: CubeTransform[]): CubeTransform => {
+    return (cube: Cube) => recursePipe(cube, transforms, 0)
 }

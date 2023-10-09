@@ -1,31 +1,36 @@
 import chalk from 'chalk';
-import { nArray } from '../utils'
+import { Cube, Line } from '../newCube';
+import { Color, FaceName } from '../constants';
+import { I } from '../cubeUtils';
 
-const chalkColors = {
-    R: 'red',
-    B: 'blue',
-    G: 'green',
-    Y: 'yellow',
-    W: 'white',
-    O: 'magenta'
+
+const coloredSquare = {
+    red: chalk['red']('■'),
+    blue: chalk['blue']('■'),
+    green: chalk['green']('■'),
+    yellow: chalk['yellow']('■'),
+    white: chalk['white']('■'),
+    orange: chalk['magenta']('■'),
 }
 
-const rowStr = (row) => row.map(tile => chalk[chalkColors[tile]]('■')).join(' ')
-const nthRowOfEachFace = (faceNames) => (n) => (cube) => faceNames.map(fn => rowStr(cube[fn][n])).join('   ')
+const rowStr = (row: Line) => row.map(tile => coloredSquare[tile]).join(' ')
+const nthRowOfEachFace = (
+        faceNames: FaceName[]
+    ) => (n: I) => (cube: Cube) => faceNames.map(fn => rowStr(cube[fn][n])).join('   ')
 const northRow = nthRowOfEachFace(['top'])
 const equatorialRow = nthRowOfEachFace(['left', 'front', 'right', 'back'])
 const southRow = nthRowOfEachFace(['bottom'])
 
+const eyes: [I,I,I] = [0,1,2]
 
-const printCube = (cube) => {
+const printCube = (cube: Cube) => {
     
     const size = cube['front'].length
-    const rowOfInts = nArray(size)(i => i)
 
     return [
-        rowOfInts.map(northRow).map(r => '        ' + r(cube)).join('\n'),
-        rowOfInts.map(equatorialRow).map(r => r(cube)).join('\n'),
-        rowOfInts.map(southRow).map(r => '        ' + r(cube)).join('\n')
+        eyes.map(northRow).map(r => '        ' + r(cube)).join('\n'),
+        eyes.map(equatorialRow).map(r => r(cube)).join('\n'),
+        eyes.map(southRow).map(r => '        ' + r(cube)).join('\n')
     ].join('\n\n')
 }
 

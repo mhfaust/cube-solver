@@ -8,21 +8,22 @@ import {
     rightFace, 
     backFace, 
     leftFace,
+    I,
 } from '../cubeUtils'
 
 
-export default  (y, cubeSize = 3) => {
+const yNeg =  (y: I) => {
 
-    const lastIndex = cubeSize - 1
     const rowY = row(y)
 
     return nextCube({
-        front: replaceRow(y, [rightFace, rowY]),
-        back: replaceRow(y, [leftFace, rowY]),
-        right: replaceRow(y, [backFace, rowY]),
-        left: replaceRow(y, [frontFace, rowY]),
+        front: replaceRow(y, cube => rowY(rightFace(cube))),
+        back: replaceRow(y, cube => rowY(leftFace(cube))),
+        right: replaceRow(y, cube => rowY(backFace(cube))),
+        left: replaceRow(y, cube => rowY(frontFace(cube))),
         top: clockwiseIf(y === 0),
-        bottom: counterClockwiseIf(y === lastIndex),
+        bottom: counterClockwiseIf(y === 2),
     })
 }
 
+export default yNeg

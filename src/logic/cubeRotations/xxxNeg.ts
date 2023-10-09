@@ -1,5 +1,12 @@
-import { pipe } from 'ramda'
 import { xNeg } from '../layerRotations'
-import { nArray } from '../utils'
+import { Cube } from '../newCube'
 
-export default  (cubeSize = 3) => pipe(...nArray(cubeSize)(xNeg))
+const xNeg0 = xNeg(0)
+const xNeg1 = xNeg(1)
+const xNeg2 = xNeg(2)
+
+const xxxNeg = (cube: Cube) => {
+    return xNeg2(xNeg1(xNeg0(cube)))
+}
+
+export default xxxNeg

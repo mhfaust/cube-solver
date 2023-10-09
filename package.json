@@ -1,24 +1,55 @@
 {
   "name": "cube-solver",
+  "author": "Mike Hildebrand-Faust",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "mocha --parallel -r ts-node/register 'src/logic/layerRotations/*.test.ts'"
   },
   "dependencies": {
+    "chalk": "^5.3.0",
+    "next": "13.5.4",
     "react": "^18",
     "react-dom": "^18",
-    "next": "13.5.4"
+    "save-dev": "^0.0.1-security",
+    "ts-node": "^10.9.1"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@types/chai": "^4.3.6",
+    "@types/mocha": "^10.0.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "chai": "^4.3.10",
     "eslint": "^8",
-    "eslint-config-next": "13.5.4"
+    "eslint-config-next": "13.5.4",
+    "mocha": "^10.2.0",
+    "tsx": "^3.13.0",
+    "typescript": "^5"
+  },
+  "mocha": {
+    "diff": true,
+    "extensions": [
+      "ts",
+      "tsx"
+    ],
+    "package": "./package.json",
+    "reporter": "spec",
+    "slow": "75",
+    "timeout": "2000",
+    "ui": "bdd",
+    "watch-files": [
+      "src/**/*.ts",
+      "src/**/*.tsx"
+    ],
+    "node-option": [
+      "experimental-specifier-resolution=node",
+      "loader=ts-node/esm"
+    ]
   }
 }

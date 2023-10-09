@@ -10,14 +10,15 @@ import {
     rightFace, 
     leftFace, 
     topFace, 
-    bottomFace
+    bottomFace,
+    I
 } from '../cubeUtils'
 
 
-export default  (z, cubeSize = 3) => {
+const zPos = (z: I) => {
 
-    const lastIndex = cubeSize - 1
-    const zFromEnd = lastIndex - z
+    const lastIndex = 2
+    const zFromEnd = 2 - z as I
     const rowZ = row(z) 
     const colZ = col(z)
     const colOppositeZ = col(zFromEnd)
@@ -26,9 +27,11 @@ export default  (z, cubeSize = 3) => {
     return nextCube({
         front: clockwiseIf(z === 0),
         back: counterClockwiseIf(z === lastIndex),
-        right: replaceCol(z, [topFace, rowOppositeZ]),
-        left: replaceCol(zFromEnd, [bottomFace, rowZ]),
-        top: replaceRow(zFromEnd, [leftFace, colOppositeZ, invert]),
-        bottom: replaceRow(z, [rightFace, colZ, invert])
+        right: replaceCol(z, cube => rowOppositeZ(topFace(cube))),
+        left: replaceCol(zFromEnd, cube => rowZ(bottomFace(cube))),
+        top: replaceRow(zFromEnd, cube => invert(colOppositeZ(leftFace(cube)))),
+        bottom: replaceRow(z, cube => invert(colZ(rightFace(cube))))
     })
 }
+
+export default zPos

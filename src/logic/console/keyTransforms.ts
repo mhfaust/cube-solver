@@ -10,7 +10,7 @@ import {
 } from '../cubeRotations'
 
 
-export default  (cubeSize) => ({
+export default  () => ({
     u: U,
     U: Ui,
     d: D,
@@ -23,10 +23,10 @@ export default  (cubeSize) => ({
     B: Bi,
     f: F,
     F: Fi,
-    '0': xxxNeg(cubeSize),
-    ')': xxxPos(cubeSize),
-    '-': yyyPos(cubeSize),
-    '_': yyyNeg(cubeSize),
-    '=': zzzPos(cubeSize),
-    '+': zzzNeg(cubeSize)
+    '0': xxxNeg,
+    ')': xxxPos,
+    '-': yyyPos,
+    '_': yyyNeg,
+    '=': zzzPos,
+    '+': zzzNeg
 })

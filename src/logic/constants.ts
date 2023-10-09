@@ -5,6 +5,22 @@ export const LEFT = 'left'
 export const TOP = 'top'
 export const BOTTOM = 'bottom'
 
-export const colors = Object.freeze({ R: 'R', B: 'B', G: 'G', Y: 'Y', O: 'O', W: 'W'})
-export const faceNames = Object.freeze([FRONT, RIGHT, BACK, LEFT, TOP, BOTTOM])
-export const equatorFaces =  Object.freeze([FRONT, RIGHT, BACK, LEFT])
+export const faceNames = [FRONT, RIGHT, BACK, LEFT, TOP, BOTTOM] as const;
+export type FaceName = typeof faceNames[number];
+
+const RED = 'red' as const
+const BLUE = 'blue' as const
+const GREEN = 'green' as const
+const YELLOW = 'yellow' as const
+const ORANGE = 'orange' as const
+const WHITE = 'white' as const
+export const R = RED
+export const B = BLUE
+export const G = GREEN
+export const Y = YELLOW
+export const O = ORANGE
+export const W = WHITE
+export const colors = [RED, BLUE, GREEN, YELLOW, ORANGE, WHITE];
+export type Color = typeof colors[number];
+
+export const equatorFaces: [FaceName, FaceName, FaceName, FaceName] =  [FRONT, RIGHT, BACK, LEFT]   

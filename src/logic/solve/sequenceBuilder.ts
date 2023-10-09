@@ -1,18 +1,21 @@
-import solutionNotation from './solutionNotation'
+import { Cube } from '../newCube'
+import solutionNotation, { FnName } from './solutionNotation'
 
 class SequenceBuilder {
-    constructor(cube){
+    cube: Cube
+    stack: FnName[]
+    constructor(cube: Cube){
         this.cube = cube
         this.stack = []
     }
 
-    push (fnName){
+    push (fnName: FnName){
         this.stack.push(fnName)
-        this.cube = solutionNotation[fnName](this.cube )
+        this.cube = solutionNotation[fnName](this.cube)
         return this
     }
 
-    concat(sequence){
+    concat(sequence: FnName[]){
         sequence.forEach(fnName => this.push(fnName))
         return this
     }
@@ -27,4 +30,4 @@ class SequenceBuilder {
     }
 }
 
-export const  newSequenceBuilder = (cube) => new SequenceBuilder(cube)
+export const  newSequenceBuilder = (cube: Cube) => new SequenceBuilder(cube)

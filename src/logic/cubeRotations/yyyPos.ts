@@ -1,5 +1,12 @@
-import { pipe } from 'ramda'
 import { yPos } from '../layerRotations'
-import { nArray } from '../utils'
+import { Cube } from '../newCube'
 
-export default  (cubeSize = 3) => pipe(...nArray(cubeSize)(yPos))
+const yPos0 = yPos(0)
+const yPos1 = yPos(1)
+const yPos2 = yPos(2)
+
+const yyyPos = (cube: Cube) => {
+    return yPos2(yPos1(yPos0(cube)))
+}
+
+export default yyyPos

@@ -1,5 +1,12 @@
-import { pipe } from 'ramda'
 import { yNeg } from '../layerRotations'
-import { nArray } from '../utils'
+import { Cube } from '../newCube'
 
-export default  (cubeSize = 3) => pipe(...nArray(cubeSize)(yNeg))
+const yNeg0 = yNeg(0)
+const yNeg1 = yNeg(1)
+const yNeg2 = yNeg(2)
+
+const yyyNeg = (cube: Cube) => {
+    return yNeg2(yNeg1(yNeg0(cube)))
+}
+
+export default yyyNeg
