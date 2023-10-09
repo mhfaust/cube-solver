@@ -1,11 +1,11 @@
 import { expect } from 'chai'
 import yyyNeg from './yyyNeg'
-import { allUniqueTilesCube } from '../testUtils'
 import { faceClockwise, faceCounterClockwise } from '../cubeUtils'
+import newCube from '../newCube'
 
 describe('yyyNeg', () => {
     it('rotates a 3-cube right correctly', () => {
-        const initial = allUniqueTilesCube()
+        const initial = newCube()
         const rotated = yyyNeg(initial)
 
         expect(rotated.top).to.deep.equal(faceClockwise('top', initial))

@@ -4,6 +4,8 @@ export const BACK = 'back'
 export const LEFT = 'left'
 export const TOP = 'top'
 export const BOTTOM = 'bottom'
+export type EquatorialEdge = typeof FRONT | typeof BACK | typeof LEFT | typeof RIGHT
+
 
 export const faceNames = [FRONT, RIGHT, BACK, LEFT, TOP, BOTTOM] as const;
 export type FaceName = typeof faceNames[number];

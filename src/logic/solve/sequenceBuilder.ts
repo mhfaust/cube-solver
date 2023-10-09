@@ -1,5 +1,13 @@
+import { TileLocator } from '../cubeUtils';
 import { Cube } from '../newCube'
 import solutionNotation, { FnName } from './solutionNotation'
+
+export type CubeAndSequence = {
+    cube: Cube;
+    sequence: FnName[];
+}
+export type CaseHandler = (cube: Cube, l: Partial<TileLocator>) => CubeAndSequence
+
 
 class SequenceBuilder {
     cube: Cube

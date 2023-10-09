@@ -1,9 +1,10 @@
-import { faceNames } from '../../../constants'
+import { Cube } from '@/logic/newCube'
+import { Color, faceNames } from '../../../constants'
 
 const edgeCoords = [[0,1],[1,0],[1,2],[2,1]]
 
 
-export const coloredEdges = (color, cube) => {
+export const coloredEdges = (color: Color, cube: Cube) => {
     return faceNames.map(faceName => {
         const face = cube[faceName]
         return edgeCoords

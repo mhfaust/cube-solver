@@ -4,6 +4,12 @@ import { CubeTransform } from './nextCube'
 
 export type I = 0 | 1 | 2
 
+export type TileLocator = {
+    faceName: FaceName,
+    row: I,
+    col: I
+}
+
 export const face = (faceName: FaceName) => (cube: Cube) => cube[faceName]
 
 export const row = (rowIndex: number) => (face: Face): Line => [...face[rowIndex]]
