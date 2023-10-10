@@ -15,6 +15,10 @@ const yellow = new Color(.5, .5, 0)
 const white = new Color(1, 1, 1)
 
 const colors = [red, orange, blue, green, white, yellow ]
+//axes:
+//x = red-axis
+//y = green-axis
+//z = blue-axis
 
 type CubeProps = {
   x0: number; 
@@ -39,9 +43,19 @@ const Cube = ({ x0, y0, z0 }: CubeProps) => {
 
       for(let i = 0; i < count; i++){
         const color = colors[Math.floor(i / 6) % 6]
-        geometry.attributes.color.setXYZ(i ,color.r, color.g, color.b)
+        if(
+          color === red && x0 === 1 ||
+          color === orange && x0 === -1 ||
+          color === blue && y0 === 1 ||
+          color === green && y0 === -1 ||
+          color === white && z0 === 1 || 
+          color === yellow && z0 === -1
+        ){
+
+          geometry.attributes.color.setXYZ(i ,color.r, color.g, color.b)
+        }
       }
-    }, [geometry])
+    }, [geometry, x0, y0, z0])
 
     const ref = useRef<Mesh>({} as Mesh)
 
