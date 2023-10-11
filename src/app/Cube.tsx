@@ -1,10 +1,14 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, MutableRefObject } from 'react'
 import { 
   Mesh, 
   BoxGeometry, 
   Color, 
   BufferAttribute,
-  MeshBasicMaterial
+  MeshBasicMaterial,
+  BufferGeometry,
+  NormalBufferAttributes,
+  Material,
+  Object3DEventMap
 } from 'three'
 
 const red = new Color(1, 0, 0);
@@ -20,12 +24,16 @@ const colors = [red, orange, blue, green, white, yellow ]
 //y = green-axis
 //z = blue-axis
 
+// export type CubeRef = MutableRefObject<MeshBasicMaterial>
+export type CubeRef = MutableRefObject<Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>>
+
 type CubeProps = {
+  meshRef: CubeRef;
   x0: number; 
   y0: number; 
   z0: number; 
 }
-const Cube = ({ x0, y0, z0 }: CubeProps) => {
+const Cube = ({ meshRef, x0, y0, z0 }: CubeProps) => {
   
   const geometryRef = useRef(new BoxGeometry().toNonIndexed())
   const geometry = geometryRef.current
@@ -51,17 +59,16 @@ const Cube = ({ x0, y0, z0 }: CubeProps) => {
           color === white && z0 === 1 || 
           color === yellow && z0 === -1
         ){
-
           geometry.attributes.color.setXYZ(i ,color.r, color.g, color.b)
         }
       }
     }, [geometry, x0, y0, z0])
 
-    const ref = useRef<Mesh>({} as Mesh)
+    // const ref = useRef<Mesh>({} as Mesh)
 
     return (
       <mesh
-          ref={ref}
+          ref={meshRef}
           position={[x,y,z]}
           geometry={geometry}
           material={material}
