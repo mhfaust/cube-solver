@@ -1,9 +1,8 @@
 import Cube from "./Cube"
 import { Stats, OrbitControls } from '@react-three/drei'
 import { useThree } from "@react-three/fiber"
-import { stat } from "fs/promises"
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { Mesh, MeshBasicMaterial, Object3D, Vector3, Quaternion } from "three"
+import { useEffect, useRef, useState } from 'react'
+import { Mesh, Object3D, Vector3, Quaternion } from "three"
 
 var q = new Quaternion();
 
@@ -38,7 +37,6 @@ const rotateZNegative = (cube: Object3D) => rotateAroundWorldAxis(cube, origin, 
 //z = blue-axis
 
 const eyes = [0,1,2]
-// const r = () => new MeshBasicMaterial({ vertexColors: true })
 
 const xAxis = new Vector3(1, 0,0 ).normalize()
 const yAxis = new Vector3(0, 1, 0).normalize()
@@ -71,12 +69,6 @@ const Cubes = () => {
 
     const [grid, setGrid] = useState(refs)
 
-    // const gridRef = useRef(
-    //     eyes.map(i => eyes.map(j => eyes.map(k => refs[i][j][k])))
-    // )
-    // const grid = gridRef.current
-
-
     // const rightCubes = grid[2].flat()
     // const leftCubes = grid[0].flat()
     // const upCubes = useMemo(() => grid.map(layer => layer[2]).flat(), [grid])
@@ -84,70 +76,82 @@ const Cubes = () => {
     // const frontCubes = grid.map(layer => layer.map(line => line[2])).flat()
     // const backCubes = grid.map(layer => layer.map(line => line[0])).flat()
 
-    // useEffect(() => {
-    //     gridRef.current.forEach(a => a.forEach(b => b.forEach(c => scene.add(c.current))))
-    // }, [scene])
 
-    const rotateUp = () => {
-        grid.map(layer => layer[2])
-            .flat().map(r => r.current)
-            .forEach(rotateYPositive)
+    const rotateXLayerNeg = (x:0|1|2) => {
+        const cubes = grid[x].flat().map(r => r.current)
+        // cubes.forEach(c => c.visible = false)
+        cubes.forEach(rotateXNegative)
 
-        const new020 = grid[0][2][0].current
-        const new021 = grid[1][2][0].current
-        const new022 = grid[2][2][0].current
-        const new120 = grid[0][2][1].current
-        const new121 = grid[1][2][1].current
-        const new122 = grid[2][2][1].current
-        const new220 = grid[0][2][2].current
-        const new221 = grid[1][2][2].current
-        const new222 = grid[2][2][2].current
+        const newx00 = grid[x][2][0].current
+        const newx01 = grid[x][1][0].current
+        const newx02 = grid[x][0][0].current
+        const newx10 = grid[x][2][1].current
+        const newx11 = grid[x][1][1].current
+        const newx12 = grid[x][0][1].current
+        const newx20 = grid[x][2][2].current
+        const newx21 = grid[x][1][2].current
+        const newx22 = grid[x][0][2].current
 
         const newGrid = copyGrid(grid)
-        newGrid[0][2][0].current =new020
-        newGrid[0][2][1].current =new021
-        newGrid[0][2][2].current =new022
-        newGrid[1][2][0].current =new120
-        newGrid[1][2][1].current =new121
-        newGrid[1][2][2].current =new122
-        newGrid[2][2][0].current =new220
-        newGrid[2][2][1].current =new221
-        newGrid[2][2][2].current =new222
+        newGrid[x][0][0].current = newx00
+        newGrid[x][0][1].current = newx01
+        newGrid[x][0][2].current = newx02
+        newGrid[x][1][0].current = newx10
+        newGrid[x][1][1].current = newx11
+        newGrid[x][1][2].current = newx12
+        newGrid[x][2][0].current = newx20
+        newGrid[x][2][1].current = newx21
+        newGrid[x][2][2].current = newx22
+        setGrid(newGrid)
+    }
+    
+    const rotateYLayerNeg = (y: 0|1|2) => {
+        const cubes = grid.map(layer => layer[y])
+            .flat().map(r => r.current)
+        cubes.forEach(rotateYNegative)
+        // cubes.forEach(c => c.visible = false)
+
+        const new0y0 = grid[0][y][2].current
+        const new0y1 = grid[1][y][2].current
+        const new0y2 = grid[2][y][2].current
+        const new1y0 = grid[0][y][1].current
+        const new1y1 = grid[1][y][1].current
+        const new1y2 = grid[2][y][1].current
+        const new2y0 = grid[0][y][0].current
+        const new2y1 = grid[1][y][0].current
+        const new2y2 = grid[2][y][0].current
+
+        const newGrid = copyGrid(grid)
+        newGrid[0][y][0].current = new0y0
+        newGrid[0][y][1].current = new0y1
+        newGrid[0][y][2].current = new0y2
+        newGrid[1][y][0].current = new1y0
+        newGrid[1][y][1].current = new1y1
+        newGrid[1][y][2].current = new1y2
+        newGrid[2][y][0].current = new2y0
+        newGrid[2][y][1].current = new2y1
+        newGrid[2][y][2].current = new2y2
         setGrid(newGrid)
     }
 
-    const rotateRight = () => {
-        const cubes = grid[2].flat().map(r => r.current)
-        // cubes.forEach(c => c.visible = false)
-        cubes.forEach(rotateXPositive)
-        // const newGrid = copyGrid(grid)
-        // newGrid[0][2][0].current = grid[0][2][2].current
-        // newGrid[0][2][1].current = grid[1][2][2].current
-        // newGrid[0][2][2].current = grid[2][2][2].current
-        // newGrid[1][2][0].current = grid[0][2][1].current
-        // newGrid[1][2][1].current = grid[1][2][1].current
-        // newGrid[1][2][2].current = grid[2][2][1].current
-        // newGrid[2][2][0].current = grid[0][2][0].current
-        // newGrid[2][2][1].current = grid[1][2][0].current
-        // newGrid[2][2][2].current = grid[2][2][0].current
-    }
 
-    useEffect(() => {
-        const timeout = setTimeout(() => {
-            rotateUp()
-        }, 1000)
-        return () => {
-            clearTimeout(timeout)
-        }
-    }, [])
-    useEffect(() => {
-        const timeout = setInterval(() => {
-            rotateRight()
-        }, 4000)
-        return () => {
-            clearInterval(timeout)
-        }
-    }, [])
+    const effects = [
+        () => rotateYLayerNeg(1),
+        () => rotateYLayerNeg(1),
+        () => rotateXLayerNeg(1),
+        () => rotateXLayerNeg(1),
+    ]
+
+    useEffect(() => { effects[0] && setTimeout(effects[0], 0 * 500) }, [])
+    useEffect(() => { effects[1] && setTimeout(effects[1], 1 * 500) }, [])
+    useEffect(() => { effects[2] && setTimeout(effects[2], 2 * 500) }, [])
+    useEffect(() => { effects[3] && setTimeout(effects[3], 3 * 500) }, [])
+    useEffect(() => { effects[4] && setTimeout(effects[4], 4 * 500) }, [])
+    useEffect(() => { effects[5] && setTimeout(effects[5], 5 * 500) }, [])
+    useEffect(() => { effects[6] && setTimeout(effects[6], 6 * 500) }, [])
+    useEffect(() => { effects[7] && setTimeout(effects[7], 7 * 500) }, [])
+    useEffect(() => { effects[8] && setTimeout(effects[8], 8 * 500) }, [])
+
 
 
     console.log('RENDER')
