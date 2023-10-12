@@ -1,16 +1,19 @@
 import Cube from "./Cube"
 import { Stats, OrbitControls } from '@react-three/drei'
-import { useThree } from "@react-three/fiber"
+import { useFrame, useThree } from "@react-three/fiber"
 import { useEffect, useRef, useState } from 'react'
-import { Mesh, Object3D, Vector3, Quaternion, Matrix4 } from "three"
+import { Mesh, Object3D, Vector3, Quaternion, Matrix4, MathUtils } from "three"
 import { Easing, Tween, update } from "three/examples/jsm/libs/tween.module.js"
+import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+
+const { PI } = Math
 
 // function rotateSmooth(
 //     cube: Object3D, 
 //     xyz: 'x' | 'y' | 'z'
 // ) {
 //     new Tween({ theta: cube.rotation[xyz] })
-//         .to({ theta: Math.PI / 2 }, 300) // Target rotation and duration
+//         .to({ theta: PI / 2 }, 300) // Target rotation and duration
 //         .easing(Easing.Quadratic.InOut) // Easing function
 //         .onUpdate((object) => {
 //             cube.rotation[xyz] = object.theta;
@@ -31,8 +34,28 @@ function rotate(
         cube: Object3D, 
         point: Vector3, 
         axis: Vector3, 
-        angle: number 
+        angle: number, 
+        callback: () => void = () => {}
     ) {
+    // new Tween({ t: 0 })
+    //     .to({ t: 1 }, 10 )
+    //     .easing( Easing.Quadratic.Out )
+    //     .onUpdate( (tween) => {
+    //             quaternion.setFromAxisAngle(axis, angle);
+    //             cube.applyQuaternion(quaternion);
+    //             cube.position.sub(point);
+    //             cube.position.applyQuaternion(quaternion);
+    //             cube.position.add(point);
+                
+    //         } )
+    //     .onComplete(callback)
+    //     .start();
+    //     const animate: FrameRequestCallback = (time) => {
+    //         requestAnimationFrame(animate);
+    //         update(time);
+    //     }
+    //     requestAnimationFrame(animate);
+
     quaternion.setFromAxisAngle(axis, angle);
     cube.applyQuaternion(quaternion);
     cube.position.sub(point);
@@ -40,12 +63,12 @@ function rotate(
     cube.position.add(point);
 }
 
-const rotateXPositive = (cube: Object3D) => rotate(cube, origin, xAxis, Math.PI / 2)
-const rotateXNegative = (cube: Object3D) => rotate(cube, origin, xAxis, -Math.PI / 2)
-const rotateYPositive = (cube: Object3D) => rotate(cube, origin, yAxis, Math.PI / 2)
-const rotateYNegative = (cube: Object3D) => rotate(cube, origin, yAxis, -Math.PI / 2)
-const rotateZPositive = (cube: Object3D) => rotate(cube, origin, zAxis, Math.PI / 2)
-const rotateZNegative = (cube: Object3D) => rotate(cube, origin, zAxis, -Math.PI / 2)
+const rotateXPositive = (cube: Object3D) => rotate(cube, origin, xAxis, PI / 2)
+const rotateXNegative = (cube: Object3D) => rotate(cube, origin, xAxis, -PI / 2)
+const rotateYPositive = (cube: Object3D) => rotate(cube, origin, yAxis, PI / 2)
+const rotateYNegative = (cube: Object3D) => rotate(cube, origin, yAxis, -PI / 2)
+const rotateZPositive = (cube: Object3D) => rotate(cube, origin, zAxis, PI / 2)
+const rotateZNegative = (cube: Object3D) => rotate(cube, origin, zAxis, -PI / 2)
 
 const eyes = [0,1,2] as const
 
@@ -57,9 +80,37 @@ const origin = new Vector3(0, 0, 0).normalize()
 function copyGrid<T> (grid: T[][][]) {
     return grid.map(dim2 => dim2.map(dim1 => dim1.slice()))
 }
-
+function debounce(func: any) {
+    let timeout: any;
+  
+    return (...args: any[]) => {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+  
+      clearTimeout(timeout);
+      timeout = setTimeout(later, 100);  // sets the delay to 100ms
+    };
+}
+const log = debounce(console.log)
 const Cubes = () => {
     const { scene, camera } = useThree();
+    const controlsRef = useRef<ThreeOrbitControls>(null);
+
+    useFrame((_state) => {
+        controlsRef.current?.update()
+    });
+
+    useEffect(() => {
+        if(!controlsRef.current) {
+            return
+        }
+        controlsRef.current.minPolarAngle = PI / 3;
+        controlsRef.current.maxPolarAngle = 2 * PI / 3;
+        controlsRef.current.minAzimuthAngle = (PI / 3) - (PI / 2);
+        controlsRef.current.maxAzimuthAngle = (2 * PI / 3)  - (PI / 2);
+    }, [])
 
     const refs = [
         [
@@ -280,7 +331,7 @@ const Cubes = () => {
 
     return (<>
         <Stats />
-        <OrbitControls />
+        <OrbitControls ref={controlsRef}/>
         <axesHelper args={[5]} />
         {eyes.map(i => eyes.map(j => eyes.map(k =>(
             <Cube 

@@ -32,7 +32,7 @@ type CubeProps = {
 }
 const Cube = ({ meshRef, x0, y0, z0 }: CubeProps) => {
   
-  const geometryRef = useRef(new RoundedBoxGeometry(1.0, 1.0, 1.0).toNonIndexed())
+  const geometryRef = useRef(new RoundedBoxGeometry(1.0, 1.0, 1.0))
   const geometry = geometryRef.current
   const materialRef = useRef(new MeshBasicMaterial({ vertexColors: true }))
   const material = materialRef.current
