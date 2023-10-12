@@ -3,33 +3,49 @@ import { Stats, OrbitControls } from '@react-three/drei'
 import { useThree } from "@react-three/fiber"
 import { useEffect, useRef, useState } from 'react'
 import { Mesh, Object3D, Vector3, Quaternion, Matrix4 } from "three"
+import { Easing, Tween, update } from "three/examples/jsm/libs/tween.module.js"
+
+// function rotateSmooth(
+//     cube: Object3D, 
+//     xyz: 'x' | 'y' | 'z'
+// ) {
+//     new Tween({ theta: cube.rotation[xyz] })
+//         .to({ theta: Math.PI / 2 }, 300) // Target rotation and duration
+//         .easing(Easing.Quadratic.InOut) // Easing function
+//         .onUpdate((object) => {
+//             cube.rotation[xyz] = object.theta;
+//         })
+//         .start();
+//     // This function is necessary for TWEEN's internal update
+//     const animate: FrameRequestCallback = (time) => {
+//         requestAnimationFrame(animate);
+//         update(time);
+//     }
+//     requestAnimationFrame(animate);
+// }
+
 
 var quaternion = new Quaternion();
 
-function rotateAroundWorldAxis(
-        object: Object3D, 
+function rotate(
+        cube: Object3D, 
         point: Vector3, 
         axis: Vector3, 
         angle: number 
     ) {
-
     quaternion.setFromAxisAngle(axis, angle);
-
-    object.applyQuaternion(quaternion);
-
-    object.position.sub(point);
-    object.position.applyQuaternion(quaternion);
-    object.position.add( point);
-
-    return object;
+    cube.applyQuaternion(quaternion);
+    cube.position.sub(point);
+    cube.position.applyQuaternion(quaternion);
+    cube.position.add(point);
 }
 
-const rotateXPositive = (cube: Object3D) => rotateAroundWorldAxis(cube, origin, xAxis, Math.PI / 2)
-const rotateXNegative = (cube: Object3D) => rotateAroundWorldAxis(cube, origin, xAxis, -Math.PI / 2)
-const rotateYPositive = (cube: Object3D) => rotateAroundWorldAxis(cube, origin, yAxis, Math.PI / 2)
-const rotateYNegative = (cube: Object3D) => rotateAroundWorldAxis(cube, origin, yAxis, -Math.PI / 2)
-const rotateZPositive = (cube: Object3D) => rotateAroundWorldAxis(cube, origin, zAxis, Math.PI / 2)
-const rotateZNegative = (cube: Object3D) => rotateAroundWorldAxis(cube, origin, zAxis, -Math.PI / 2)
+const rotateXPositive = (cube: Object3D) => rotate(cube, origin, xAxis, Math.PI / 2)
+const rotateXNegative = (cube: Object3D) => rotate(cube, origin, xAxis, -Math.PI / 2)
+const rotateYPositive = (cube: Object3D) => rotate(cube, origin, yAxis, Math.PI / 2)
+const rotateYNegative = (cube: Object3D) => rotate(cube, origin, yAxis, -Math.PI / 2)
+const rotateZPositive = (cube: Object3D) => rotate(cube, origin, zAxis, Math.PI / 2)
+const rotateZNegative = (cube: Object3D) => rotate(cube, origin, zAxis, -Math.PI / 2)
 
 const eyes = [0,1,2] as const
 

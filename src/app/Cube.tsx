@@ -41,12 +41,11 @@ const Cube = ({ meshRef, x0, y0, z0 }: CubeProps) => {
       let { count } = geometry.attributes.position
       geometry.setAttribute('color', new BufferAttribute(new Float32Array( count * 3 ), 3 ))
       for(let i = 0; i < count; i++){
-        const im = i % 100
+        const imod = i % 150
         const s = new Set([22, 23, 24, 25, 26, 27, 72, 73, 74, 75, 76, 77 ])
-        if(!s.has(im)) {
+        if(!s.has(imod)) {
           continue
         }
-        console.log(i)
         const color = colors[Math.floor(i / 6) % 6]
         if(
           //only color exposed sides:
