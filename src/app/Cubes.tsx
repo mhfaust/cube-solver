@@ -2,9 +2,9 @@ import Cube from "./Cube"
 import { Stats, OrbitControls } from '@react-three/drei'
 import { useFrame, useThree } from "@react-three/fiber"
 import { useEffect, useRef, useState } from 'react'
-import { Mesh, Object3D, Vector3, Quaternion, Matrix4, MathUtils } from "three"
+import { Mesh, Object3D, Vector3, Quaternion } from "three"
 import { Easing, Tween, update } from "three/examples/jsm/libs/tween.module.js"
-import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { OrbitControls as ThreeOrbitControls } from 'three-stdlib';
 
 const { PI } = Math
 
@@ -80,20 +80,7 @@ const origin = new Vector3(0, 0, 0).normalize()
 function copyGrid<T> (grid: T[][][]) {
     return grid.map(dim2 => dim2.map(dim1 => dim1.slice()))
 }
-function debounce(func: any) {
-    let timeout: any;
-  
-    return (...args: any[]) => {
-      const later = () => {
-        clearTimeout(timeout);
-        func(...args);
-      };
-  
-      clearTimeout(timeout);
-      timeout = setTimeout(later, 100);  // sets the delay to 100ms
-    };
-}
-const log = debounce(console.log)
+
 const Cubes = () => {
     const { scene, camera } = useThree();
     const controlsRef = useRef<ThreeOrbitControls>(null);
