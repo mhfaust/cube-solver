@@ -4,7 +4,7 @@ import { useThree } from "@react-three/fiber"
 import { useEffect, useRef, useState } from 'react'
 import { Mesh, Object3D, Vector3, Quaternion, Matrix4 } from "three"
 
-var q = new Quaternion();
+var quaternion = new Quaternion();
 
 function rotateAroundWorldAxis(
         object: Object3D, 
@@ -13,13 +13,13 @@ function rotateAroundWorldAxis(
         angle: number 
     ) {
 
-    q.setFromAxisAngle( axis, angle );
+    quaternion.setFromAxisAngle(axis, angle);
 
-    object.applyQuaternion( q );
+    object.applyQuaternion(quaternion);
 
-    object.position.sub( point );
-    object.position.applyQuaternion( q );
-    object.position.add( point );
+    object.position.sub(point);
+    object.position.applyQuaternion(quaternion);
+    object.position.add( point);
 
     return object;
 }
@@ -232,7 +232,7 @@ const Cubes = () => {
             newGrid[2][2][z].current = new22z
             setGrid(newGrid)
         }
-        
+
         const cases: Record<string, () => void> = {
             'u': () => rotateYLayerNeg(2),
             'U': () => rotateYLayerPos(2),
