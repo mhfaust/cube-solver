@@ -2,61 +2,45 @@ import Cube from "./Cube"
 import { Stats, OrbitControls } from '@react-three/drei'
 import { useFrame, useThree } from "@react-three/fiber"
 import { useEffect, useRef, useState } from 'react'
-import { Mesh, Object3D, Vector3, Quaternion } from "three"
+import { Mesh, Object3D, Vector3, Quaternion, Clock } from "three"
 import { Easing, Tween, update } from "three/examples/jsm/libs/tween.module.js"
 import { OrbitControls as ThreeOrbitControls } from 'three-stdlib';
 
 const { PI } = Math
 
-// function rotateSmooth(
-//     cube: Object3D, 
-//     xyz: 'x' | 'y' | 'z'
-// ) {
-//     new Tween({ theta: cube.rotation[xyz] })
-//         .to({ theta: PI / 2 }, 300) // Target rotation and duration
-//         .easing(Easing.Quadratic.InOut) // Easing function
-//         .onUpdate((object) => {
-//             cube.rotation[xyz] = object.theta;
-//         })
-//         .start();
-//     // This function is necessary for TWEEN's internal update
-//     const animate: FrameRequestCallback = (time) => {
-//         requestAnimationFrame(animate);
-//         update(time);
-//     }
-//     requestAnimationFrame(animate);
-// }
+const oppKeys = {
+	'u': 'U',
+	'U': 'u',
+	'd': 'D',
+	'D': 'd',
+	'l': 'L',
+	'L': 'l',
+	'r': 'R',
+	'R': 'r',
+	'f': 'F',
+	'F': 'f',
+	'b': 'B',
+	'B': 'b',
+	'ArrowLeft': 'ArrowRight',
+	'ArrowRight': 'ArrowLeft',
+	'ArrowUp': 'ArrowDown',
+	'ArrowDown': 'ArrowUp',
+	'[': ']',
+	']': '[',
+}
+type Key = keyof typeof oppKeys;
 
-
-var quaternion = new Quaternion();
+const clock = new Clock()
+const quaternion = new Quaternion();
 
 function rotate(
         cube: Object3D, 
         point: Vector3, 
         axis: Vector3, 
         angle: number, 
-        callback: () => void = () => {}
     ) {
-    // new Tween({ t: 0 })
-    //     .to({ t: 1 }, 10 )
-    //     .easing( Easing.Quadratic.Out )
-    //     .onUpdate( (tween) => {
-    //             quaternion.setFromAxisAngle(axis, angle);
-    //             cube.applyQuaternion(quaternion);
-    //             cube.position.sub(point);
-    //             cube.position.applyQuaternion(quaternion);
-    //             cube.position.add(point);
-                
-    //         } )
-    //     .onComplete(callback)
-    //     .start();
-    //     const animate: FrameRequestCallback = (time) => {
-    //         requestAnimationFrame(animate);
-    //         update(time);
-    //     }
-    //     requestAnimationFrame(animate);
-
     quaternion.setFromAxisAngle(axis, angle);
+    
     cube.applyQuaternion(quaternion);
     cube.position.sub(point);
     cube.position.applyQuaternion(quaternion);
@@ -85,6 +69,8 @@ const Cubes = () => {
     const { scene, camera } = useThree();
     const controlsRef = useRef<ThreeOrbitControls>(null);
 
+		const [history, setHistory] = useState<Key[]>([])
+
     useFrame((_state) => {
         controlsRef.current?.update()
     });
@@ -93,10 +79,10 @@ const Cubes = () => {
         if(!controlsRef.current) {
             return
         }
-        controlsRef.current.minPolarAngle = PI / 3;
-        controlsRef.current.maxPolarAngle = 2 * PI / 3;
-        controlsRef.current.minAzimuthAngle = (PI / 3) - (PI / 2);
-        controlsRef.current.maxAzimuthAngle = (2 * PI / 3)  - (PI / 2);
+        controlsRef.current.minPolarAngle = 1/3 * PI;
+        controlsRef.current.maxPolarAngle = 2/3 * PI;
+        controlsRef.current.minAzimuthAngle = -1/6 * PI;
+        controlsRef.current.maxAzimuthAngle = 1/6 * PI;
     }, [])
 
     const refs = [
@@ -287,7 +273,7 @@ const Cubes = () => {
             setGrid(newGrid)
         }
 
-        const cases: Record<string, () => void> = {
+        const keys: Record<string, () => void> = {
             'u': () => rotateYLayerNeg(2),
             'U': () => rotateYLayerPos(2),
             'd': () => rotateYLayerPos(0),
@@ -308,7 +294,21 @@ const Cubes = () => {
             ']': () => eyes.forEach(rotateZLayerNeg)
         }
         const handleKeyDown = (e: KeyboardEvent) => {
-            cases[e.key]?.()
+						if(e.metaKey && e.key === 'z'){
+							console.log('undo')
+							const newHistory = [...history]
+							const last = newHistory.pop()
+							setHistory(newHistory)
+							if(last){
+								keys[oppKeys[last]]()
+							}
+								
+						}
+						const fn = keys[e.key]
+						if(fn){
+							fn()
+							setHistory(h => [...h, e.key as Key])
+						}
         };
         document.addEventListener('keydown', handleKeyDown);
         return () => {
@@ -319,7 +319,6 @@ const Cubes = () => {
     return (<>
         <Stats />
         <OrbitControls ref={controlsRef}/>
-        <axesHelper args={[5]} />
         {eyes.map(i => eyes.map(j => eyes.map(k =>(
             <Cube 
                 key={`i:${i},j:${j},k:${k}`} 
