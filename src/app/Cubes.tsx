@@ -1,6 +1,8 @@
+'use client'
+
 import Cube from "./Cube"
 import { Stats, OrbitControls } from '@react-three/drei'
-import { useFrame, useThree } from "@react-three/fiber"
+import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import { useEffect, useRef, useState } from 'react'
 import { Mesh, Object3D, Vector3, Quaternion, Clock } from "three"
 import { Easing, Tween, update } from "three/examples/jsm/libs/tween.module.js"
@@ -40,11 +42,8 @@ function rotate(
         angle: number, 
     ) {
     quaternion.setFromAxisAngle(axis, angle);
-    
     cube.applyQuaternion(quaternion);
-    cube.position.sub(point);
     cube.position.applyQuaternion(quaternion);
-    cube.position.add(point);
 }
 
 const rotateXPositive = (cube: Object3D) => rotate(cube, origin, xAxis, PI / 2)
@@ -65,7 +64,7 @@ function copyGrid<T> (grid: T[][][]) {
     return grid.map(dim2 => dim2.map(dim1 => dim1.slice()))
 }
 
-const Cubes = () => {
+const CubesContainer = () => {
     const { scene, camera } = useThree();
     const controlsRef = useRef<ThreeOrbitControls>(null);
 
@@ -76,14 +75,19 @@ const Cubes = () => {
     });
 
     useEffect(() => {
-        if(!controlsRef.current) {
-            return
-        }
-        controlsRef.current.minPolarAngle = 1/3 * PI;
-        controlsRef.current.maxPolarAngle = 2/3 * PI;
-        controlsRef.current.minAzimuthAngle = -1/6 * PI;
-        controlsRef.current.maxAzimuthAngle = 1/6 * PI;
-    }, [])
+			(camera as any).fov = 30
+			camera.updateProjectionMatrix();
+
+			if(!controlsRef.current) {
+					return
+			}
+			controlsRef.current.minPolarAngle = 2/5 * PI;
+			controlsRef.current.maxPolarAngle = 3/5 * PI;
+			controlsRef.current.minAzimuthAngle = -1/10 * PI;
+			controlsRef.current.maxAzimuthAngle = 1/10 * PI;
+			controlsRef.current.maxDistance = 16
+			controlsRef.current.minDistance = 16
+    }, [camera])
 
     const refs = [
         [
@@ -333,4 +337,10 @@ const Cubes = () => {
      </>)
 }
 
-export default Cubes;
+const Cubes = () => (
+	<Canvas>
+		<CubesContainer/>
+	</Canvas>
+);
+
+export default Cubes
