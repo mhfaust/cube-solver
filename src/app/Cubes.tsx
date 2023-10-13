@@ -296,12 +296,14 @@ const Cubes = () => {
         const handleKeyDown = (e: KeyboardEvent) => {
 						if(e.metaKey && e.key === 'z'){
 							console.log('undo')
-							const newHistory = [...history]
-							const last = newHistory.pop()
-							setHistory(newHistory)
-							if(last){
-								keys[oppKeys[last]]()
-							}
+							setHistory((h) => {
+								const newHistory = [...h]
+								const last = newHistory.pop()
+								if(last){
+									keys[oppKeys[last]]()
+								}
+								return newHistory
+							})
 								
 						}
 						const fn = keys[e.key]

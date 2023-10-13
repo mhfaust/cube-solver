@@ -6,7 +6,7 @@ import Cubes from './Cubes'
 export default function App() {
 
   return (
-    <Canvas  style={{width: 500, height: 500}}>
+    <Canvas  style={{width: '100vw', height: '100vh'}}>
       <Cubes />
     </Canvas>
   )
