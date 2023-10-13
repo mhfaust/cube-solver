@@ -8,12 +8,12 @@ import { Mesh, Object3D, Vector3, Quaternion, Clock } from "three"
 import { Easing, Tween, update } from "three/examples/jsm/libs/tween.module.js"
 import { OrbitControls as ThreeOrbitControls } from 'three-stdlib';
 import { 
-	rotateModelXNegative, 
-	rotateModelXPositive, 
-	rotateModelYNegative, 
-	rotateModelYPositive, 
-	rotateModelZNegative,
-	rotateModelZPositive
+	rotateModelXLayerNegative, 
+	rotateModelXLayerPositive, 
+	rotateModelYLayerNegative, 
+	rotateModelYLayerPositive, 
+	rotateModelZLayerNegative,
+	rotateModelZYalerPositive
 } from "./gridModelRotations"
 
 const { PI } = Math
@@ -40,16 +40,21 @@ const oppositeKeys = {
 }
 type Key = keyof typeof oppositeKeys;
 
-const clock = new Clock()
-const quaternion = new Quaternion();
-
 function rotate(
         cube: Object3D, 
         axis: Vector3, 
         angle: number, 
     ) {
-    quaternion.setFromAxisAngle(axis, angle);
-    cube.applyQuaternion(quaternion);
+		const steps = 30
+		const r = (i: number) => {
+			setTimeout(() => {
+				cube.rotateOnWorldAxis(axis, angle / (steps))
+				if(i < steps - 1){
+					r(i + 1)
+				}
+			}, 135 / steps)
+		}
+		r(0)
 }
 
 const rotateXPositive = (cube: Object3D) => rotate(cube, xAxis, PI / 2)
@@ -72,8 +77,9 @@ const CubesContainer = () => {
 
 		const [history, setHistory] = useState<Key[]>([])
 
-    useFrame((_state) => {
+    useFrame(({ clock }) => {
         controlsRef.current?.update()
+				// const a = clock.getElapsedTime()
     });
 
 		const controls = controlsRef.current
@@ -123,41 +129,41 @@ const CubesContainer = () => {
         const rotateXLayerPositive = (x:0|1|2) => {
             const cubes = grid[x].flat().map(r => r.current)
             cubes.forEach(rotateXPositive)
-            setGrid(rotateModelXPositive(grid, x))
+            setGrid(rotateModelXLayerPositive(grid, x))
         }
     
         const rotateXLayerNegative = (x:0|1|2) => {
             const cubes = grid[x].flat().map(r => r.current)
             cubes.forEach(rotateXNegative)
-            setGrid(rotateModelXNegative(grid, x))
+            setGrid(rotateModelXLayerNegative(grid, x))
         }
     
         const rotateYLayerPositive = (y: 0|1|2) => {
             const cubes = grid.map(layer => layer[y])
                 .flat().map(r => r.current)
             cubes.forEach(rotateYPositive)
-            setGrid(rotateModelYPositive(grid, y))
+            setGrid(rotateModelYLayerPositive(grid, y))
         }
     
         const rotateYLayerNegative = (y: 0|1|2) => {
             const cubes = grid.map(layer => layer[y])
                 .flat().map(r => r.current)
             cubes.forEach(rotateYNegative)
-            setGrid(rotateModelYNegative(grid, y))
+            setGrid(rotateModelYLayerNegative(grid, y))
         }
     
         const rotateZLayerPositive = (z: 0|1|2) => {
             const cubes = grid.map(layer => layer.map(line => line[z]))
                 .flat().map(r => r.current)
             cubes.forEach(rotateZPositive)
-            setGrid(rotateModelZPositive(grid, z))
+            setGrid(rotateModelZYalerPositive(grid, z))
         }
     
         const rotateZLayerNegative = (z:0|1|2) => {
             const cubes = grid.map(layer => layer.map(line => line[z]))
                 .flat().map(r => r.current)
             cubes.forEach(rotateZNegative)
-            setGrid(rotateModelZNegative(grid, z))
+            setGrid(rotateModelZLayerNegative(grid, z))
         }
 
         const keyCodeFunctions: Record<string, () => void> = {
