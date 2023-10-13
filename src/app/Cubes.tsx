@@ -45,21 +45,19 @@ const quaternion = new Quaternion();
 
 function rotate(
         cube: Object3D, 
-        point: Vector3, 
         axis: Vector3, 
         angle: number, 
     ) {
     quaternion.setFromAxisAngle(axis, angle);
     cube.applyQuaternion(quaternion);
-    cube.position.applyQuaternion(quaternion);
 }
 
-const rotateXPositive = (cube: Object3D) => rotate(cube, origin, xAxis, PI / 2)
-const rotateXNegative = (cube: Object3D) => rotate(cube, origin, xAxis, -PI / 2)
-const rotateYPositive = (cube: Object3D) => rotate(cube, origin, yAxis, PI / 2)
-const rotateYNegative = (cube: Object3D) => rotate(cube, origin, yAxis, -PI / 2)
-const rotateZPositive = (cube: Object3D) => rotate(cube, origin, zAxis, PI / 2)
-const rotateZNegative = (cube: Object3D) => rotate(cube, origin, zAxis, -PI / 2)
+const rotateXPositive = (cube: Object3D) => rotate(cube, xAxis, PI / 2)
+const rotateXNegative = (cube: Object3D) => rotate(cube, xAxis, -PI / 2)
+const rotateYPositive = (cube: Object3D) => rotate(cube, yAxis, PI / 2)
+const rotateYNegative = (cube: Object3D) => rotate(cube, yAxis, -PI / 2)
+const rotateZPositive = (cube: Object3D) => rotate(cube, zAxis, PI / 2)
+const rotateZNegative = (cube: Object3D) => rotate(cube, zAxis, -PI / 2)
 
 const coords = [0,1,2] as const
 
@@ -216,7 +214,7 @@ const CubesContainer = () => {
                 x0={i-1} 
                 y0={j-1} 
                 z0={k-1} 
-                meshRef={refs[i][j][k]}
+                containerRef={refs[i][j][k]}
             />
         ))))}
      </>)
