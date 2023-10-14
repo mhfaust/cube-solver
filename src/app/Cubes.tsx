@@ -3,9 +3,8 @@
 import Cube from "./Cube"
 import { Stats, OrbitControls } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
-import { createRef, useEffect, useRef, useState } from 'react'
-import { Mesh, Object3D, Vector3, Quaternion, Clock } from "three"
-import { Easing, Tween, update } from "three/examples/jsm/libs/tween.module.js"
+import { useEffect, useRef, useState } from 'react'
+import { Mesh, Object3D, Vector3 } from "three"
 import { OrbitControls as ThreeOrbitControls } from 'three-stdlib';
 import { 
 	rotateModelXLayerNegative, 
@@ -40,46 +39,48 @@ const oppositeKeys = {
 }
 type Key = keyof typeof oppositeKeys;
 
+const ROTATION_STEPS = 30
+const ROTATION_TIME = 135
+
 function rotate(
         cube: Object3D, 
         axis: Vector3, 
-        angle: number, 
+        angle: number,
+				callback: () => void
     ) {
-		const steps = 30
 		const r = (i: number) => {
 			setTimeout(() => {
-				cube.rotateOnWorldAxis(axis, angle / (steps))
-				if(i < steps - 1){
+				cube.rotateOnWorldAxis(axis, angle / (ROTATION_STEPS))
+				if(i < ROTATION_STEPS - 1){
 					r(i + 1)
-				}
-			}, 135 / steps)
+				} else callback()
+			}, ROTATION_TIME / ROTATION_STEPS)
 		}
 		r(0)
 }
 
-const rotateXPositive = (cube: Object3D) => rotate(cube, xAxis, PI / 2)
-const rotateXNegative = (cube: Object3D) => rotate(cube, xAxis, -PI / 2)
-const rotateYPositive = (cube: Object3D) => rotate(cube, yAxis, PI / 2)
-const rotateYNegative = (cube: Object3D) => rotate(cube, yAxis, -PI / 2)
-const rotateZPositive = (cube: Object3D) => rotate(cube, zAxis, PI / 2)
-const rotateZNegative = (cube: Object3D) => rotate(cube, zAxis, -PI / 2)
+type Rotator = (cube: Object3D, callback: () => void) => void
+const rotateXPositive: Rotator = (cube: Object3D, callback: () => void) => rotate(cube, xAxis, PI / 2, callback)
+const rotateXNegative: Rotator = (cube: Object3D, callback: () => void) => rotate(cube, xAxis, -PI / 2, callback)
+const rotateYPositive: Rotator = (cube: Object3D, callback: () => void) => rotate(cube, yAxis, PI / 2, callback)
+const rotateYNegative: Rotator = (cube: Object3D, callback: () => void) => rotate(cube, yAxis, -PI / 2, callback)
+const rotateZPositive: Rotator = (cube: Object3D, callback: () => void) => rotate(cube, zAxis, PI / 2, callback)
+const rotateZNegative: Rotator = (cube: Object3D, callback: () => void) => rotate(cube, zAxis, -PI / 2, callback)
 
 const coords = [0,1,2] as const
 
 const xAxis = new Vector3(1, 0,0 ).normalize()
 const yAxis = new Vector3(0, 1, 0).normalize()
 const zAxis = new Vector3(0, 0, 1).normalize()
-const origin = new Vector3(0, 0, 0).normalize()
 
 const CubesContainer = () => {
-    const { scene, camera } = useThree();
+    const { camera } = useThree();
     const controlsRef = useRef<ThreeOrbitControls>(null);
-
-		const [history, setHistory] = useState<Key[]>([])
+		const [_history, setHistory] = useState<Key[]>([])
+		const isRotating = useRef<boolean>(false)
 
     useFrame(({ clock }) => {
         controlsRef.current?.update()
-				// const a = clock.getElapsedTime()
     });
 
 		const controls = controlsRef.current
@@ -126,90 +127,122 @@ const CubesContainer = () => {
 
     
     useEffect(() => {
-        const rotateXLayerPositive = (x:0|1|2) => {
-            const cubes = grid[x].flat().map(r => r.current)
-            cubes.forEach(rotateXPositive)
-            setGrid(rotateModelXLayerPositive(grid, x))
-        }
-    
-        const rotateXLayerNegative = (x:0|1|2) => {
-            const cubes = grid[x].flat().map(r => r.current)
-            cubes.forEach(rotateXNegative)
-            setGrid(rotateModelXLayerNegative(grid, x))
-        }
-    
-        const rotateYLayerPositive = (y: 0|1|2) => {
-            const cubes = grid.map(layer => layer[y])
-                .flat().map(r => r.current)
-            cubes.forEach(rotateYPositive)
-            setGrid(rotateModelYLayerPositive(grid, y))
-        }
-    
-        const rotateYLayerNegative = (y: 0|1|2) => {
-            const cubes = grid.map(layer => layer[y])
-                .flat().map(r => r.current)
-            cubes.forEach(rotateYNegative)
-            setGrid(rotateModelYLayerNegative(grid, y))
-        }
-    
-        const rotateZLayerPositive = (z: 0|1|2) => {
-            const cubes = grid.map(layer => layer.map(line => line[z]))
-                .flat().map(r => r.current)
-            cubes.forEach(rotateZPositive)
-            setGrid(rotateModelZYalerPositive(grid, z))
-        }
-    
-        const rotateZLayerNegative = (z:0|1|2) => {
-            const cubes = grid.map(layer => layer.map(line => line[z]))
-                .flat().map(r => r.current)
-            cubes.forEach(rotateZNegative)
-            setGrid(rotateModelZLayerNegative(grid, z))
-        }
+			// const rotateLayer = (rotator: Rotator)  => {
+			// 	return (cubes: Object3D[]) => {
+			// 		if (!isRotating.current){
+			// 			isRotating.current = true
+			// 			cubes.forEach(cube => {
+			// 				rotator(cube, () => isRotating.current = false)
+			// 			})
+			// 		} 
+			// 	}
+			// }
+			const rotateXLayerPositive = (x:0|1|2) => {
+				if (!isRotating.current){
+					isRotating.current = true
+					const cubes = grid[x].flat().map(r => r.current)
+					cubes.forEach((cube) => {rotateXPositive(cube, () => isRotating.current = false)})
+					setGrid(rotateModelXLayerPositive(grid, x))
+				}
+			}
+	
+			const rotateXLayerNegative = (x:0|1|2) => {
+				if (!isRotating.current){
+					isRotating.current = true
+					const cubes = grid[x].flat().map(r => r.current)
+					cubes.forEach((cube) => {rotateXNegative(cube, () => isRotating.current = false)})
+					setGrid(rotateModelXLayerNegative(grid, x))
+				}
+			}
+	
+			const rotateYLayerPositive = (y: 0|1|2) => {
+				if (!isRotating.current){
+					isRotating.current = true
+					const cubes = grid.map(layer => layer[y])
+							.flat().map(r => r.current)
+					cubes.forEach((cube) => {rotateYPositive(cube, () => isRotating.current = false)})
+					setGrid(rotateModelYLayerPositive(grid, y))
+				}
+			}
+	
+			const rotateYLayerNegative = (y: 0|1|2) => {
+				if (!isRotating.current){
+					isRotating.current = true
+					const cubes = grid.map(layer => layer[y])
+							.flat().map(r => r.current)
+					cubes.forEach((cube) => {rotateYNegative(cube, () => isRotating.current = false)})
+					setGrid(rotateModelYLayerNegative(grid, y))
+				}
+			}
+	
+			const rotateZLayerPositive = (z: 0|1|2) => {
+				if (!isRotating.current){					
+					isRotating.current = true
+					const cubes = grid.map(layer => layer.map(line => line[z]))
+							.flat().map(r => r.current)
+					cubes.forEach((cube) => {rotateZPositive(cube, () => isRotating.current = false)})
+					setGrid(rotateModelZYalerPositive(grid, z))
+				}
+			}
+	
+			const rotateZLayerNegative = (z:0|1|2) => {
+				if (!isRotating.current){					
+					isRotating.current = true					
+					const cubes = grid.map(layer => layer.map(line => line[z]))
+							.flat().map(r => r.current)
+					cubes.forEach((cube) => {rotateZNegative(cube, () => isRotating.current = false)})
+					setGrid(rotateModelZLayerNegative(grid, z))
+				}
+			}
 
-        const keyCodeFunctions: Record<string, () => void> = {
-            'u': () => rotateYLayerNegative(2),
-            'U': () => rotateYLayerPositive(2),
-            'd': () => rotateYLayerPositive(0),
-            'D': () => rotateYLayerNegative(0),
-            'l': () => rotateXLayerPositive(0),
-            'L': () => rotateXLayerNegative(0),
-            'r': () => rotateXLayerNegative(2),
-            'R': () => rotateXLayerPositive(2),
-            'f': () => rotateZLayerNegative(2),
-            'F': () => rotateZLayerPositive(2),
-            'b': () => rotateZLayerPositive(0),
-            'B': () => rotateZLayerNegative(0),
-            'ArrowLeft': () => coords.forEach(rotateYLayerNegative),
-            'ArrowRight': () => coords.forEach(rotateYLayerPositive),
-            'ArrowUp': () => coords.forEach(rotateXLayerNegative),
-            'ArrowDown': () => coords.forEach(rotateXLayerPositive),
-            '[': () => coords.forEach(rotateZLayerPositive),
-            ']': () => coords.forEach(rotateZLayerNegative)
-        }
-        const handleKeyDown = (e: KeyboardEvent) => {
-						if(e.metaKey && e.key === 'z'){
-							//Undo:
-							setHistory((h) => {
-								const newHistory = [...h]
-								const last = newHistory.pop()
-								if(last){
-									keyCodeFunctions[oppositeKeys[last]]()
-								}
-								return newHistory
-							})
-								
-						}
+			const keyCodeFunctions: Record<string, () => void> = {
+					'u': () => rotateYLayerNegative(2),
+					'U': () => rotateYLayerPositive(2),
+					'd': () => rotateYLayerPositive(0),
+					'D': () => rotateYLayerNegative(0),
+					'l': () => rotateXLayerPositive(0),
+					'L': () => rotateXLayerNegative(0),
+					'r': () => rotateXLayerNegative(2),
+					'R': () => rotateXLayerPositive(2),
+					'f': () => rotateZLayerNegative(2),
+					'F': () => rotateZLayerPositive(2),
+					'b': () => rotateZLayerPositive(0),
+					'B': () => rotateZLayerNegative(0),
+					'ArrowLeft': () => coords.forEach(rotateYLayerNegative),
+					'ArrowRight': () => coords.forEach(rotateYLayerPositive),
+					'ArrowUp': () => coords.forEach(rotateXLayerNegative),
+					'ArrowDown': () => coords.forEach(rotateXLayerPositive),
+					'[': () => coords.forEach(rotateZLayerPositive),
+					']': () => coords.forEach(rotateZLayerNegative)
+			}
+			const handleKeyDown = (e: KeyboardEvent) => {
+					if(isRotating.current){
+						return
+					}
+					if(e.metaKey && e.key === 'z'){
+						//Undo:
+						setHistory((h) => {
+							const newHistory = [...h]
+							const last = newHistory.pop()
+							if(last){
+								keyCodeFunctions[oppositeKeys[last]]()
+							}
+							return newHistory
+						})
+							
+					} else {
 						const fn = keyCodeFunctions[e.key]
 						if(fn){
 							fn()
 							setHistory(h => [...h, e.key as Key])
 						}
-        };
-        document.addEventListener('keydown', handleKeyDown);
-        return () => {
-            document.removeEventListener('keydown', handleKeyDown);
-        };
-      }, [grid]);
+					}
+			};
+			document.addEventListener('keydown', handleKeyDown);
+			return () => {
+					document.removeEventListener('keydown', handleKeyDown);
+			};
+		}, [grid]);
 
     return (<>
         <Stats />
