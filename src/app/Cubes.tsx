@@ -127,72 +127,51 @@ const CubesContainer = () => {
 
     
     useEffect(() => {
-			// const rotateLayer = (rotator: Rotator)  => {
-			// 	return (cubes: Object3D[]) => {
-			// 		if (!isRotating.current){
-			// 			isRotating.current = true
-			// 			cubes.forEach(cube => {
-			// 				rotator(cube, () => isRotating.current = false)
-			// 			})
-			// 		} 
-			// 	}
-			// }
+
 			const rotateXLayerPositive = (x:0|1|2) => {
-				if (!isRotating.current){
-					isRotating.current = true
-					const cubes = grid[x].flat().map(r => r.current)
-					cubes.forEach((cube) => {rotateXPositive(cube, () => isRotating.current = false)})
-					setGrid(rotateModelXLayerPositive(grid, x))
-				}
+				isRotating.current = true
+				const cubes = grid[x].flat().map(r => r.current)
+				cubes.forEach((cube) => {rotateXPositive(cube, () => isRotating.current = false)})
+				setGrid(rotateModelXLayerPositive(grid, x))
 			}
 	
 			const rotateXLayerNegative = (x:0|1|2) => {
-				if (!isRotating.current){
-					isRotating.current = true
-					const cubes = grid[x].flat().map(r => r.current)
-					cubes.forEach((cube) => {rotateXNegative(cube, () => isRotating.current = false)})
-					setGrid(rotateModelXLayerNegative(grid, x))
-				}
+				isRotating.current = true
+				const cubes = grid[x].flat().map(r => r.current)
+				cubes.forEach((cube) => {rotateXNegative(cube, () => isRotating.current = false)})
+				setGrid(rotateModelXLayerNegative(grid, x))
 			}
 	
 			const rotateYLayerPositive = (y: 0|1|2) => {
-				if (!isRotating.current){
-					isRotating.current = true
-					const cubes = grid.map(layer => layer[y])
-							.flat().map(r => r.current)
-					cubes.forEach((cube) => {rotateYPositive(cube, () => isRotating.current = false)})
-					setGrid(rotateModelYLayerPositive(grid, y))
-				}
+				isRotating.current = true
+				const cubes = grid.map(layer => layer[y])
+						.flat().map(r => r.current)
+				cubes.forEach((cube) => {rotateYPositive(cube, () => isRotating.current = false)})
+				setGrid(rotateModelYLayerPositive(grid, y))
 			}
 	
 			const rotateYLayerNegative = (y: 0|1|2) => {
-				if (!isRotating.current){
-					isRotating.current = true
-					const cubes = grid.map(layer => layer[y])
-							.flat().map(r => r.current)
-					cubes.forEach((cube) => {rotateYNegative(cube, () => isRotating.current = false)})
-					setGrid(rotateModelYLayerNegative(grid, y))
-				}
+				isRotating.current = true
+				const cubes = grid.map(layer => layer[y])
+						.flat().map(r => r.current)
+				cubes.forEach((cube) => {rotateYNegative(cube, () => isRotating.current = false)})
+				setGrid(rotateModelYLayerNegative(grid, y))
 			}
 	
 			const rotateZLayerPositive = (z: 0|1|2) => {
-				if (!isRotating.current){					
-					isRotating.current = true
-					const cubes = grid.map(layer => layer.map(line => line[z]))
-							.flat().map(r => r.current)
-					cubes.forEach((cube) => {rotateZPositive(cube, () => isRotating.current = false)})
-					setGrid(rotateModelZYalerPositive(grid, z))
-				}
+				isRotating.current = true
+				const cubes = grid.map(layer => layer.map(line => line[z]))
+						.flat().map(r => r.current)
+				cubes.forEach((cube) => {rotateZPositive(cube, () => isRotating.current = false)})
+				setGrid(rotateModelZYalerPositive(grid, z))
 			}
 	
 			const rotateZLayerNegative = (z:0|1|2) => {
-				if (!isRotating.current){					
-					isRotating.current = true					
-					const cubes = grid.map(layer => layer.map(line => line[z]))
-							.flat().map(r => r.current)
-					cubes.forEach((cube) => {rotateZNegative(cube, () => isRotating.current = false)})
-					setGrid(rotateModelZLayerNegative(grid, z))
-				}
+				isRotating.current = true
+				const cubes = grid.map(layer => layer.map(line => line[z]))
+						.flat().map(r => r.current)
+				cubes.forEach((cube) => {rotateZNegative(cube, () => isRotating.current = false)})
+				setGrid(rotateModelZLayerNegative(grid, z))
 			}
 
 			const keyCodeFunctions: Record<string, () => void> = {
