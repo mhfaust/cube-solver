@@ -35,7 +35,6 @@ type CubeProps = {
   containerRef: CubeContainerRef;
   onPointerDown: (event: ThreeEvent<PointerEvent>) => void,
   onPointerUp: (event: ThreeEvent<PointerEvent>) => void,
-  onWheel: (event: ThreeEvent<WheelEvent>) => void
 }
 const Cube = ({ 
   x0, 
@@ -44,17 +43,10 @@ const Cube = ({
   containerRef, 
   onPointerDown, 
   onPointerUp,
-  onWheel
 }: CubeProps) => {
 
   const geometryRef = useRef(new RoundedBoxGeometry(1.0, 1.0, 1.0, 2, .1))
   const materialRef = useRef(new MeshBasicMaterial({ vertexColors: true }))
-
-  // const handleWheel = (e: ThreeEvent<WheelEvent>) => {
-  //   if(isFront && e.eventObject.uuid === e.intersections[0].eventObject.uuid){
-  //     console.log(e)
-  //   }
-  // }
 
   useEffect (() => {
     let { count } = geometryRef.current.attributes.position
@@ -83,16 +75,12 @@ const Cube = ({
     }
   }, [x0, y0, z0])
 
-  // const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
-  //   onPointerDown(e, isFront)
-  // }
-
   return (
     <mesh ref={containerRef} >
         <mesh
           onPointerDown={onPointerDown}
           onPointerUp={onPointerUp}
-          onWheel={onWheel}
+          // onWheel={onWheel}
           // onPointerMove={console.log}
           position={[x0-1, y0-1, z0-1]}
           geometry={geometryRef.current}

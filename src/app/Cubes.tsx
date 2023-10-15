@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
 import Cube from "./Cube"
@@ -8,62 +9,14 @@ import { Mesh, MeshBasicMaterial, Object3D, PlaneGeometry, Vector3 } from "three
 import { OrbitControls as ThreeOrbitControls } from 'three-stdlib';
 import { 
 	GridModel,
-	LayerRotator,
-	rotateModelXLayerNegative, 
-	rotateModelXLayerPositive, 
-	rotateModelYLayerNegative, 
-	rotateModelYLayerPositive, 
-	rotateModelZLayerNegative,
-	rotateModelZYalerPositive
+	cubeRotator,
+	layerRotator,
 } from "./gridModelRotations"
-import { KeyCode, MoveCode, asKeyCode, inverse, keyMoves } from "@/utils/moveNotation"
+import { MoveCode, asKeyCode, inverse, keyMoves } from "@/utils/moveNotation"
 
 const { PI, abs } = Math
 
-const ROTATION_STEPS = 30
-const ROTATION_TIME = 135
 const FOV_ANGLE = PI/20
-
-function orbit(
-        cube: Object3D, 
-        axis: Vector3, 
-        angle: number,
-				callback: () => void
-    ) {
-		const r = (i: number) => {
-			setTimeout(() => {
-				cube.rotateOnWorldAxis(axis, angle / (ROTATION_STEPS))
-				if(i < ROTATION_STEPS - 1){
-					r(i + 1)
-				} else callback()
-			}, ROTATION_TIME / ROTATION_STEPS)
-		}
-		r(0)
-}
-
-function layerObjects <T>(model: MutableRefObject<T>[][][], axis: 'i'|'j'|'k', layer: 0|1|2) {
-	return {
-		'i': () => model[layer].flat(),
-		'j': () => model.map(i => i[layer]).flat(),
-		'k': () => model.map(j => j.map(y => y[layer])).flat()
-	}[axis]().map(r => r.current)
-}
-
-const xAxis = new Vector3(1, 0,0 ).normalize()
-const yAxis = new Vector3(0, 1, 0).normalize()
-const zAxis = new Vector3(0, 0, 1).normalize()
-
-const makeOrbiter = (angle: number, axis: Vector3) => 
-	(cube: Object3D, callback: () => void) => orbit(cube, axis, angle, callback)
-const orbitXPositive = makeOrbiter(PI/2, xAxis)
-const orbitXNegative = makeOrbiter(-PI/2, xAxis)
-const orbitYPositive = makeOrbiter(PI/2, yAxis)
-const orbitYNegative = makeOrbiter(-PI/2, yAxis)
-const orbitZPositive = makeOrbiter(PI/2, zAxis)
-const orbitZNegative = makeOrbiter(-PI/2, zAxis)
-type Rotator = typeof orbitZNegative
-
-const coords = [0,1,2] as const
 
 function everyCube<T>(things: T[][][], fn: (t:T) => void) {
 	things.forEach(layer => layer.forEach(row => row.forEach(fn)))
@@ -72,18 +25,7 @@ function everyCube<T>(things: T[][][], fn: (t:T) => void) {
 const bgGeometry = new PlaneGeometry(20, 20)
 const bgMaterial = new MeshBasicMaterial( { color: 0x222222 } );
 
-// const cury = (
-// 	grid: GridModel,
-// 	setGrid: (g :GridModel) => void,
-// 	layerRotator: LayerRotator,
-// 	cubRotator: (cube: Object3D) => void,
-// 	layer: 0|1|2, 
-// 	isRotating: MutableRefObject<boolean>
-// ) => {
-// 	isRotating.current = true
-// 	layerObjects(grid, 'i', layer).forEach(cubRotator)
-// 	setGrid(layerRotator(grid, layer))
-// }
+const _012 = [0,1,2] as const
 
 const CubesContainer = () => {
 
@@ -132,52 +74,6 @@ const CubesContainer = () => {
 		controlsRef.current.minDistance = 16
 		controlsRef.current.enablePan = false
 	}, [camera])
-    
-	const curyRotator = (rotator: Rotator) => (cube: Object3D) => {
-		rotator(cube, () => isRotating.current = false)
-	}
-
-	const xPos = curyRotator(orbitXPositive)
-	const rotateXLayerPositive = useCallback((i: 0|1|2) => {
-		isRotating.current = true
-		layerObjects(grid, 'i', i).forEach(xPos)
-		setGrid(rotateModelXLayerPositive(grid, i))
-	}, [grid, xPos])
-
-	const xNeg = curyRotator(orbitXNegative)
-	const rotateXLayerNegative = useCallback((i: 0|1|2) => {
-		isRotating.current = true
-		layerObjects(grid, 'i', i).forEach(xNeg)
-		setGrid(rotateModelXLayerNegative(grid, i))
-	}, [grid, xNeg])
-
-	const yPos = curyRotator(orbitYPositive)
-	const rotateYLayerPositive = useCallback((j: 0|1|2) => {
-		isRotating.current = true
-		layerObjects(grid, 'j', j).forEach(yPos)
-		setGrid(rotateModelYLayerPositive(grid, j))
-	}, [grid, yPos])
-
-	const yNeg = curyRotator(orbitYNegative)
-	const rotateYLayerNegative = useCallback((j: 0|1|2) => {
-		isRotating.current = true
-		layerObjects(grid, 'j', j).forEach(yNeg)
-		setGrid(rotateModelYLayerNegative(grid, j))
-	}, [grid, yNeg])
-
-	const zPos = curyRotator(orbitZPositive)
-	const rotateZLayerPositive = useCallback((k: 0|1|2) => {
-		isRotating.current = true
-		layerObjects(grid, 'k', k).forEach(zPos)
-		setGrid(rotateModelZYalerPositive(grid, k))
-	}, [grid, zPos])
-	
-	const zNeg = curyRotator(orbitZNegative)
-	const rotateZLayerNegative = useCallback((k: 0|1|2) => {
-		isRotating.current = true
-		layerObjects(grid, 'k', k).forEach(zNeg)
-		setGrid(rotateModelZLayerNegative(grid, k))
-	}, [grid, zNeg])
 
 	const getPosition = (container: Object3D): [0|1|2, 0|1|2, 0|1|2] | undefined => {
 		for (let i = 0; i < 3; i++) {
@@ -191,51 +87,53 @@ const CubesContainer = () => {
 		}
 	}
 
-	useEffect(() => {
-		const moveFunctions: Record<MoveCode, () => void> = {
-			'U': () => rotateYLayerNegative(2),
-			'U′': () => rotateYLayerPositive(2),
-			'D': () => rotateYLayerPositive(0),
-			'D′': () => rotateYLayerNegative(0),
-			'L': () => rotateXLayerPositive(0),
-			'L′': () => rotateXLayerNegative(0),
-			'R': () => rotateXLayerNegative(2),
-			'R′': () => rotateXLayerPositive(2),
-			'F': () => rotateZLayerNegative(2),
-			'F′': () => rotateZLayerPositive(2),
-			'B': () => rotateZLayerPositive(0),
-			'B′': () => rotateZLayerNegative(0),
-			'Y′': () => coords.forEach(rotateYLayerNegative),
-			'Y': () => coords.forEach(rotateYLayerPositive),
-			'X′': () => coords.forEach(rotateXLayerNegative),
-			'X': () => coords.forEach(rotateXLayerPositive),
-			'Z′': () => coords.forEach(rotateZLayerPositive),
-			'Z': () => coords.forEach(rotateZLayerNegative),
-			'E': () => rotateYLayerNegative(1),
-			'E′': () => rotateYLayerNegative(1),
-			'M': () => rotateXLayerPositive(1),
-			'M′': () => rotateXLayerNegative(1),
-			'S': () => rotateZLayerNegative(1),
-			'S′': () => rotateZLayerPositive(1)
-		}
+	const moveFunctions: Record<MoveCode, () => void> = useMemo(() => ({
+		'U': layerRotator(grid, setGrid, 'y', 2, '-', isRotating),
+		'U′': layerRotator(grid, setGrid, 'y', 2, '+', isRotating),
+		'D': layerRotator(grid, setGrid, 'y', 0, '+', isRotating),
+		'D′': layerRotator(grid, setGrid, 'y', 0, '-', isRotating),
+		'L': layerRotator(grid, setGrid, 'x', 0, '+', isRotating),
+		'L′': layerRotator(grid, setGrid, 'x', 0, '-', isRotating),
+		'R': layerRotator(grid, setGrid, 'x', 2, '-', isRotating),
+		'R′': layerRotator(grid, setGrid, 'x', 2, '+', isRotating),
+		'F': layerRotator(grid, setGrid, 'z', 2, '-', isRotating),
+		'F′': layerRotator(grid, setGrid, 'z', 2, '+', isRotating),
+		'B': layerRotator(grid, setGrid, 'z', 0, '+', isRotating),
+		'B′': layerRotator(grid, setGrid, 'z', 0, '-', isRotating),
+		'Y′': cubeRotator(grid, setGrid, 'y', '-', isRotating),
+		'Y': cubeRotator(grid, setGrid, 'y', '+', isRotating),
+		'X′': cubeRotator(grid, setGrid, 'x', '-', isRotating),
+		'X': cubeRotator(grid, setGrid, 'x', '+', isRotating),
+		'Z′': cubeRotator(grid, setGrid, 'z', '+', isRotating),
+		'Z': cubeRotator(grid, setGrid, 'z', '-', isRotating),
+		'E': layerRotator(grid, setGrid, 'y', 1 , '+', isRotating),
+		'E′': layerRotator(grid, setGrid, 'y', 1, '-', isRotating),
+		'M': layerRotator(grid, setGrid, 'x', 1, '+', isRotating),
+		'M′': layerRotator(grid, setGrid, 'x', 1, '-', isRotating),
+		'S': layerRotator(grid, setGrid, 'z', 1, '-', isRotating),
+		'S′': layerRotator(grid, setGrid, 'z', 1, '+', isRotating)
+	}), [])
 
+	const undo = useCallback(() => {
+		setHistory((h) => {
+			const newHistory = [...h]
+			const last = newHistory.pop()
+			if(!last) {
+				return h
+			}
+			moveFunctions[inverse(last)]()
+			return newHistory
+		})
+	}, [])
+	
+	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
 			const keyCode = asKeyCode(e.key)
 			if(!keyCode || isRotating.current){
 				return
 			}
 			if(e.metaKey && keyCode === 'z'){
-				//Undo:
-				setHistory((h) => {
-					const newHistory = [...h]
-					const last = newHistory.pop()
-					if(!last) {
-						return h
-					}
-					moveFunctions[inverse(last)]()
-					return newHistory
-				})
-					
+				undo()
 			} else {
 				const move = keyMoves[keyCode]
 				moveFunctions[move]()
@@ -246,7 +144,7 @@ const CubesContainer = () => {
 		return () => {
 				document.removeEventListener('keydown', handleKeyDown);
 		};
-	}, [ grid, rotateXLayerNegative, rotateXLayerPositive, rotateYLayerNegative, rotateYLayerPositive, rotateZLayerNegative, rotateZLayerPositive]);
+	}, [moveFunctions]);
 
 	const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
 		pointerEvents.current[e.pointerId] = e
@@ -270,30 +168,29 @@ const CubesContainer = () => {
 					: (dx > 0 ? 'right' : 'left')
 
 				if(dir === 'down') {
-					['l']
-					rotateXLayerPositive(i)
+					const move = ['L', 'M', 'R′'][i] as MoveCode
+					moveFunctions[move]()
+					setHistory(h => [...h, move])
 				}
 				if(dir === 'up') {
-					rotateXLayerNegative(i)
+					const move = ['L′', 'M′', 'R'][i] as MoveCode
+					moveFunctions[move]()
+					setHistory(h => [...h, move])
 				}
 				if(dir === 'right') {
-					rotateYLayerPositive(j)
+					const move = ['D', 'E', 'U′'][j] as MoveCode
+					moveFunctions[move]()
+					setHistory(h => [...h, move])
 				}
 				if(dir === 'left') {
-					rotateYLayerNegative(j)
+					const move = ['D′', 'E′', 'U'][j] as MoveCode
+					moveFunctions[move]()
+					setHistory(h => [...h, move])
 				}
 			
 				delete pointerEvents.current[upEvent.pointerId]
 			}
 		}
-	}
-
-	const handleWheel = (e: ThreeEvent<WheelEvent>) => {
-
-	}
-
-	const handleBgPointerUp = (e: ThreeEvent<PointerEvent>) => {
-		
 	}
 
 	const handleBgPointerDown = (e: ThreeEvent<PointerEvent>) => {
@@ -311,7 +208,7 @@ const CubesContainer = () => {
 			onPointerDown={handleBgPointerDown}
 		/>
 
-		{coords.map(x0 => coords.map(y0 => coords.map(z0 =>(
+		{(_012).map(x0 => (_012).map(y0 => (_012).map(z0 =>(
 			<Cube 
 				key={`x0:${x0},y0:${y0},z0:${z0}`} 
 				x0={x0} 
@@ -320,7 +217,6 @@ const CubesContainer = () => {
 				containerRef={containerRefs[x0][y0][z0]}
 				onPointerDown={handlePointerDown}
 				onPointerUp={handlePointerUp}
-				onWheel={handleWheel}
 			/>
 		))))}
 	</>)

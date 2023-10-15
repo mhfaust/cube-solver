@@ -1,5 +1,5 @@
 import { MutableRefObject } from "react";
-import { Mesh } from "three";
+import { Mesh, Object3D, Vector3 } from "three";
 
 function copyModel<T> (grid: T[][][]) {
   return grid.map(dim2 => dim2.map(dim1 => dim1.slice()))
@@ -107,7 +107,7 @@ export const rotateModelYLayerNegative: LayerRotator = (grid: GridModel, y: 0|1|
   return newGrid
 }
 
-export const rotateModelZYalerPositive: LayerRotator = (grid: GridModel, z: 0|1|2) => {
+export const rotateModelZLayerPositive: LayerRotator = (grid: GridModel, z: 0|1|2) => {
   const new00z = grid[0][2][z].current
   const new01z = grid[1][2][z].current
   const new02z = grid[2][2][z].current
@@ -158,3 +158,80 @@ export const rotateModelZLayerNegative: LayerRotator = (grid: GridModel, z: 0|1|
 }
 
 export type LayerRotator = typeof rotateModelXLayerPositive
+
+
+const ROTATION_STEPS = 30
+const ROTATION_TIME = 135
+
+function orbit(
+  cube: Object3D, 
+  axis: Vector3, 
+  angle: number,
+  callback: () => void
+) {
+const r = (i: number) => {
+setTimeout(() => {
+  cube.rotateOnWorldAxis(axis, angle / (ROTATION_STEPS))
+  if(i < ROTATION_STEPS - 1){
+    r(i + 1)
+  } else callback()
+}, ROTATION_TIME / ROTATION_STEPS)
+}
+r(0)
+}
+
+function layerObjects <T>(model: MutableRefObject<T>[][][], axis: 'x'|'y'|'z', layer: 0|1|2) {
+return {
+  'x': () => model[layer].flat(),
+  'y': () => model.map(i => i[layer]).flat(),
+  'z': () => model.map(j => j.map(y => y[layer])).flat()
+}[axis]().map(r => r.current)
+}
+
+const xAxis = new Vector3(1, 0,0 ).normalize()
+const yAxis = new Vector3(0, 1, 0).normalize()
+const zAxis = new Vector3(0, 0, 1).normalize()
+
+const makeOrbiter = (angle: number, axis: Vector3) => {
+  return (cube: Object3D, callback: () => void) => orbit(cube, axis, angle, callback)
+}
+const orbitXPositive = makeOrbiter(Math.PI/2, xAxis)
+const orbitXNegative = makeOrbiter(-Math.PI/2, xAxis)
+const orbitYPositive = makeOrbiter(Math.PI/2, yAxis)
+const orbitYNegative = makeOrbiter(-Math.PI/2, yAxis)
+const orbitZPositive = makeOrbiter(Math.PI/2, zAxis)
+const orbitZNegative = makeOrbiter(-Math.PI/2, zAxis)
+
+const fns = {
+  x: {'+': [rotateModelXLayerPositive, orbitXPositive], '-': [rotateModelXLayerNegative, orbitXNegative]},
+  y: {'+': [rotateModelYLayerPositive, orbitYPositive], '-': [rotateModelYLayerNegative, orbitYNegative]},
+  z: {'+': [rotateModelZLayerPositive, orbitZPositive], '-': [rotateModelZLayerNegative, orbitZNegative]},
+} as const
+
+export const layerRotator = (
+  grid: GridModel,
+  setGrid: (g :GridModel) => void,
+  axis: 'x'|'y'|'z',
+  layer: 0|1|2,
+  direction: '+' | '-',
+  isRotating: MutableRefObject<boolean>,
+) => () => {
+  isRotating.current = true
+  const [gridLayerRotator, objectOrbiter] = fns[axis][direction]
+  layerObjects(grid, axis, layer).forEach((cube: Object3D) => {
+    objectOrbiter(cube, () => isRotating.current = false)
+  })
+  setGrid(gridLayerRotator(grid, layer))
+}
+
+export const cubeRotator = (
+  grid: GridModel,
+  setGrid: (g :GridModel) => void,
+  axis: 'x'|'y'|'z',
+  direction: '+' | '-',
+  isRotating: MutableRefObject<boolean>,
+) => () => {
+  layerRotator(grid, setGrid, axis, 0, direction, isRotating)()
+  layerRotator(grid, setGrid, axis, 1, direction, isRotating)()
+  layerRotator(grid, setGrid, axis, 2, direction, isRotating)()
+}
