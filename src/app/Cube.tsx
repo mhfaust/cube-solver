@@ -1,3 +1,4 @@
+import { ThreeEvent } from '@react-three/fiber';
 import { useRef, useEffect, MutableRefObject } from 'react'
 import { 
   Mesh, 
@@ -28,53 +29,80 @@ const facePolygonIndices = new Set([...orangeGreenYellowPolys,  ...redWhiteBlueP
 export type CubeContainerRef = MutableRefObject<Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>>
 
 type CubeProps = {
+  x0: 0| 1| 2; 
+  y0: 0| 1| 2; 
+  z0: 0| 1| 2;
   containerRef: CubeContainerRef;
-  x0: number; 
-  y0: number; 
-  z0: number; 
+  onPointerDown: (event: ThreeEvent<PointerEvent>) => void,
+  onPointerUp: (event: ThreeEvent<PointerEvent>) => void,
+  onWheel: (event: ThreeEvent<WheelEvent>) => void
 }
-const Cube = ({ containerRef, x0, y0, z0 }: CubeProps) => {
+const Cube = ({ 
+  x0, 
+  y0, 
+  z0, 
+  containerRef, 
+  onPointerDown, 
+  onPointerUp,
+  onWheel
+}: CubeProps) => {
 
-  
   const geometryRef = useRef(new RoundedBoxGeometry(1.0, 1.0, 1.0, 2, .07))
   const geometry = geometryRef.current
   const materialRef = useRef(new MeshBasicMaterial({ vertexColors: true }))
   const material = materialRef.current
 
-    useEffect (() => {
-      let { count } = geometry.attributes.position
-      geometry.setAttribute('color', new BufferAttribute(new Float32Array( count * 3 ), 3 ))
-      for(let i = 0; i < count; i++){
-        const imod = i % 150
+  const pointers = useRef([])
 
-        if(!facePolygonIndices.has(imod)) {
-          geometry.attributes.color.setXYZ(i ,frameColor.r, frameColor.g, frameColor.b)
-        } else {
-          const faceColor = colors[Math.floor(i / 6) % 6]
-          if(
-            //only color exposed sides:
-            faceColor === red && x0 === 1 ||
-            faceColor === orange && x0 === -1 ||
-            faceColor === blue && y0 === 1 ||
-            faceColor === green && y0 === -1 ||
-            faceColor === white && z0 === 1 || 
-            faceColor === yellow && z0 === -1
-          ){
-            geometry.attributes.color.setXYZ(i ,faceColor.r, faceColor.g, faceColor.b)
-          }
+
+  // const handleWheel = (e: ThreeEvent<WheelEvent>) => {
+  //   if(isFront && e.eventObject.uuid === e.intersections[0].eventObject.uuid){
+  //     console.log(e)
+  //   }
+  // }
+
+  useEffect (() => {
+    let { count } = geometry.attributes.position
+    geometry.setAttribute('color', new BufferAttribute(new Float32Array( count * 3 ), 3 ))
+    for(let i = 0; i < count; i++){
+      const imod = i % 150
+
+      if(!facePolygonIndices.has(imod)) {
+        geometry.attributes.color.setXYZ(i ,frameColor.r, frameColor.g, frameColor.b)
+      } else {
+        const faceColor = colors[Math.floor(i / 6) % 6]
+        if(
+          //only color exposed sides:
+          faceColor === red && x0 === 2 ||
+          faceColor === orange && x0 === 0 ||
+          faceColor === blue && y0 === 2 ||
+          faceColor === green && y0 === 0 ||
+          faceColor === white && z0 === 2 || 
+          faceColor === yellow && z0 === 0
+        ){
+          geometry.attributes.color.setXYZ(i ,faceColor.r, faceColor.g, faceColor.b)
         }
       }
-    }, [geometry, x0, y0, z0])
+    }
+  }, [geometry, x0, y0, z0])
 
-    return (
-      <mesh ref={containerRef} >
-          <mesh
-            position={[x0,y0,z0]}
-            geometry={geometry}
-            material={material} 
-          />
-      </mesh>
-    )
+  // const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
+  //   onPointerDown(e, isFront)
+  // }
+
+  return (
+    <mesh ref={containerRef} >
+        <mesh
+          onPointerDown={onPointerDown}
+          onPointerUp={onPointerUp}
+          onWheel={onWheel}
+          // onPointerMove={console.log}
+          position={[x0-1, y0-1, z0-1]}
+          geometry={geometry}
+          material={material} 
+        />
+    </mesh>
+  )
 }
 
 export default Cube
