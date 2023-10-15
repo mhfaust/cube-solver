@@ -18,7 +18,7 @@ const blue = new Color(.0, .02, 1);
 const orange = new Color(.8, .2, 0)
 const yellow = new Color(.7, .7, 0)
 const white = new Color(1, 1, 1)
-const frameColor = new Color(.0, .0, .0)
+const frameColor = new Color(.4, .4, .4)
 
 const colors = [red, orange, blue, green, white, yellow]
 
@@ -47,13 +47,8 @@ const Cube = ({
   onWheel
 }: CubeProps) => {
 
-  const geometryRef = useRef(new RoundedBoxGeometry(1.0, 1.0, 1.0, 2, .07))
-  const geometry = geometryRef.current
+  const geometryRef = useRef(new RoundedBoxGeometry(1.0, 1.0, 1.0, 2, .1))
   const materialRef = useRef(new MeshBasicMaterial({ vertexColors: true }))
-  const material = materialRef.current
-
-  const pointers = useRef([])
-
 
   // const handleWheel = (e: ThreeEvent<WheelEvent>) => {
   //   if(isFront && e.eventObject.uuid === e.intersections[0].eventObject.uuid){
@@ -62,13 +57,15 @@ const Cube = ({
   // }
 
   useEffect (() => {
-    let { count } = geometry.attributes.position
-    geometry.setAttribute('color', new BufferAttribute(new Float32Array( count * 3 ), 3 ))
+    let { count } = geometryRef.current.attributes.position
+    geometryRef.current
+      .setAttribute('color', new BufferAttribute(new Float32Array( count * 3 ), 3 ))
     for(let i = 0; i < count; i++){
       const imod = i % 150
 
       if(!facePolygonIndices.has(imod)) {
-        geometry.attributes.color.setXYZ(i ,frameColor.r, frameColor.g, frameColor.b)
+        geometryRef.current
+          .attributes.color.setXYZ(i ,frameColor.r, frameColor.g, frameColor.b)
       } else {
         const faceColor = colors[Math.floor(i / 6) % 6]
         if(
@@ -80,11 +77,11 @@ const Cube = ({
           faceColor === white && z0 === 2 || 
           faceColor === yellow && z0 === 0
         ){
-          geometry.attributes.color.setXYZ(i ,faceColor.r, faceColor.g, faceColor.b)
+          geometryRef.current.attributes.color.setXYZ(i ,faceColor.r, faceColor.g, faceColor.b)
         }
       }
     }
-  }, [geometry, x0, y0, z0])
+  }, [x0, y0, z0])
 
   // const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
   //   onPointerDown(e, isFront)
@@ -98,8 +95,8 @@ const Cube = ({
           onWheel={onWheel}
           // onPointerMove={console.log}
           position={[x0-1, y0-1, z0-1]}
-          geometry={geometry}
-          material={material} 
+          geometry={geometryRef.current}
+          material={materialRef.current} 
         />
     </mesh>
   )

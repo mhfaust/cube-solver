@@ -4,7 +4,7 @@ import Cube from "./Cube"
 import { Stats, OrbitControls } from '@react-three/drei'
 import { Canvas, ThreeEvent, useFrame, useThree } from "@react-three/fiber"
 import { MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Mesh, Object3D, Vector3 } from "three"
+import { Mesh, MeshBasicMaterial, Object3D, PlaneGeometry, Vector3 } from "three"
 import { OrbitControls as ThreeOrbitControls } from 'three-stdlib';
 import { 
 	rotateModelXLayerNegative, 
@@ -43,7 +43,7 @@ const ROTATION_STEPS = 30
 const ROTATION_TIME = 135
 const FOV_ANGLE = PI/20
 
-function rotate(
+function orbit(
         cube: Object3D, 
         axis: Vector3, 
         angle: number,
@@ -68,19 +68,24 @@ function layerObjects <T>(model: MutableRefObject<T>[][][], axis: 'x'|'y'|'z', l
 	}[axis]().map(r => r.current)
 }
 
-const rotateXPositive = (cube: Object3D, callback: () => void) => rotate(cube, xAxis, PI/2, callback)
-const rotateXNegative = (cube: Object3D, callback: () => void) => rotate(cube, xAxis, -PI/2, callback)
-const rotateYPositive = (cube: Object3D, callback: () => void) => rotate(cube, yAxis, PI/2, callback)
-const rotateYNegative = (cube: Object3D, callback: () => void) => rotate(cube, yAxis, -PI/2, callback)
-const rotateZPositive = (cube: Object3D, callback: () => void) => rotate(cube, zAxis, PI/2, callback)
-const rotateZNegative = (cube: Object3D, callback: () => void) => rotate(cube, zAxis, -PI/2, callback)
-type Rotator = typeof rotateZNegative
-
-const coords = [0,1,2] as const
-
 const xAxis = new Vector3(1, 0,0 ).normalize()
 const yAxis = new Vector3(0, 1, 0).normalize()
 const zAxis = new Vector3(0, 0, 1).normalize()
+
+const makeOrbiter = (angle: number, axis: Vector3) => {
+	return (cube: Object3D, callback: () => void) => orbit(cube, axis, angle, callback)
+}
+const orbitXPositive = makeOrbiter(PI/2, xAxis)
+//(cube: Object3D, callback: () => void) => orbit(cube, xAxis, PI/2, callback)
+const orbitXNegative = makeOrbiter(-PI/2, xAxis)
+const orbitYPositive = makeOrbiter(PI/2, yAxis)//(cube: Object3D, callback: () => void) => orbit(cube, yAxis, PI/2, callback)
+const orbitYNegative = makeOrbiter(-PI/2, yAxis)//(cube: Object3D, callback: () => void) => orbit(cube, yAxis, -PI/2, callback)
+const orbitZPositive = makeOrbiter(PI/2, zAxis)//(cube: Object3D, callback: () => void) => orbit(cube, zAxis, PI/2, callback)
+const orbitZNegative = makeOrbiter(-PI/2, zAxis)//(cube: Object3D, callback: () => void) => orbit(cube, zAxis, -PI/2, callback)
+type Rotator = typeof orbitZNegative
+
+const coords = [0,1,2] as const
+
 
 const noop = () => {}
 
@@ -88,15 +93,17 @@ function everyCube<T>(things: T[][][], fn: (t:T) => void) {
 	things.forEach(layer => layer.forEach(row => row.forEach(fn)))
 }
 
+const bgGeometry = new PlaneGeometry(20, 20)
+const bgMaterial = new MeshBasicMaterial( { color: 0x222222 } );
+
 const CubesContainer = () => {
 
 	const { camera } = useThree();
-	const controlsRef = useRef<ThreeOrbitControls>(null);
 	const [_history, setHistory] = useState<Key[]>([])
+	const controlsRef = useRef<ThreeOrbitControls>(null);
 	const isRotating = useRef<boolean>(false)
-
-	// const _refs = coords.map((i) => coords.map((j) => coords.map((k) => (useRef({} as Mesh)))))
-	const refs = [
+	// const bgGeometryRef = useRef(new PlaneGeometry(20, 20))
+	const containerRefs = [
 			[
 					[useRef({} as Mesh), useRef({} as Mesh), useRef({} as Mesh)],
 					[useRef({} as Mesh), useRef({} as Mesh), useRef({} as Mesh)],
@@ -113,9 +120,7 @@ const CubesContainer = () => {
 					[useRef({} as Mesh), useRef({} as Mesh), useRef({} as Mesh)]
 			],
 	]
-
-
-	const [grid, setGrid] = useState(refs)
+	const [grid, setGrid] = useState(containerRefs)
 	const pointerEvents = useRef<Record<string, ThreeEvent<PointerEvent>>>({})
 
 	useFrame(({ clock }) => {
@@ -145,42 +150,42 @@ const CubesContainer = () => {
 		rotator(cube, () => isRotating.current = false)
 	}
 
-	const xPos = curyRotator(rotateXPositive)
+	const xPos = curyRotator(orbitXPositive)
 	const rotateXLayerPositive = useCallback((x: 0|1|2) => {
 		isRotating.current = true
 		layerObjects(grid, 'x', x).forEach(xPos)
 		setGrid(rotateModelXLayerPositive(grid, x))
 	}, [grid, xPos])
 
-	const xNeg = curyRotator(rotateXNegative)
+	const xNeg = curyRotator(orbitXNegative)
 	const rotateXLayerNegative = useCallback((x: 0|1|2) => {
 		isRotating.current = true
 		layerObjects(grid, 'x', x).forEach(xNeg)
 		setGrid(rotateModelXLayerNegative(grid, x))
 	}, [grid, xNeg])
 
-	const yPos = curyRotator(rotateYPositive)
+	const yPos = curyRotator(orbitYPositive)
 	const rotateYLayerPositive = useCallback((y: 0|1|2) => {
 		isRotating.current = true
 		layerObjects(grid, 'y', y).forEach(yPos)
 		setGrid(rotateModelYLayerPositive(grid, y))
 	}, [grid, yPos])
 
-	const yNeg = curyRotator(rotateYNegative)
+	const yNeg = curyRotator(orbitYNegative)
 	const rotateYLayerNegative = useCallback((y: 0|1|2) => {
 		isRotating.current = true
 		layerObjects(grid, 'y', y).forEach(yNeg)
 		setGrid(rotateModelYLayerNegative(grid, y))
 	}, [grid, yNeg])
 
-	const zPos = curyRotator(rotateZPositive)
+	const zPos = curyRotator(orbitZPositive)
 	const rotateZLayerPositive = useCallback((z: 0|1|2) => {
 		isRotating.current = true
 		layerObjects(grid, 'z', z).forEach(zPos)
 		setGrid(rotateModelZYalerPositive(grid, z))
 	}, [grid, zPos])
 	
-	const zNeg = curyRotator(rotateZNegative)
+	const zNeg = curyRotator(orbitZNegative)
 	const rotateZLayerNegative = useCallback((z: 0|1|2) => {
 		isRotating.current = true
 		layerObjects(grid, 'z', z).forEach(zNeg)
@@ -197,8 +202,7 @@ const CubesContainer = () => {
 				}
 			}
 		}
-		console.log('not found')
-		return [0,0,0]
+		return [1,1,1] //shouldn't happen, but just in case (and for TS)
 	}
 
 	useEffect(() => {
@@ -265,9 +269,9 @@ const CubesContainer = () => {
 	const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
 		pointerEvents.current[e.pointerId] = e
 	}
-	const handlePointerUp = () => (upEvent: ThreeEvent<PointerEvent>) => {
+	const handlePointerUp = (upEvent: ThreeEvent<PointerEvent>) => {
 		if(upEvent.eventObject.uuid === upEvent.intersections[0].eventObject.uuid){
-			console.log({ pointerEventObjects: Object.keys(pointerEvents.current)})
+			console.log('up')
 			const downEvent = pointerEvents.current[upEvent.pointerId]
 			if(downEvent) {
 				const [x,y,z] = getCoords(downEvent.eventObject)
@@ -276,8 +280,6 @@ const CubesContainer = () => {
 				const dir = abs(dy) > abs(dx)  
 					? (dy > 0 ? 'down' : 'up')
 					: (dx > 0 ? 'right' : 'left')
-
-					// console.log({x,y,z})
 
 				if(dir === 'down') {
 					rotateXLayerPositive(x)
@@ -301,28 +303,37 @@ const CubesContainer = () => {
 
 	}
 
+	const handleBgPointerUp = (e: ThreeEvent<PointerEvent>) => {
+		
+	}
+
+	const handleBgPointerDown = (e: ThreeEvent<PointerEvent>) => {
+
+	}
 
 	return (<>
 		<Stats />
 		<OrbitControls ref={controlsRef}/>
-		<mesh
-			// onPointerUp={console.log}
-			// onPointerDown={handlePointerDown()}
-			onPointerMissed={console.log}
-		>
-			{coords.map(x0 => coords.map(y0 => coords.map(z0 =>(
-				<Cube 
-					key={`x0:${x0},y0:${y0},z0:${z0}`} 
-					x0={x0} 
-					y0={y0} 
-					z0={z0} 
-					containerRef={refs[x0][y0][z0]}
-					onPointerDown={handlePointerDown}
-					onPointerUp={handlePointerUp()}
-					onWheel={handleWheel}
-				/>
-			))))}
-		</mesh>
+		<mesh 
+			geometry={bgGeometry}
+			material={bgMaterial}
+			position={[0,0,-10]}
+			onPointerUp={handlePointerUp}
+			onPointerDown={handleBgPointerDown}
+		/>
+
+		{coords.map(x0 => coords.map(y0 => coords.map(z0 =>(
+			<Cube 
+				key={`x0:${x0},y0:${y0},z0:${z0}`} 
+				x0={x0} 
+				y0={y0} 
+				z0={z0} 
+				containerRef={containerRefs[x0][y0][z0]}
+				onPointerDown={handlePointerDown}
+				onPointerUp={handlePointerUp}
+				onWheel={handleWheel}
+			/>
+		))))}
 	</>)
 }
 
