@@ -60,11 +60,11 @@ function orbit(
 		r(0)
 }
 
-function layerObjects <T>(model: MutableRefObject<T>[][][], axis: 'x'|'y'|'z', layer: 0|1|2) {
+function layerObjects <T>(model: MutableRefObject<T>[][][], axis: 'i'|'j'|'k', layer: 0|1|2) {
 	return {
-		'x': () => model[layer].flat(),
-		'y': () => model.map(x => x[layer]).flat(),
-		'z': () => model.map(x => x.map(y => y[layer])).flat()
+		'i': () => model[layer].flat(),
+		'j': () => model.map(i => i[layer]).flat(),
+		'k': () => model.map(j => j.map(y => y[layer])).flat()
 	}[axis]().map(r => r.current)
 }
 
@@ -72,16 +72,14 @@ const xAxis = new Vector3(1, 0,0 ).normalize()
 const yAxis = new Vector3(0, 1, 0).normalize()
 const zAxis = new Vector3(0, 0, 1).normalize()
 
-const makeOrbiter = (angle: number, axis: Vector3) => {
-	return (cube: Object3D, callback: () => void) => orbit(cube, axis, angle, callback)
-}
+const makeOrbiter = (angle: number, axis: Vector3) => 
+	(cube: Object3D, callback: () => void) => orbit(cube, axis, angle, callback)
 const orbitXPositive = makeOrbiter(PI/2, xAxis)
-//(cube: Object3D, callback: () => void) => orbit(cube, xAxis, PI/2, callback)
 const orbitXNegative = makeOrbiter(-PI/2, xAxis)
-const orbitYPositive = makeOrbiter(PI/2, yAxis)//(cube: Object3D, callback: () => void) => orbit(cube, yAxis, PI/2, callback)
-const orbitYNegative = makeOrbiter(-PI/2, yAxis)//(cube: Object3D, callback: () => void) => orbit(cube, yAxis, -PI/2, callback)
-const orbitZPositive = makeOrbiter(PI/2, zAxis)//(cube: Object3D, callback: () => void) => orbit(cube, zAxis, PI/2, callback)
-const orbitZNegative = makeOrbiter(-PI/2, zAxis)//(cube: Object3D, callback: () => void) => orbit(cube, zAxis, -PI/2, callback)
+const orbitYPositive = makeOrbiter(PI/2, yAxis)
+const orbitYNegative = makeOrbiter(-PI/2, yAxis)
+const orbitZPositive = makeOrbiter(PI/2, zAxis)
+const orbitZNegative = makeOrbiter(-PI/2, zAxis)
 type Rotator = typeof orbitZNegative
 
 const coords = [0,1,2] as const
@@ -151,53 +149,53 @@ const CubesContainer = () => {
 	}
 
 	const xPos = curyRotator(orbitXPositive)
-	const rotateXLayerPositive = useCallback((x: 0|1|2) => {
+	const rotateXLayerPositive = useCallback((i: 0|1|2) => {
 		isRotating.current = true
-		layerObjects(grid, 'x', x).forEach(xPos)
-		setGrid(rotateModelXLayerPositive(grid, x))
+		layerObjects(grid, 'i', i).forEach(xPos)
+		setGrid(rotateModelXLayerPositive(grid, i))
 	}, [grid, xPos])
 
 	const xNeg = curyRotator(orbitXNegative)
-	const rotateXLayerNegative = useCallback((x: 0|1|2) => {
+	const rotateXLayerNegative = useCallback((i: 0|1|2) => {
 		isRotating.current = true
-		layerObjects(grid, 'x', x).forEach(xNeg)
-		setGrid(rotateModelXLayerNegative(grid, x))
+		layerObjects(grid, 'i', i).forEach(xNeg)
+		setGrid(rotateModelXLayerNegative(grid, i))
 	}, [grid, xNeg])
 
 	const yPos = curyRotator(orbitYPositive)
-	const rotateYLayerPositive = useCallback((y: 0|1|2) => {
+	const rotateYLayerPositive = useCallback((j: 0|1|2) => {
 		isRotating.current = true
-		layerObjects(grid, 'y', y).forEach(yPos)
-		setGrid(rotateModelYLayerPositive(grid, y))
+		layerObjects(grid, 'j', j).forEach(yPos)
+		setGrid(rotateModelYLayerPositive(grid, j))
 	}, [grid, yPos])
 
 	const yNeg = curyRotator(orbitYNegative)
-	const rotateYLayerNegative = useCallback((y: 0|1|2) => {
+	const rotateYLayerNegative = useCallback((j: 0|1|2) => {
 		isRotating.current = true
-		layerObjects(grid, 'y', y).forEach(yNeg)
-		setGrid(rotateModelYLayerNegative(grid, y))
+		layerObjects(grid, 'j', j).forEach(yNeg)
+		setGrid(rotateModelYLayerNegative(grid, j))
 	}, [grid, yNeg])
 
 	const zPos = curyRotator(orbitZPositive)
-	const rotateZLayerPositive = useCallback((z: 0|1|2) => {
+	const rotateZLayerPositive = useCallback((k: 0|1|2) => {
 		isRotating.current = true
-		layerObjects(grid, 'z', z).forEach(zPos)
-		setGrid(rotateModelZYalerPositive(grid, z))
+		layerObjects(grid, 'k', k).forEach(zPos)
+		setGrid(rotateModelZYalerPositive(grid, k))
 	}, [grid, zPos])
 	
 	const zNeg = curyRotator(orbitZNegative)
-	const rotateZLayerNegative = useCallback((z: 0|1|2) => {
+	const rotateZLayerNegative = useCallback((k: 0|1|2) => {
 		isRotating.current = true
-		layerObjects(grid, 'z', z).forEach(zNeg)
-		setGrid(rotateModelZLayerNegative(grid, z))
+		layerObjects(grid, 'k', k).forEach(zNeg)
+		setGrid(rotateModelZLayerNegative(grid, k))
 	}, [grid, zNeg])
 
-	const getCoords = (container: Object3D): [0|1|2, 0|1|2, 0|1|2] => {
-		for (let x = 0; x < 3; x++) {
-			for (let y = 0; y < 3; y++) {
-				for (let z = 0; z < 3; z++) {
-					if(grid[x][y][z].current.children[0] === container) {
-						return [x as 0|1|2, y as 0|1|2 ,z as 0|1|2]
+	const getPosition = (container: Object3D): [0|1|2, 0|1|2, 0|1|2] => {
+		for (let i = 0; i < 3; i++) {
+			for (let j = 0; j < 3; j++) {
+				for (let k = 0; k < 3; k++) {
+					if(grid[i][j][k].current.children[0] === container) {
+						return [i as 0|1|2, j as 0|1|2 ,k as 0|1|2]
 					}
 				}
 			}
@@ -274,7 +272,7 @@ const CubesContainer = () => {
 			console.log('up')
 			const downEvent = pointerEvents.current[upEvent.pointerId]
 			if(downEvent) {
-				const [x,y,z] = getCoords(downEvent.eventObject)
+				const [i,j] = getPosition(downEvent.eventObject)
 				const dx = upEvent.x - downEvent.x
 				const dy = upEvent.y - downEvent.y
 				const dir = abs(dy) > abs(dx)  
@@ -282,16 +280,16 @@ const CubesContainer = () => {
 					: (dx > 0 ? 'right' : 'left')
 
 				if(dir === 'down') {
-					rotateXLayerPositive(x)
+					rotateXLayerPositive(i)
 				}
 				if(dir === 'up') {
-					rotateXLayerNegative(x)
+					rotateXLayerNegative(i)
 				}
 				if(dir === 'right') {
-					rotateYLayerPositive(y)
+					rotateYLayerPositive(j)
 				}
 				if(dir === 'left') {
-					rotateYLayerNegative(y)
+					rotateYLayerNegative(j)
 				}
 			
 				delete pointerEvents.current[upEvent.pointerId]
