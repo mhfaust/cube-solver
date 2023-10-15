@@ -147,7 +147,9 @@ const CubesContainer = () => {
 	}, [moveFunctions]);
 
 	const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
-		pointerEvents.current[e.pointerId] = e
+		if(e.eventObject.uuid === e.intersections[0].eventObject.uuid){
+			pointerEvents.current[e.pointerId] = e
+		}
 	}
 	const handlePointerUp = (upEvent: ThreeEvent<PointerEvent>) => {
 		if(upEvent.eventObject.uuid === upEvent.intersections[0].eventObject.uuid){
