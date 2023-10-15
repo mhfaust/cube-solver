@@ -7,6 +7,8 @@ import { MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } f
 import { Mesh, MeshBasicMaterial, Object3D, PlaneGeometry, Vector3 } from "three"
 import { OrbitControls as ThreeOrbitControls } from 'three-stdlib';
 import { 
+	GridModel,
+	LayerRotator,
 	rotateModelXLayerNegative, 
 	rotateModelXLayerPositive, 
 	rotateModelYLayerNegative, 
@@ -14,30 +16,9 @@ import {
 	rotateModelZLayerNegative,
 	rotateModelZYalerPositive
 } from "./gridModelRotations"
+import { KeyCode, MoveCode, asKeyCode, inverse, keyMoves } from "@/utils/moveNotation"
 
-const { PI, atan, abs, tan } = Math
-
-type Key = 'u' | 'U' | 'd' | 'D' | 'l' | 'L' | 'r' | 'R' | 'f' | 'F' | 'b' | 'B' | 'ArrowLeft' | 'ArrowRight' | 'ArrowUp' | 'ArrowDown' | '[' | ']'
-const oppositeKeys: Record<Key, Key> = {
-	'u': 'U',
-	'U': 'u',
-	'd': 'D',
-	'D': 'd',
-	'l': 'L',
-	'L': 'l',
-	'r': 'R',
-	'R': 'r',
-	'f': 'F',
-	'F': 'f',
-	'b': 'B',
-	'B': 'b',
-	'ArrowLeft': 'ArrowRight',
-	'ArrowRight': 'ArrowLeft',
-	'ArrowUp': 'ArrowDown',
-	'ArrowDown': 'ArrowUp',
-	'[': ']',
-	']': '[',
-}
+const { PI, abs } = Math
 
 const ROTATION_STEPS = 30
 const ROTATION_TIME = 135
@@ -84,9 +65,6 @@ type Rotator = typeof orbitZNegative
 
 const coords = [0,1,2] as const
 
-
-const noop = () => {}
-
 function everyCube<T>(things: T[][][], fn: (t:T) => void) {
 	things.forEach(layer => layer.forEach(row => row.forEach(fn)))
 }
@@ -94,14 +72,26 @@ function everyCube<T>(things: T[][][], fn: (t:T) => void) {
 const bgGeometry = new PlaneGeometry(20, 20)
 const bgMaterial = new MeshBasicMaterial( { color: 0x222222 } );
 
+// const cury = (
+// 	grid: GridModel,
+// 	setGrid: (g :GridModel) => void,
+// 	layerRotator: LayerRotator,
+// 	cubRotator: (cube: Object3D) => void,
+// 	layer: 0|1|2, 
+// 	isRotating: MutableRefObject<boolean>
+// ) => {
+// 	isRotating.current = true
+// 	layerObjects(grid, 'i', layer).forEach(cubRotator)
+// 	setGrid(layerRotator(grid, layer))
+// }
+
 const CubesContainer = () => {
 
 	const { camera } = useThree();
-	const [_history, setHistory] = useState<Key[]>([])
+	const [_history, setHistory] = useState<MoveCode[]>([])
 	const controlsRef = useRef<ThreeOrbitControls>(null);
 	const isRotating = useRef<boolean>(false)
-	// const bgGeometryRef = useRef(new PlaneGeometry(20, 20))
-	const containerRefs = [
+	const containerRefs: GridModel = [
 			[
 					[useRef({} as Mesh), useRef({} as Mesh), useRef({} as Mesh)],
 					[useRef({} as Mesh), useRef({} as Mesh), useRef({} as Mesh)],
@@ -125,24 +115,23 @@ const CubesContainer = () => {
 		controlsRef.current?.update()
 	});
 
-	const controls = controlsRef.current
 	useEffect(() => {
 		if(camera){
 			(camera as any).fov = 30 //r3-fiber isn't typing camera correctly :-(
 			camera.updateProjectionMatrix();
 		}
 		
-		if(!controls) {
+		if(!controlsRef.current) {
 				return
 		}
-		controls.minPolarAngle = PI/2 - FOV_ANGLE;
-		controls.maxPolarAngle = PI/2 + FOV_ANGLE;
-		controls.minAzimuthAngle = - FOV_ANGLE;
-		controls.maxAzimuthAngle =  FOV_ANGLE;
-		controls.maxDistance = 16
-		controls.minDistance = 16
-		controls.enablePan = false
-	}, [camera, controls])
+		controlsRef.current.minPolarAngle = PI/2 - FOV_ANGLE;
+		controlsRef.current.maxPolarAngle = PI/2 + FOV_ANGLE;
+		controlsRef.current.minAzimuthAngle = - FOV_ANGLE;
+		controlsRef.current.maxAzimuthAngle =  FOV_ANGLE;
+		controlsRef.current.maxDistance = 16
+		controlsRef.current.minDistance = 16
+		controlsRef.current.enablePan = false
+	}, [camera])
     
 	const curyRotator = (rotator: Rotator) => (cube: Object3D) => {
 		rotator(cube, () => isRotating.current = false)
@@ -190,7 +179,7 @@ const CubesContainer = () => {
 		setGrid(rotateModelZLayerNegative(grid, k))
 	}, [grid, zNeg])
 
-	const getPosition = (container: Object3D): [0|1|2, 0|1|2, 0|1|2] => {
+	const getPosition = (container: Object3D): [0|1|2, 0|1|2, 0|1|2] | undefined => {
 		for (let i = 0; i < 3; i++) {
 			for (let j = 0; j < 3; j++) {
 				for (let k = 0; k < 3; k++) {
@@ -200,79 +189,80 @@ const CubesContainer = () => {
 				}
 			}
 		}
-		return [1,1,1] //shouldn't happen, but just in case (and for TS)
 	}
 
 	useEffect(() => {
-
-		const keyCodeFunctions: Record<Key, () => void> = {
-			'u': () => rotateYLayerNegative(2),
-			'U': () => rotateYLayerPositive(2),
-			'd': () => rotateYLayerPositive(0),
-			'D': () => rotateYLayerNegative(0),
-			'l': () => rotateXLayerPositive(0),
-			'L': () => rotateXLayerNegative(0),
-			'r': () => rotateXLayerNegative(2),
-			'R': () => rotateXLayerPositive(2),
-			'f': () => rotateZLayerNegative(2),
-			'F': () => rotateZLayerPositive(2),
-			'b': () => rotateZLayerPositive(0),
-			'B': () => rotateZLayerNegative(0),
-			'ArrowLeft': () => coords.forEach(rotateYLayerNegative),
-			'ArrowRight': () => coords.forEach(rotateYLayerPositive),
-			'ArrowUp': () => coords.forEach(rotateXLayerNegative),
-			'ArrowDown': () => coords.forEach(rotateXLayerPositive),
-			'[': () => coords.forEach(rotateZLayerPositive),
-			']': () => coords.forEach(rotateZLayerNegative)
+		const moveFunctions: Record<MoveCode, () => void> = {
+			'U': () => rotateYLayerNegative(2),
+			'U′': () => rotateYLayerPositive(2),
+			'D': () => rotateYLayerPositive(0),
+			'D′': () => rotateYLayerNegative(0),
+			'L': () => rotateXLayerPositive(0),
+			'L′': () => rotateXLayerNegative(0),
+			'R': () => rotateXLayerNegative(2),
+			'R′': () => rotateXLayerPositive(2),
+			'F': () => rotateZLayerNegative(2),
+			'F′': () => rotateZLayerPositive(2),
+			'B': () => rotateZLayerPositive(0),
+			'B′': () => rotateZLayerNegative(0),
+			'Y′': () => coords.forEach(rotateYLayerNegative),
+			'Y': () => coords.forEach(rotateYLayerPositive),
+			'X′': () => coords.forEach(rotateXLayerNegative),
+			'X': () => coords.forEach(rotateXLayerPositive),
+			'Z′': () => coords.forEach(rotateZLayerPositive),
+			'Z': () => coords.forEach(rotateZLayerNegative),
+			'E': () => rotateYLayerNegative(1),
+			'E′': () => rotateYLayerNegative(1),
+			'M': () => rotateXLayerPositive(1),
+			'M′': () => rotateXLayerNegative(1),
+			'S': () => rotateZLayerNegative(1),
+			'S′': () => rotateZLayerPositive(1)
 		}
 
 		const handleKeyDown = (e: KeyboardEvent) => {
-			if(isRotating.current){
+			const keyCode = asKeyCode(e.key)
+			if(!keyCode || isRotating.current){
 				return
 			}
-			if(e.metaKey && e.key === 'z'){
+			if(e.metaKey && keyCode === 'z'){
 				//Undo:
 				setHistory((h) => {
 					const newHistory = [...h]
 					const last = newHistory.pop()
-					if(last){
-						keyCodeFunctions[oppositeKeys[last]]()
+					if(!last) {
+						return h
 					}
+					moveFunctions[inverse(last)]()
 					return newHistory
 				})
 					
 			} else {
-				const fn = keyCodeFunctions[e.key as Key]
-				if(fn){
-					fn()
-					setHistory(h => [...h, e.key as Key])
-				}
+				const move = keyMoves[keyCode]
+				moveFunctions[move]()
+				setHistory(h => [...h, move])
 			}
 		};
 		document.addEventListener('keydown', handleKeyDown);
 		return () => {
 				document.removeEventListener('keydown', handleKeyDown);
 		};
-	}, [	
-		grid, 
-		rotateXLayerNegative, 
-		rotateXLayerPositive, 
-		rotateYLayerNegative, 
-		rotateYLayerPositive, 
-		rotateZLayerNegative, 
-		rotateZLayerPositive
-	]);
-
+	}, [ grid, rotateXLayerNegative, rotateXLayerPositive, rotateYLayerNegative, rotateYLayerPositive, rotateZLayerNegative, rotateZLayerPositive]);
 
 	const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
 		pointerEvents.current[e.pointerId] = e
 	}
 	const handlePointerUp = (upEvent: ThreeEvent<PointerEvent>) => {
 		if(upEvent.eventObject.uuid === upEvent.intersections[0].eventObject.uuid){
-			console.log('up')
+
 			const downEvent = pointerEvents.current[upEvent.pointerId]
 			if(downEvent) {
-				const [i,j] = getPosition(downEvent.eventObject)
+				const position = getPosition(downEvent.eventObject)
+				if(!position){
+					console.log('TODO: handle pointerevents originating outside cubes')
+					return
+				}
+
+				const [i,j,k] = position
 				const dx = upEvent.x - downEvent.x
 				const dy = upEvent.y - downEvent.y
 				const dir = abs(dy) > abs(dx)  
@@ -280,6 +270,7 @@ const CubesContainer = () => {
 					: (dx > 0 ? 'right' : 'left')
 
 				if(dir === 'down') {
+					['l']
 					rotateXLayerPositive(i)
 				}
 				if(dir === 'up') {
