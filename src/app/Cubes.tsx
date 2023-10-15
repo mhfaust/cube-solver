@@ -11,7 +11,7 @@ import {
 	GridModel,
 	cubeRotator,
 	layerRotator,
-} from "./gridModelRotations"
+} from "./rotations"
 import { MoveCode, asKeyCode, inverse, keyMoves } from "@/utils/moveNotation"
 
 const { PI, abs } = Math
@@ -51,7 +51,7 @@ const CubesContainer = () => {
 			],
 	]
 	const [grid, setGrid] = useState(containerRefs)
-	const pointerEvents = useRef<Record<string, ThreeEvent<PointerEvent>>>({})
+	const pointerDownEvents = useRef<Record<string, ThreeEvent<PointerEvent>>>({})
 
 	useFrame(({ clock }) => {
 		controlsRef.current?.update()
@@ -148,49 +148,41 @@ const CubesContainer = () => {
 
 	const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
 		if(e.eventObject.uuid === e.intersections[0].eventObject.uuid){
-			pointerEvents.current[e.pointerId] = e
+			pointerDownEvents.current[e.pointerId] = e
 		}
 	}
+
 	const handlePointerUp = (upEvent: ThreeEvent<PointerEvent>) => {
+		console.log('handlePointerUp')
 		if(upEvent.eventObject.uuid === upEvent.intersections[0].eventObject.uuid){
 
-			const downEvent = pointerEvents.current[upEvent.pointerId]
+			const downEvent = pointerDownEvents.current[upEvent.pointerId]
+
 			if(downEvent) {
 				const position = getPosition(downEvent.eventObject)
 				if(!position){
-					console.log('TODO: handle pointerevents originating outside cubes')
+					console.log('TODO: handle pointer events originating outside the cubes')
 					return
 				}
 
 				const [i,j,k] = position
 				const dx = upEvent.x - downEvent.x
 				const dy = upEvent.y - downEvent.y
-				const dir = abs(dy) > abs(dx)  
-					? (dy > 0 ? 'down' : 'up')
-					: (dx > 0 ? 'right' : 'left')
+				const isVertical = abs(dy) > abs(dx) 
+				const swipeDirection = isVertical 
+					? (dy > 0 ? 'swipedDown' : 'swipedUp')
+					: (dx > 0 ? 'swipedRight' : 'swipedLeft')
+				const map: Record<typeof swipeDirection, MoveCode[]> = {
+					'swipedDown': ['L', 'M', 'R′'],
+					'swipedUp': ['L′', 'M′', 'R'],
+					'swipedRight': ['D', 'E', 'U′'],
+					'swipedLeft': ['D′', 'E′', 'U'],
+				}
+				const move: MoveCode = map[swipeDirection][isVertical ? i : j]
+				moveFunctions[move]()
+				setHistory(h => [...h, move])
 
-				if(dir === 'down') {
-					const move = ['L', 'M', 'R′'][i] as MoveCode
-					moveFunctions[move]()
-					setHistory(h => [...h, move])
-				}
-				if(dir === 'up') {
-					const move = ['L′', 'M′', 'R'][i] as MoveCode
-					moveFunctions[move]()
-					setHistory(h => [...h, move])
-				}
-				if(dir === 'right') {
-					const move = ['D', 'E', 'U′'][j] as MoveCode
-					moveFunctions[move]()
-					setHistory(h => [...h, move])
-				}
-				if(dir === 'left') {
-					const move = ['D′', 'E′', 'U'][j] as MoveCode
-					moveFunctions[move]()
-					setHistory(h => [...h, move])
-				}
-			
-				delete pointerEvents.current[upEvent.pointerId]
+				delete pointerDownEvents.current[upEvent.pointerId]
 			}
 		}
 	}
