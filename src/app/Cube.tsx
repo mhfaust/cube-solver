@@ -9,6 +9,7 @@ import {
   NormalBufferAttributes,
   Material,
   Object3DEventMap,
+  MeshPhongMaterial,
 } from 'three'
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 
@@ -18,7 +19,7 @@ const blue = new Color(.0, .02, 1);
 const orange = new Color(.8, .2, 0)
 const yellow = new Color(.7, .7, 0)
 const white = new Color(1, 1, 1)
-const frameColor = new Color(.4, .4, .4)
+const frameColor = new Color(.8, .8, .8)
 
 const colors = [red, orange, blue, green, white, yellow]
 
@@ -46,7 +47,7 @@ const Cube = ({
 }: CubeProps) => {
 
   const geometryRef = useRef(new RoundedBoxGeometry(1.0, 1.0, 1.0, 2, .1))
-  const materialRef = useRef(new MeshBasicMaterial({ vertexColors: true }))
+  const materialRef = useRef(new MeshPhongMaterial({ vertexColors: true }))
 
   useEffect (() => {
     let { count } = geometryRef.current.attributes.position

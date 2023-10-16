@@ -5,7 +5,7 @@ import Cube from "./Cube"
 import { Stats, OrbitControls } from '@react-three/drei'
 import { Canvas, ThreeEvent, useFrame, useThree } from "@react-three/fiber"
 import { MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Mesh, MeshBasicMaterial, Object3D, PlaneGeometry, Vector3 } from "three"
+import { Color, Mesh, MeshBasicMaterial, Object3D, PlaneGeometry, PointLight, Vector3 } from "three"
 import { OrbitControls as ThreeOrbitControls } from 'three-stdlib';
 import { 
 	GridModel,
@@ -14,7 +14,7 @@ import {
 } from "./rotations"
 import { MoveCode, asKeyCode, inverse, keyMoves } from "@/utils/moveNotation"
 
-const { PI, abs } = Math
+const { PI, abs, sqrt, pow } = Math
 
 const FOV_ANGLE = PI/20
 
@@ -51,7 +51,10 @@ const CubesContainer = () => {
 			],
 	]
 	const [grid, setGrid] = useState(containerRefs)
+
 	const pointerDownEvents = useRef<Record<string, ThreeEvent<PointerEvent>>>({})
+
+
 
 	useFrame(({ clock }) => {
 		controlsRef.current?.update()
@@ -153,6 +156,9 @@ const CubesContainer = () => {
 	}
 
 	const handlePointerUp = (upEvent: ThreeEvent<PointerEvent>) => {
+		if(isRotating.current){
+			return
+		}
 		console.log('handlePointerUp')
 		if(upEvent.eventObject.uuid === upEvent.intersections[0].eventObject.uuid){
 
@@ -164,10 +170,15 @@ const CubesContainer = () => {
 					console.log('TODO: handle pointer events originating outside the cubes')
 					return
 				}
-
 				const [i,j,k] = position
 				const dx = upEvent.x - downEvent.x
 				const dy = upEvent.y - downEvent.y
+				const distance = sqrt(pow(dx, 2) + pow(dy, 2))
+				const time = upEvent.timeStamp - downEvent.timeStamp
+				// console.log({ time})
+				if(distance < 10 || time > 1200) {
+					return
+				}
 				const isVertical = abs(dy) > abs(dx) 
 				const swipeDirection = isVertical 
 					? (dy > 0 ? 'swipedDown' : 'swipedUp')
@@ -192,9 +203,12 @@ const CubesContainer = () => {
 	}
 
 	return (<>
-		<Stats />
+		{/* <Stats /> */}
+		<pointLight position={[0, 0, 5]} visible={true} intensity={7} color={ new Color(1, 1, 1)} />
+		<ambientLight visible={true} intensity={2} color={ new Color(1, 1, 1)} />
+		{/* <Light /> */}
 		<OrbitControls ref={controlsRef}/>
-		<mesh 
+		<mesh
 			geometry={bgGeometry}
 			material={bgMaterial}
 			position={[0,0,-10]}

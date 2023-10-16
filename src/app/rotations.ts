@@ -159,9 +159,8 @@ export const rotateModelZLayerNegative: LayerRotator = (grid: GridModel, z: 0|1|
 
 export type LayerRotator = typeof rotateModelXLayerPositive
 
-
-const ROTATION_STEPS = 30
-const ROTATION_TIME = 135
+const ROTATION_STEPS = 20
+const ROTATION_TIME = 100
 
 function orbit(
   cube: Object3D, 
@@ -174,7 +173,7 @@ setTimeout(() => {
   cube.rotateOnWorldAxis(axis, angle / (ROTATION_STEPS))
   if(i < ROTATION_STEPS - 1){
     r(i + 1)
-  } else callback()
+  } else setTimeout(callback, 1)
 }, ROTATION_TIME / ROTATION_STEPS)
 }
 r(0)
