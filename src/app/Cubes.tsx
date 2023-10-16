@@ -13,26 +13,30 @@ import {
 	layerRotator,
 } from "./rotations"
 import { MoveCode, asKeyCode, inverse, keyMoves } from "@/utils/moveNotation"
+import { SwipeDirection, getOtherPointer, getPointer, isOnCube, removePointer, resetPointers, swipeInfo } from "@/utils/ponters"
+import { distance } from "three/examples/jsm/nodes/Nodes.js"
 
 const { PI, abs, sqrt, pow } = Math
 
 const FOV_ANGLE = PI/20
 
-function everyCube<T>(things: T[][][], fn: (t:T) => void) {
-	things.forEach(layer => layer.forEach(row => row.forEach(fn)))
-}
+// function everyCube<T>(things: T[][][], fn: (t:T) => void) {
+// 	things.forEach(layer => layer.forEach(row => row.forEach(fn)))
+// }
 
-const bgGeometry = new PlaneGeometry(20, 20)
+const bgGeometry = new PlaneGeometry(50, 50)
 const bgMaterial = new MeshBasicMaterial( { color: 0x222222 } );
 
 const _012 = [0,1,2] as const
 
-const CubesContainer = () => {
-
+type CubesContainerProps = { setMessage: (m: string) => void }
+const CubesContainer = ({ setMessage }: CubesContainerProps) => {
 	const { camera } = useThree();
 	const [_history, setHistory] = useState<MoveCode[]>([])
 	const controlsRef = useRef<ThreeOrbitControls>(null);
 	const isRotating = useRef<boolean>(false)
+	const pointers = useRef<ThreeEvent<PointerEvent>[]>([])
+
 	const containerRefs: GridModel = [
 			[
 					[useRef({} as Mesh), useRef({} as Mesh), useRef({} as Mesh)],
@@ -51,10 +55,6 @@ const CubesContainer = () => {
 			],
 	]
 	const [grid, setGrid] = useState(containerRefs)
-
-	const pointerDownEvents = useRef<Record<string, ThreeEvent<PointerEvent>>>({})
-
-
 
 	useFrame(({ clock }) => {
 		controlsRef.current?.update()
@@ -78,7 +78,7 @@ const CubesContainer = () => {
 		controlsRef.current.enablePan = false
 	}, [camera])
 
-	const getPosition = (container: Object3D): [0|1|2, 0|1|2, 0|1|2] | undefined => {
+	const getCubePosition = (container: Object3D): [0|1|2, 0|1|2, 0|1|2] | undefined => {
 		for (let i = 0; i < 3; i++) {
 			for (let j = 0; j < 3; j++) {
 				for (let k = 0; k < 3; k++) {
@@ -151,89 +151,135 @@ const CubesContainer = () => {
 
 	const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
 		if(e.eventObject.uuid === e.intersections[0].eventObject.uuid){
-			pointerDownEvents.current[e.pointerId] = e
+			pointers.current.push(e)
 		}
+		const ids = pointers.current.map((e: any) => e.pointerId).join('-')
+		// setMessage(`touching: ` + ids)
 	}
 
-	const handlePointerUp = (upEvent: ThreeEvent<PointerEvent>) => {
+	const msg = (...a: { toString: () => string }[]) => {
+		setMessage(a.map(_ => _.toString()).join(' - '))
+	}
+
+	const handlePointerUp = (upPointer: ThreeEvent<PointerEvent>) => {
+
+		if(upPointer.eventObject.uuid === upPointer.intersections[0].eventObject.uuid){
+			console.log(upPointer)
+		}
+		
 		if(isRotating.current){
+			removePointer(pointers, upPointer)
 			return
 		}
-		console.log('handlePointerUp')
-		if(upEvent.eventObject.uuid === upEvent.intersections[0].eventObject.uuid){
+		
+		const downPointer = getPointer(pointers, upPointer.pointerId)
+		if(!downPointer) {
+			return
+		}
+		const swipe = swipeInfo(downPointer, upPointer)
+		const downCube = getCubePosition(downPointer.eventObject)
+		const upCube = getCubePosition(downPointer.eventObject)
 
-			const downEvent = pointerDownEvents.current[upEvent.pointerId]
+		const center = grid[1][1][1]
+		console.log(center.current.children[0])
 
-			if(downEvent) {
-				const position = getPosition(downEvent.eventObject)
-				if(!position){
-					console.log('TODO: handle pointer events originating outside the cubes')
-					return
+		const fingers = pointers.current.length
+
+		//TWO FINGERS
+		if(fingers === 2 && swipe.distance > 10 && swipe.distance > 10) {
+			const otherPointer = getOtherPointer(pointers, downPointer)
+			if(otherPointer && isOnCube(otherPointer) !== isOnCube(upPointer)){
+				const fnGroups = [['B′','B'],['F', 'F′']] as const
+				const fns = fnGroups[isOnCube(otherPointer) ? 0: 1]
+				const swipedAbove = upPointer.y < otherPointer.y 
+				const swipedRight = swipe.dx > 0
+				const [_,j] = getCubePosition(upPointer.eventObject) || []
+				msg(j ?? 'undefined')
+
+				const move: MoveCode = swipedAbove === swipedRight ? fns[0] : fns[1]
+				moveFunctions[move]()
+				setHistory(h => [...h, move])
+
+			} else if(otherPointer){
+
+			}
+		} else if(fingers === 3) {
+			const { distance, time, direction } = swipe
+			if(distance > 10 && time < 500 ) {
+				const map: Record<SwipeDirection, MoveCode> = {
+					'swipedDown': 'X',
+					'swipedUp': 'X′',
+					'swipedRight': 'Y',
+					'swipedLeft': 'Y′',
 				}
-				const [i,j,k] = position
-				const dx = upEvent.x - downEvent.x
-				const dy = upEvent.y - downEvent.y
-				const distance = sqrt(pow(dx, 2) + pow(dy, 2))
-				const time = upEvent.timeStamp - downEvent.timeStamp
-				// console.log({ time})
-				if(distance < 10 || time > 500) {
-					return
-				}
-				const isVertical = abs(dy) > abs(dx) 
-				const swipeDirection = isVertical 
-					? (dy > 0 ? 'swipedDown' : 'swipedUp')
-					: (dx > 0 ? 'swipedRight' : 'swipedLeft')
-				const map: Record<typeof swipeDirection, MoveCode[]> = {
+				const move: MoveCode = map[direction]
+				moveFunctions[move]()
+				setHistory(h => [...h, move])
+			}
+
+		} else if(downCube){
+			// console.log('TODO: handle pointer events originating outside the cubes')
+			const [i,j,k] = downCube
+			const { distance, time, direction, isVertical } = swipe
+			if(distance > 10 && time < 500 ) {
+				const map: Record<SwipeDirection, MoveCode[]> = {
 					'swipedDown': ['L', 'M', 'R′'],
 					'swipedUp': ['L′', 'M′', 'R'],
 					'swipedRight': ['D', 'E', 'U′'],
 					'swipedLeft': ['D′', 'E′', 'U'],
 				}
-				const move: MoveCode = map[swipeDirection][isVertical ? i : j]
+				const move: MoveCode = map[direction][isVertical ? i : j]
 				moveFunctions[move]()
 				setHistory(h => [...h, move])
-
-				delete pointerDownEvents.current[upEvent.pointerId]
 			}
 		}
+		// pointers.current = []
+		removePointer (pointers, downPointer)
+		const ids = pointers.current.map((e: any) => e.pointerId).join('-')
+		// setMessage(`touching: ` + ids)
 	}
 
-	const handleBgPointerDown = (e: ThreeEvent<PointerEvent>) => {
-
-	}
-
-	return (<>
-		{/* <Stats /> */}
-		<pointLight position={[0, 0, 5]} visible={true} intensity={7} color={ new Color(1, 1, 1)} />
-		<ambientLight visible={true} intensity={2} color={ new Color(1, 1, 1)} />
-		{/* <Light /> */}
-		<OrbitControls ref={controlsRef}/>
-		<mesh
-			geometry={bgGeometry}
-			material={bgMaterial}
-			position={[0,0,-10]}
-			onPointerUp={handlePointerUp}
-			onPointerDown={handleBgPointerDown}
-		/>
-
-		{(_012).map(x0 => (_012).map(y0 => (_012).map(z0 =>(
-			<Cube 
-				key={`x0:${x0},y0:${y0},z0:${z0}`} 
-				x0={x0} 
-				y0={y0} 
-				z0={z0} 
-				containerRef={containerRefs[x0][y0][z0]}
-				onPointerDown={handlePointerDown}
+	return (
+		<>
+			<pointLight position={[0, 0, 5]} visible={true} intensity={7} color={ new Color(1, 1, 1)} />
+			<ambientLight visible={true} intensity={2} color={ new Color(1, 1, 1)} />
+			<OrbitControls ref={controlsRef}/>
+			<mesh
+				geometry={bgGeometry}
+				material={bgMaterial}
+				position={[0,0,-10]}
 				onPointerUp={handlePointerUp}
+				onPointerDown={handlePointerDown}
 			/>
-		))))}
-	</>)
+
+			{(_012).map(x0 => (_012).map(y0 => (_012).map(z0 =>(
+								<Cube 
+									key={`x0:${x0},y0:${y0},z0:${z0}`} 
+									x0={x0} 
+									y0={y0} 
+									z0={z0} 
+									containerRef={containerRefs[x0][y0][z0]}
+									onPointerDown={handlePointerDown}
+									onPointerUp={handlePointerUp}
+								/>
+							)
+						)
+					)
+				)
+			}
+		</>
+	)
 }
 
-const Cubes = () => { 
+
+
+const Cubes = ({ setMessage }: { setMessage: (m: string) => void }) => { 
+	const canavas = useRef<HTMLCanvasElement>(null)
+
+
 	return (
-		<Canvas>
-			<CubesContainer/>
+		<Canvas ref={canavas}>
+			<CubesContainer setMessage={setMessage}/>
 		</Canvas>
 	)
 };
