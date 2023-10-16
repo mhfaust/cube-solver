@@ -7,7 +7,7 @@ function copyModel<T> (grid: T[][][]) {
 
 export type GridModel =  MutableRefObject<Mesh>[][][]
 
-export const rotateModelXLayerPositive = (grid: GridModel, x: 0|1|2) => {
+const rotateModelXLayerPositive = (grid: GridModel, x: 0|1|2) => {
   const newx00 = grid[x][0][2].current
   const newx01 = grid[x][1][2].current
   const newx02 = grid[x][2][2].current
@@ -32,7 +32,7 @@ export const rotateModelXLayerPositive = (grid: GridModel, x: 0|1|2) => {
   return newGrid
 }
 
-export const rotateModelXLayerNegative: LayerRotator = (grid: GridModel, x: 0|1|2) => {
+const rotateModelXLayerNegative: LayerRotator = (grid: GridModel, x: 0|1|2) => {
   const newx00 = grid[x][2][0].current
   const newx01 = grid[x][1][0].current
   const newx02 = grid[x][0][0].current
@@ -57,7 +57,7 @@ export const rotateModelXLayerNegative: LayerRotator = (grid: GridModel, x: 0|1|
   return newGrid
 }
 
-export const rotateModelYLayerPositive: LayerRotator = (grid: GridModel, y: 0|1|2) => {
+const rotateModelYLayerPositive: LayerRotator = (grid: GridModel, y: 0|1|2) => {
   const new0y0 = grid[2][y][0].current
   const new0y1 = grid[1][y][0].current
   const new0y2 = grid[0][y][0].current
@@ -82,7 +82,7 @@ export const rotateModelYLayerPositive: LayerRotator = (grid: GridModel, y: 0|1|
   return newGrid
 }
 
-export const rotateModelYLayerNegative: LayerRotator = (grid: GridModel, y: 0|1|2) => {
+const rotateModelYLayerNegative: LayerRotator = (grid: GridModel, y: 0|1|2) => {
   const new0y0 = grid[0][y][2].current
   const new0y1 = grid[1][y][2].current
   const new0y2 = grid[2][y][2].current
@@ -107,7 +107,7 @@ export const rotateModelYLayerNegative: LayerRotator = (grid: GridModel, y: 0|1|
   return newGrid
 }
 
-export const rotateModelZLayerPositive: LayerRotator = (grid: GridModel, z: 0|1|2) => {
+const rotateModelZLayerPositive: LayerRotator = (grid: GridModel, z: 0|1|2) => {
   const new00z = grid[0][2][z].current
   const new01z = grid[1][2][z].current
   const new02z = grid[2][2][z].current
@@ -132,7 +132,7 @@ export const rotateModelZLayerPositive: LayerRotator = (grid: GridModel, z: 0|1|
   return newGrid
 }
 
-export const rotateModelZLayerNegative: LayerRotator = (grid: GridModel, z: 0|1|2) => {
+const rotateModelZLayerNegative: LayerRotator = (grid: GridModel, z: 0|1|2) => {
   const new00z = grid[2][0][z].current
   const new01z = grid[1][0][z].current
   const new02z = grid[0][0][z].current
@@ -157,10 +157,10 @@ export const rotateModelZLayerNegative: LayerRotator = (grid: GridModel, z: 0|1|
   return newGrid
 }
 
-export type LayerRotator = typeof rotateModelXLayerPositive
+type LayerRotator = typeof rotateModelXLayerPositive
 
 const ROTATION_STEPS = 20
-const ROTATION_TIME = 100
+const ROTATION_TIME = 50
 
 function orbit(
   cube: Object3D, 

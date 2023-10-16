@@ -2,23 +2,18 @@
 'use client'
 
 import Cube from "./Cube"
-import { Stats, OrbitControls } from '@react-three/drei'
+import { OrbitControls } from '@react-three/drei'
 import { Canvas, ThreeEvent, useFrame, useThree } from "@react-three/fiber"
-import { MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Color, Mesh, MeshBasicMaterial, Object3D, PlaneGeometry, PointLight, Vector3 } from "three"
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Color, Mesh, MeshBasicMaterial, Object3D, PlaneGeometry } from "three"
 import { OrbitControls as ThreeOrbitControls } from 'three-stdlib';
-import { 
-	GridModel,
-	cubeRotator,
-	layerRotator,
-} from "./rotations"
-import { MoveCode, asKeyCode, inverse, keyMoves } from "@/utils/moveNotation"
-import { SwipeDirection, getOtherPointer, getPointer, isOnCube, removePointer, resetPointers, swipeInfo } from "@/utils/ponters"
-import { distance } from "three/examples/jsm/nodes/Nodes.js"
+import { GridModel,cubeRotator,layerRotator } from "./utils/rotator"
+import { MoveCode, asKeyCode, inverse, keyMoves } from "@/app/utils/moveNotation"
+import { SwipeDirection, getOtherPointer, getPointer, isOnCube, removePointer, resetPointers, swipeInfo } from "@/app/utils/pointers"
 
 const { PI, abs, sqrt, pow } = Math
 
-const FOV_ANGLE = PI/20
+const FOV_ANGLE = PI/12
 
 // function everyCube<T>(things: T[][][], fn: (t:T) => void) {
 // 	things.forEach(layer => layer.forEach(row => row.forEach(fn)))
