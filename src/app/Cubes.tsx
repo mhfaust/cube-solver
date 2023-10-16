@@ -7,9 +7,14 @@ import { Canvas, ThreeEvent, useFrame, useThree } from "@react-three/fiber"
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Color, Mesh, MeshBasicMaterial, Object3D, PlaneGeometry } from "three"
 import { OrbitControls as ThreeOrbitControls } from 'three-stdlib';
-import { GridModel,cubeRotator,layerRotator } from "./utils/rotator"
+import { cubeRotator,layerRotator } from "./utils/rotator"
 import { MoveCode, asKeyCode, inverse, keyMoves } from "@/app/utils/moveNotation"
-import { SwipeDirection, getOtherPointer, getPointer, isOnCube, removePointer, resetPointers, swipeInfo } from "@/app/utils/pointers"
+import { AxisDirection, getOtherPointer, getPointer, isOnCube, removePointer, resetPointers, swipeInfo } from "@/app/utils/pointers"
+import { GridModel, getCubePosition } from "./utils/grid"
+import frontOrBackSpin from "./utils/frontBackSpin"
+import { atan } from "three/examples/jsm/nodes/Nodes.js"
+
+let r = 0
 
 const { PI, abs, sqrt, pow } = Math
 
@@ -31,6 +36,7 @@ const CubesContainer = ({ setMessage }: CubesContainerProps) => {
 	const controlsRef = useRef<ThreeOrbitControls>(null);
 	const isRotating = useRef<boolean>(false)
 	const pointers = useRef<ThreeEvent<PointerEvent>[]>([])
+	// const [timer, setTimer] = useState<NodeJS.Timeout>()
 
 	const containerRefs: GridModel = [
 			[
@@ -73,17 +79,7 @@ const CubesContainer = ({ setMessage }: CubesContainerProps) => {
 		controlsRef.current.enablePan = false
 	}, [camera])
 
-	const getCubePosition = (container: Object3D): [0|1|2, 0|1|2, 0|1|2] | undefined => {
-		for (let i = 0; i < 3; i++) {
-			for (let j = 0; j < 3; j++) {
-				for (let k = 0; k < 3; k++) {
-					if(grid[i][j][k].current.children[0] === container) {
-						return [i as 0|1|2, j as 0|1|2 ,k as 0|1|2]
-					}
-				}
-			}
-		}
-	}
+
 
 	const moveFunctions: Record<MoveCode, () => void> = useMemo(() => ({
 		'U': layerRotator(grid, setGrid, 'y', 2, '-', isRotating),
@@ -147,93 +143,105 @@ const CubesContainer = ({ setMessage }: CubesContainerProps) => {
 	const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
 		if(e.eventObject.uuid === e.intersections[0].eventObject.uuid){
 			pointers.current.push(e)
+			if(isOnCube(e)) {
+				controlsRef.current!.enableRotate = false
+			}
+			log(pointers.current.map((e: any) => e.pointerId).join('-') || 'none')
+
 		}
-		const ids = pointers.current.map((e: any) => e.pointerId).join('-')
-		// setMessage(`touching: ` + ids)
 	}
 
-	const msg = (...a: { toString: () => string }[]) => {
+	const log = (...a: { toString: () => string }[]) => {
 		setMessage(a.map(_ => _.toString()).join(' - '))
 	}
 
 	const handlePointerUp = (upPointer: ThreeEvent<PointerEvent>) => {
 
 		if(upPointer.eventObject.uuid === upPointer.intersections[0].eventObject.uuid){
-			console.log(upPointer)
-		}
-		
-		if(isRotating.current){
-			removePointer(pointers, upPointer)
-			return
-		}
-		
-		const downPointer = getPointer(pointers, upPointer.pointerId)
-		if(!downPointer) {
-			return
-		}
-		const swipe = swipeInfo(downPointer, upPointer)
-		const downCube = getCubePosition(downPointer.eventObject)
-		const upCube = getCubePosition(downPointer.eventObject)
 
-		const center = grid[1][1][1]
-		console.log(center.current.children[0])
-
-		const fingers = pointers.current.length
-
-		//TWO FINGERS
-		if(fingers === 2 && swipe.distance > 10 && swipe.distance > 10) {
-			const otherPointer = getOtherPointer(pointers, downPointer)
-			if(otherPointer && isOnCube(otherPointer) !== isOnCube(upPointer)){
-				const fnGroups = [['B′','B'],['F', 'F′']] as const
-				const fns = fnGroups[isOnCube(otherPointer) ? 0: 1]
-				const swipedAbove = upPointer.y < otherPointer.y 
-				const swipedRight = swipe.dx > 0
-				const [_,j] = getCubePosition(upPointer.eventObject) || []
-				msg(j ?? 'undefined')
-
-				const move: MoveCode = swipedAbove === swipedRight ? fns[0] : fns[1]
-				moveFunctions[move]()
-				setHistory(h => [...h, move])
-
-			} else if(otherPointer){
-
+			// setTimer((oldTimer) => {
+			// 	if(oldTimer){
+			// 		clearTimeout(oldTimer)
+			// 	}
+			// 	return setTimeout(() => {
+			// 		if(!pointers.current.some(isOnCube)){
+			// 			controlsRef.current!.enableRotate = true
+			// 		}
+			// 	}, 500)
+			// })
+			
+			if(isRotating.current){
+				removePointer(pointers, upPointer)
+				return
 			}
-		} else if(fingers === 3) {
-			const { distance, time, direction } = swipe
-			if(distance > 10 && time < 500 ) {
-				const map: Record<SwipeDirection, MoveCode> = {
-					'swipedDown': 'X',
-					'swipedUp': 'X′',
-					'swipedRight': 'Y',
-					'swipedLeft': 'Y′',
+			
+			const downPointer = getPointer(pointers, upPointer.pointerId)
+			if(!downPointer) {
+				return
+			}
+			// const { screenX, screenY, clientX, clientY, layerX, layerY } = downPointer
+			// console.log({layerX, layerY})
+			// console.log(downPointer)
+			const swipe = swipeInfo(downPointer, upPointer)
+			const downCube = getCubePosition(grid, downPointer.eventObject)
+			const upCube = getCubePosition(grid, downPointer.eventObject)
+
+
+			console.log({theta: swipe.theta})
+
+			const fingers = pointers.current.length
+
+			//TWO FINGERS
+			if(fingers === 2 && swipe.distance > 10 && swipe.distance > 10) {
+				const otherPointer = getOtherPointer(pointers, downPointer)!
+				if(isOnCube(otherPointer) !== isOnCube(upPointer)){
+					const move = frontOrBackSpin(grid, downPointer, upPointer, otherPointer, log)
+					moveFunctions[move]()
+					setHistory(h => [...h, move])
+
+				} else if(otherPointer){
+					// TODO what should we do if neither finger is on the cube when one is lifted up?
 				}
-				const move: MoveCode = map[direction]
-				moveFunctions[move]()
-				setHistory(h => [...h, move])
-			}
-
-		} else if(downCube){
-			// console.log('TODO: handle pointer events originating outside the cubes')
-			const [i,j,k] = downCube
-			const { distance, time, direction, isVertical } = swipe
-			if(distance > 10 && time < 500 ) {
-				const map: Record<SwipeDirection, MoveCode[]> = {
-					'swipedDown': ['L', 'M', 'R′'],
-					'swipedUp': ['L′', 'M′', 'R'],
-					'swipedRight': ['D', 'E', 'U′'],
-					'swipedLeft': ['D′', 'E′', 'U'],
+			} else if(fingers > 2) {
+				const { distance, time, axisDirection: compassDirection } = swipe
+				if(distance > 10 && time < 500 ) {
+					const map: Record<AxisDirection, MoveCode> = {
+						'down': 'X',
+						'up': 'X′',
+						'right': 'Y',
+						'left': 'Y′',
+					}
+					const move: MoveCode = map[compassDirection]
+					moveFunctions[move]()
+					setHistory(h => [...h, move])
 				}
-				const move: MoveCode = map[direction][isVertical ? i : j]
-				moveFunctions[move]()
-				setHistory(h => [...h, move])
+
+			} else if(downCube){
+				// console.log('TODO: handle pointer events originating outside the cubes')
+				const [i,j,k] = downCube
+				const { distance, time, axisDirection: direction, isVertical } = swipe
+				if(distance > 10 && time < 500 ) {
+					const map: Record<AxisDirection, MoveCode[]> = {
+						'down': ['L', 'M', 'R′'],
+						'up': ['L′', 'M′', 'R'],
+						'right': ['D', 'E', 'U′'],
+						'left': ['D′', 'E′', 'U'],
+					}
+					const move: MoveCode = map[direction][isVertical ? i : j]
+					moveFunctions[move]()
+					setHistory(h => [...h, move])
+				}
 			}
 		}
-		// pointers.current = []
-		removePointer (pointers, downPointer)
-		const ids = pointers.current.map((e: any) => e.pointerId).join('-')
-		// setMessage(`touching: ` + ids)
+		removePointer (pointers, upPointer)
+		if(!pointers.current.some(isOnCube)){
+				controlsRef.current!.enableRotate = true
+		}
+		log(pointers.current.map((e: any) => e.pointerId).join('-') || 'none')
+
 	}
 
+	// log(pointers.current.map((e: any) => e.pointerId).join('-') || 'none')
 	return (
 		<>
 			<pointLight position={[0, 0, 5]} visible={true} intensity={7} color={ new Color(1, 1, 1)} />
@@ -269,11 +277,18 @@ const CubesContainer = ({ setMessage }: CubesContainerProps) => {
 
 
 const Cubes = ({ setMessage }: { setMessage: (m: string) => void }) => { 
-	const canavas = useRef<HTMLCanvasElement>(null)
+	const canvas = useRef<HTMLCanvasElement>(null)
+
+	// useEffect(() => {
+	// 	setInterval(() => {
+
+	// 		console.log({ height: canvas.current?.height })
+	// 	}, 4000)
+	// }, [])
 
 
 	return (
-		<Canvas ref={canavas}>
+		<Canvas ref={canvas}>
 			<CubesContainer setMessage={setMessage}/>
 		</Canvas>
 	)

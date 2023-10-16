@@ -11,7 +11,9 @@ export default function App() {
   
   return (
     <div className={styles.main}>
-      <div style={{ position: 'fixed', top: 0, height: '2em', left: 0, right: 0 }}>{'>: '}{message}</div>
+      <div 
+        style={{ position: 'fixed', top: 0, height: '2em', left: 0, right: 0, zIndex: 1, background: 'blue' }}
+      >{'>: '}{message}</div>
       <Cubes setMessage={setMessage}/>
     </div>
   )

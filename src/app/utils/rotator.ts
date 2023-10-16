@@ -1,11 +1,11 @@
 import { MutableRefObject } from "react";
 import { Mesh, Object3D, Vector3 } from "three";
+import { GridModel } from "./grid";
 
 function copyModel<T> (grid: T[][][]) {
   return grid.map(dim2 => dim2.map(dim1 => dim1.slice()))
 }
 
-export type GridModel =  MutableRefObject<Mesh>[][][]
 
 const rotateModelXLayerPositive = (grid: GridModel, x: 0|1|2) => {
   const newx00 = grid[x][0][2].current

@@ -1,7 +1,7 @@
 import { ThreeEvent } from "@react-three/fiber"
 import { MutableRefObject } from "react"
 
-const { PI, abs, sqrt, pow } = Math
+const { PI, abs, sqrt, pow, atan } = Math
 type  Pointers = MutableRefObject<ThreeEvent<PointerEvent>[]>
 
 export const getPointer = (pointers: Pointers, id: number) => {
@@ -27,7 +27,8 @@ export const isOnCube = (e?: ThreeEvent<PointerEvent>) => {
 	return Boolean(e?.eventObject.parent?.parent)
 }
 
-export type SwipeDirection = 'swipedDown' | 'swipedUp' | 'swipedRight' | 'swipedLeft'
+export type AxisDirection = 'down' | 'up' | 'left' | 'right'
+export type QuadrantDirection = 'upLeft' | 'upRight' | 'downLeft' | 'downRight'
 
 export const swipeInfo = (
   downPointer: ThreeEvent<PointerEvent>,
@@ -39,12 +40,19 @@ export const swipeInfo = (
   const distance = sqrt(pow(dx, 2) + pow(dy, 2))
   const time = upPointer.timeStamp - downPointer.timeStamp
   const isVertical = abs(dy) > abs(dx) 
-  const direction: SwipeDirection = isVertical 
-    ? (dy > 0 ? 'swipedDown' : 'swipedUp')
-    : (dx > 0 ? 'swipedRight' : 'swipedLeft')
 
-  return { dx, dy, distance, time, isVertical, direction }
+
+
+  const axisDirection: AxisDirection = isVertical 
+    ? (dy > 0 ? 'down' : 'up')
+    : (dx > 0 ? 'right' : 'left')
+
+  const quadrantDirection: QuadrantDirection = dy > 0 
+    ? (dx > 0 ? 'upRight' : 'upLeft')
+    : (dx < 0 ? 'downRight' : 'downLeft')
+
+  const theta = atan(-dy / dx) / PI
+
+
+  return { dx, dy, distance, time, isVertical, theta, axisDirection, quadrantDirection }
 }
-
-
-// const twoFingerSwipe()
