@@ -176,7 +176,7 @@ const CubesContainer = () => {
 				const distance = sqrt(pow(dx, 2) + pow(dy, 2))
 				const time = upEvent.timeStamp - downEvent.timeStamp
 				// console.log({ time})
-				if(distance < 10 || time > 1200) {
+				if(distance < 10 || time > 500) {
 					return
 				}
 				const isVertical = abs(dy) > abs(dx) 
