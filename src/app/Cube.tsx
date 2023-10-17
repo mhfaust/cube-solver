@@ -36,6 +36,7 @@ type CubeProps = {
   containerRef: CubeContainerRef;
   onPointerDown: (event: ThreeEvent<PointerEvent>) => void,
   onPointerUp: (event: ThreeEvent<PointerEvent>) => void,
+  onPointerMove: (event: ThreeEvent<PointerEvent>) => void,
 }
 const Cube = ({ 
   x0, 
@@ -44,6 +45,7 @@ const Cube = ({
   containerRef, 
   onPointerDown, 
   onPointerUp,
+  onPointerMove
 }: CubeProps) => {
 
   const geometryRef = useRef(new RoundedBoxGeometry(1.0, 1.0, 1.0, 2, .1))

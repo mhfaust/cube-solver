@@ -157,36 +157,17 @@ const CubesContainer = ({ setMessage }: CubesContainerProps) => {
 
 	const handlePointerUp = (upPointer: ThreeEvent<PointerEvent>) => {
 
+		const downPointer = getPointer(pointers, upPointer.pointerId)
+		if(isRotating.current || !downPointer){
+			removePointer(pointers, upPointer)
+			return
+		}
 		if(upPointer.eventObject.uuid === upPointer.intersections[0].eventObject.uuid){
-
-			// setTimer((oldTimer) => {
-			// 	if(oldTimer){
-			// 		clearTimeout(oldTimer)
-			// 	}
-			// 	return setTimeout(() => {
-			// 		if(!pointers.current.some(isOnCube)){
-			// 			controlsRef.current!.enableRotate = true
-			// 		}
-			// 	}, 500)
-			// })
 			
-			if(isRotating.current){
-				removePointer(pointers, upPointer)
-				return
-			}
 			
-			const downPointer = getPointer(pointers, upPointer.pointerId)
-			if(!downPointer) {
-				return
-			}
-			// const { screenX, screenY, clientX, clientY, layerX, layerY } = downPointer
-			// console.log({layerX, layerY})
-			// console.log(downPointer)
 			const swipe = swipeInfo(downPointer, upPointer)
 			const downCube = getCubePosition(grid, downPointer.eventObject)
 			const upCube = getCubePosition(grid, downPointer.eventObject)
-
-
 			console.log({theta: swipe.theta})
 
 			const fingers = pointers.current.length
@@ -196,8 +177,10 @@ const CubesContainer = ({ setMessage }: CubesContainerProps) => {
 				const otherPointer = getOtherPointer(pointers, downPointer)!
 				if(isOnCube(otherPointer) !== isOnCube(upPointer)){
 					const move = frontOrBackSpin(grid, downPointer, upPointer, otherPointer, log)
-					moveFunctions[move]()
-					setHistory(h => [...h, move])
+					if(move) {
+						moveFunctions[move]()
+						setHistory(h => [...h, move])
+					}
 
 				} else if(otherPointer){
 					// TODO what should we do if neither finger is on the cube when one is lifted up?
@@ -214,6 +197,9 @@ const CubesContainer = ({ setMessage }: CubesContainerProps) => {
 					const move: MoveCode = map[compassDirection]
 					moveFunctions[move]()
 					setHistory(h => [...h, move])
+				}
+				for(let p of pointers.current){
+					removePointer(pointers, p)
 				}
 
 			} else if(downCube){
@@ -238,7 +224,6 @@ const CubesContainer = ({ setMessage }: CubesContainerProps) => {
 				controlsRef.current!.enableRotate = true
 		}
 		log(pointers.current.map((e: any) => e.pointerId).join('-') || 'none')
-
 	}
 
 	// log(pointers.current.map((e: any) => e.pointerId).join('-') || 'none')
@@ -256,20 +241,17 @@ const CubesContainer = ({ setMessage }: CubesContainerProps) => {
 			/>
 
 			{(_012).map(x0 => (_012).map(y0 => (_012).map(z0 =>(
-								<Cube 
-									key={`x0:${x0},y0:${y0},z0:${z0}`} 
-									x0={x0} 
-									y0={y0} 
-									z0={z0} 
-									containerRef={containerRefs[x0][y0][z0]}
-									onPointerDown={handlePointerDown}
-									onPointerUp={handlePointerUp}
-								/>
-							)
-						)
-					)
-				)
-			}
+				<Cube 
+					key={`x0:${x0},y0:${y0},z0:${z0}`} 
+					x0={x0} 
+					y0={y0} 
+					z0={z0} 
+					containerRef={containerRefs[x0][y0][z0]}
+					onPointerDown={handlePointerDown}
+					onPointerUp={handlePointerUp}
+					onPointerMove={console.log}
+				/>
+			))))}
 		</>
 	)
 }
