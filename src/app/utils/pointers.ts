@@ -2,29 +2,30 @@ import { ThreeEvent } from "@react-three/fiber"
 import { MutableRefObject } from "react"
 
 const { PI, abs, sqrt, pow, atan } = Math
-type  Pointers = MutableRefObject<ThreeEvent<PointerEvent>[]>
+type  Pointers = MutableRefObject<Record<number, ThreeEvent<PointerEvent>>>
 
 export const addPointer = (pointers: Pointers, pointer: ThreeEvent<PointerEvent>) => {
-  pointers.current.push(pointer)
+  pointers.current[pointer.pointerId] = pointer
 }
 
 export const getPointer = (pointers: Pointers, id: number) => {
-	return pointers.current.find(p => p.pointerId === id)
+	return Object.values(pointers.current).find(p => p.pointerId === id)
 }
 
 export const getOtherPointer = (pointers: Pointers, pointer: ThreeEvent<PointerEvent>) => {
-	return pointers.current.find(p => p.pointerId !== pointer.pointerId)
+	return Object.values(pointers.current).find(p => p.pointerId !== pointer.pointerId)
 }
 
 export const removePointer = (
 	pointers: Pointers, 
 	pointer: ThreeEvent<PointerEvent>
 ) => {
-	pointers.current = pointers.current.filter(p => p.pointerId !== pointer.pointerId)
+	delete pointers.current[pointer.pointerId]
+  //(p => p.pointerId !== pointer.pointerId)
 }
 
 export const resetPointers = (pointers: Pointers) => {
-  pointers.current = []
+  Object.values(pointers).forEach(p => delete pointers.current[p.pointerId])
 }
 
 export const isOnCube = (e?: ThreeEvent<PointerEvent>) => {
