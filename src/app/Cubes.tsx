@@ -9,7 +9,7 @@ import { Color, Mesh, MeshBasicMaterial, Object3D, PlaneGeometry } from "three"
 import { OrbitControls as ThreeOrbitControls } from 'three-stdlib';
 import { cubeRotator,layerRotator } from "./utils/rotator"
 import { MoveCode, asKeyCode, inverse, keyMoves } from "@/app/utils/moveNotation"
-import { AxisDirection, getOtherPointer, getPointer, isOnCube, removePointer, resetPointers, swipeInfo } from "@/app/utils/pointers"
+import { AxisDirection, addPointer, getOtherPointer, getPointer, isOnCube, removePointer, resetPointers, swipeInfo } from "@/app/utils/pointers"
 import { GridModel, getCubePosition } from "./utils/grid"
 import frontOrBackSpin from "./utils/frontBackSpin"
 import { atan } from "three/examples/jsm/nodes/Nodes.js"
@@ -142,7 +142,7 @@ const CubesContainer = ({ setMessage }: CubesContainerProps) => {
 
 	const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
 		if(e.eventObject.uuid === e.intersections[0].eventObject.uuid){
-			pointers.current.push(e)
+			addPointer(pointers, e)
 			if(isOnCube(e)) {
 				controlsRef.current!.enableRotate = false
 			}
@@ -249,7 +249,7 @@ const CubesContainer = ({ setMessage }: CubesContainerProps) => {
 					containerRef={containerRefs[x0][y0][z0]}
 					onPointerDown={handlePointerDown}
 					onPointerUp={handlePointerUp}
-					onPointerMove={console.log}
+					// onPointerMove={console.log}
 				/>
 			))))}
 		</>

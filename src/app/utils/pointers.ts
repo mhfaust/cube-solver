@@ -4,6 +4,10 @@ import { MutableRefObject } from "react"
 const { PI, abs, sqrt, pow, atan } = Math
 type  Pointers = MutableRefObject<ThreeEvent<PointerEvent>[]>
 
+export const addPointer = (pointers: Pointers, pointer: ThreeEvent<PointerEvent>) => {
+  pointers.current.push(pointer)
+}
+
 export const getPointer = (pointers: Pointers, id: number) => {
 	return pointers.current.find(p => p.pointerId === id)
 }

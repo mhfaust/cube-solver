@@ -36,7 +36,7 @@ type CubeProps = {
   containerRef: CubeContainerRef;
   onPointerDown: (event: ThreeEvent<PointerEvent>) => void,
   onPointerUp: (event: ThreeEvent<PointerEvent>) => void,
-  onPointerMove: (event: ThreeEvent<PointerEvent>) => void,
+  onPointerMove?: (event: ThreeEvent<PointerEvent>) => void,
 }
 const Cube = ({ 
   x0, 
