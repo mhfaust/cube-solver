@@ -53,8 +53,8 @@ export const swipeInfo = (
     : (dx > 0 ? 'right' : 'left')
 
   const quadrantDirection: QuadrantDirection = dy > 0 
-    ? (dx > 0 ? 'upRight' : 'upLeft')
-    : (dx < 0 ? 'downRight' : 'downLeft')
+    ? (dx > 0 ? 'downRight' : 'downLeft')
+    : (dx > 0 ? 'upRight' : 'upLeft')
 
   const theta = atan(-dy / dx) / PI
 

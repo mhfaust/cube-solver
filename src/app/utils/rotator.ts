@@ -160,7 +160,7 @@ const rotateModelZLayerNegative: LayerRotator = (grid: GridModel, z: 0|1|2) => {
 type LayerRotator = typeof rotateModelXLayerPositive
 
 const ROTATION_STEPS = 20
-const ROTATION_TIME = 50
+const ROTATION_TIME = 30
 
 function orbit(
   cube: Object3D, 
@@ -221,6 +221,7 @@ export const layerRotator = (
     objectOrbiter(cube, () => isRotating.current = false)
   })
   setGrid(gridLayerRotator(grid, layer))
+  navigator.vibrate([200])
 }
 
 export const cubeRotator = (

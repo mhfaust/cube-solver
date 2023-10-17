@@ -11,8 +11,9 @@ import { cubeRotator,layerRotator } from "./utils/rotator"
 import { MoveCode, asKeyCode, inverse, keyMoves } from "@/app/utils/moveNotation"
 import { AxisDirection, addPointer, getOtherPointer, getPointer, isOnCube, removePointer, resetPointers, swipeInfo } from "@/app/utils/pointers"
 import { GridModel, getCubePosition } from "./utils/grid"
-import frontOrBackSpin from "./utils/frontBackSpin"
+import frontOrBackSpin from "./utils/spinFrontOrBack"
 import { atan } from "three/examples/jsm/nodes/Nodes.js"
+import spinRoXOrY from "./utils/spinRowXOrY"
 
 let r = 0
 
@@ -36,7 +37,7 @@ const CubesContainer = ({ setMessage }: CubesContainerProps) => {
 	const controlsRef = useRef<ThreeOrbitControls>(null);
 	const isRotating = useRef<boolean>(false)
 	const downPointers = useRef<Record<string, ThreeEvent<PointerEvent>>>({})
-	const movePointers = useRef<ThreeEvent<PointerEvent>[]>([])
+	const movePointers = useRef<Record<string, ThreeEvent<PointerEvent>>>({})
 
 	const containerRefs: GridModel = [
 			[
@@ -144,7 +145,7 @@ const CubesContainer = ({ setMessage }: CubesContainerProps) => {
 			if(isOnCube(e)) {
 				controlsRef.current!.enableRotate = false
 			}
-			log(Object.values(downPointers.current).map((e) => e.pointerId).join('-') || 'none')
+			// log(Object.values(downPointers.current).map((e) => e.pointerId).join('-') || 'none')
 
 		}
 	}
@@ -158,20 +159,19 @@ const CubesContainer = ({ setMessage }: CubesContainerProps) => {
 		const downPointer = getPointer(downPointers, upPointer.pointerId)
 		if(isRotating.current || !downPointer){
 			removePointer(downPointers, upPointer)
+			removePointer(movePointers, upPointer)
 			return
 		}
 		if(upPointer.eventObject.uuid === upPointer.intersections[0].eventObject.uuid){
 			
-			
-			const swipe = swipeInfo(downPointer, upPointer)
+			const swipe1 = swipeInfo(downPointer, upPointer)
 			const downCube = getCubePosition(grid, downPointer.eventObject)
 			const upCube = getCubePosition(grid, downPointer.eventObject)
-			console.log({theta: swipe.theta})
 
 			const fingers = Object.values(downPointers.current).length
 
 			//TWO FINGERS
-			if(fingers === 2 && swipe.distance > 10 && swipe.distance > 10) {
+			if(fingers === 2 && swipe1.distance > 10 && swipe1.distance > 10) {
 				const otherPointer = getOtherPointer(downPointers, downPointer)!
 				if(isOnCube(otherPointer) !== isOnCube(upPointer)){
 					const move = frontOrBackSpin(grid, downPointer, upPointer, otherPointer, log)
@@ -181,10 +181,26 @@ const CubesContainer = ({ setMessage }: CubesContainerProps) => {
 					}
 
 				} else if(otherPointer){
-					// if
+					const otherMovePointer = getPointer(movePointers, otherPointer.pointerId)
+					if(otherMovePointer){
+						// const theta1 = swipe1.theta
+						const swipe2 = swipeInfo(otherPointer, otherMovePointer)
+						// const t = { theta1, theta2 }
+						// log(JSON.stringify(t))
+						if(swipe1.axisDirection === swipe2.axisDirection || swipe1.quadrantDirection === swipe2.quadrantDirection) {
+							const move1 = spinRoXOrY(grid, downPointer, upPointer)
+							const move2 = spinRoXOrY(grid, otherPointer, otherMovePointer)
+							;[move1, move2].forEach(move => {
+								if(move) {
+									moveFunctions[move]()
+									setHistory(h => [...h, move])
+								}
+							})
+						}
+					}
 				}
 			} else if(fingers > 2) {
-				const { distance, time, axisDirection: compassDirection } = swipe
+				const { distance, time, axisDirection: compassDirection } = swipe1
 				if(distance > 10 && time < 500 ) {
 					const map: Record<AxisDirection, MoveCode> = {
 						'down': 'X',
@@ -198,34 +214,29 @@ const CubesContainer = ({ setMessage }: CubesContainerProps) => {
 				}
 				for(let p of Object.values(downPointers.current)){
 					removePointer(downPointers, p)
+					removePointer(movePointers, p)
 				}
 
 			} else if(downCube){
 				// console.log('TODO: handle pointer events originating outside the cubes')
-				const [i,j,k] = downCube
-				const { distance, time, axisDirection: direction, isVertical } = swipe
-				if(distance > 10 && time < 500 ) {
-					const map: Record<AxisDirection, MoveCode[]> = {
-						'down': ['L', 'M', 'R′'],
-						'up': ['L′', 'M′', 'R'],
-						'right': ['D', 'E', 'U′'],
-						'left': ['D′', 'E′', 'U'],
-					}
-					const move: MoveCode = map[direction][isVertical ? i : j]
+				const move = spinRoXOrY(grid, downPointer, upPointer)
+				if(move) {
 					moveFunctions[move]()
 					setHistory(h => [...h, move])
 				}
 			}
 		}
 		removePointer (downPointers, upPointer)
+		removePointer (movePointers, upPointer)
 		if(!Object.values(downPointers.current).some(isOnCube)){
 				controlsRef.current!.enableRotate = true
 		}
-		log(Object.values(downPointers.current).map((e: any) => e.pointerId).join('-') || 'none')
+		// log(Object.values(downPointers.current).map((e: any) => e.pointerId).join('-') || 'none')
 	}
 
 	const handlePointerMove = (e: ThreeEvent<PointerEvent>) => {
-
+		movePointers.current[e.pointerId] = e
+		// console.log(e.pointerId)
 	}
 	// log(pointers.current.map((e: any) => e.pointerId).join('-') || 'none')
 	return (
@@ -250,7 +261,7 @@ const CubesContainer = ({ setMessage }: CubesContainerProps) => {
 					containerRef={containerRefs[x0][y0][z0]}
 					onPointerDown={handlePointerDown}
 					onPointerUp={handlePointerUp}
-					// onPointerMove={console.log}
+					onPointerMove={handlePointerMove}
 				/>
 			))))}
 		</>
