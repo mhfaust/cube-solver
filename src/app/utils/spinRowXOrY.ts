@@ -2,7 +2,7 @@ import { Object3D } from "three"
 import { GridModel, getCubePosition } from "./grid"
 import { ThreeEvent } from "@react-three/fiber"
 import { AxisDirection, swipeInfo } from "./pointers"
-import { MoveCode } from "./moveNotation"
+import { MoveCode } from "./moveCodes"
 
 const spinRowXOrY = (
     grid: GridModel, 
@@ -10,7 +10,12 @@ const spinRowXOrY = (
     upPointer: ThreeEvent<PointerEvent>
   ) => {
 
-  const [i,j] = getCubePosition(grid, downPointer.eventObject)!
+  const position = getCubePosition(grid, downPointer.eventObject)
+  if(!position){
+    return { error: "Unexpected: downPointer not on any cube"}
+  }
+
+  const [i,j] = position
 
   const { 
     distance, 

@@ -2,7 +2,7 @@ import { ThreeEvent } from "@react-three/fiber"
 import { isOnCube, swipeInfo } from "./pointers"
 import { GridModel, getCubePosition } from "./grid"
 import { Logger } from "./types"
-import { MoveCode } from "./moveNotation"
+import { MoveCode } from "./moveCodes"
 
 const spinFrontOrBack = (
   grid: GridModel,
