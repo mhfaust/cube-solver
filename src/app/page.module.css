@@ -4,3 +4,47 @@
   object-fit: contain;
   
 }
+
+.log {
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  height: 2.5em;
+  z-index: 1; 
+  overflow: scroll;
+  background-color: white;
+  color: black;
+  transition: height .25s;
+  height: var(--log-line-height);
+  --log-line-height: 1.5em;
+}
+.log.open {
+  height: calc(100vh - var(--log-line-height));
+}
+.logMessage {
+  padding-top: 3px;
+  border-top: 1px dashed black;
+  margin-top: 3px;
+}
+.logToggle {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 72px;
+  height: 36px;
+  background: red;
+  z-index: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 5px;
+}
+.logToggle.open {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 0px;
+  top: auto;
+  bottom: 0;
+}

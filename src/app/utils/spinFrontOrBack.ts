@@ -4,20 +4,18 @@ import { GridModel, getCubePosition } from "./grid"
 import { Logger } from "./types"
 import { MoveCode } from "./moveNotation"
 
-const frontOrBackSpin = (
+const spinFrontOrBack = (
   grid: GridModel,
   downPointer: ThreeEvent<PointerEvent>,
   upPointer: ThreeEvent<PointerEvent>,
   otherDownPointer: ThreeEvent<PointerEvent>,
-  log?: Logger
 ): MoveCode | undefined => {
   const { dx, dy, axisDirection } = swipeInfo(downPointer, upPointer)
   const swipedAbove = upPointer.y < otherDownPointer.y 
   const swipedRight = dx > 0
-  const swipedUp = dy > 0
 
   //BACK face:
-  if( isOnCube(otherDownPointer) ) {
+  if(isOnCube(otherDownPointer)) {
     return swipedAbove === swipedRight ? 'B′' : 'B'
   }
   //FRONT face:
@@ -51,4 +49,4 @@ const frontOrBackSpin = (
 
 }
 
-export default frontOrBackSpin
+export default spinFrontOrBack

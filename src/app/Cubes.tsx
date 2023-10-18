@@ -11,29 +11,23 @@ import { cubeRotator,layerRotator } from "./utils/rotator"
 import { MoveCode, asKeyCode, inverse, keyMoves } from "@/app/utils/moveNotation"
 import { AxisDirection, addPointer, getOtherPointer, getPointer, isOnCube, removePointer, resetPointers, swipeInfo } from "@/app/utils/pointers"
 import { GridModel, getCubePosition } from "./utils/grid"
-import frontOrBackSpin from "./utils/spinFrontOrBack"
-import { atan } from "three/examples/jsm/nodes/Nodes.js"
-import spinRoXOrY from "./utils/spinRowXOrY"
+import spinFrontOrBack from "./utils/spinFrontOrBack"
+import spinRowXOrY from "./utils/spinRowXOrY"
+import twoFingerRotationDirection from "./utils/twoFingerRotationDirection"
+import useAppStore, { actionsSelector } from "./useAppStore"
 
-let r = 0
-
-const { PI, abs, sqrt, pow } = Math
-
+const { PI } = Math
 const FOV_ANGLE = PI/12
-
-// function everyCube<T>(things: T[][][], fn: (t:T) => void) {
-// 	things.forEach(layer => layer.forEach(row => row.forEach(fn)))
-// }
 
 const bgGeometry = new PlaneGeometry(50, 50)
 const bgMaterial = new MeshBasicMaterial( { color: 0x222222 } );
 
 const _012 = [0,1,2] as const
 
-type CubesContainerProps = { setMessage: (m: string) => void }
-const CubesContainer = ({ setMessage }: CubesContainerProps) => {
+const CubesContainer = () => {
 	const { camera } = useThree();
 	const [_history, setHistory] = useState<MoveCode[]>([])
+	const { log } = useAppStore(actionsSelector)
 	const controlsRef = useRef<ThreeOrbitControls>(null);
 	const isRotating = useRef<boolean>(false)
 	const downPointers = useRef<Record<string, ThreeEvent<PointerEvent>>>({})
@@ -145,100 +139,96 @@ const CubesContainer = ({ setMessage }: CubesContainerProps) => {
 			if(isOnCube(e)) {
 				controlsRef.current!.enableRotate = false
 			}
-			// log(Object.values(downPointers.current).map((e) => e.pointerId).join('-') || 'none')
-
 		}
-	}
-
-	const log = (...a: { toString: () => string }[]) => {
-		setMessage(a.map(_ => _.toString()).join(' - '))
 	}
 
 	const handlePointerUp = (upPointer: ThreeEvent<PointerEvent>) => {
 
 		const downPointer = getPointer(downPointers, upPointer.pointerId)
 		if(isRotating.current || !downPointer){
-			removePointer(downPointers, upPointer)
-			removePointer(movePointers, upPointer)
+			removePointer(downPointers, upPointer, log)
+			removePointer(movePointers, upPointer, log)
 			return
 		}
 		if(upPointer.eventObject.uuid === upPointer.intersections[0].eventObject.uuid){
 			
 			const swipe1 = swipeInfo(downPointer, upPointer)
-			const downCube = getCubePosition(grid, downPointer.eventObject)
-			const upCube = getCubePosition(grid, downPointer.eventObject)
-
 			const fingers = Object.values(downPointers.current).length
+			const isSwipe = swipe1.distance > 5 && swipe1.time < 500
+			const moves: MoveCode[] = []
 
-			//TWO FINGERS
-			if(fingers === 2 && swipe1.distance > 10 && swipe1.distance > 10) {
+			if(fingers === 1 && isSwipe){
+				const move = spinRowXOrY(grid, downPointer, upPointer)
+				move && moves.push(move)
+			}
+
+			if(fingers === 2 && isSwipe) {
 				const otherPointer = getOtherPointer(downPointers, downPointer)!
-				if(isOnCube(otherPointer) !== isOnCube(upPointer)){
-					const move = frontOrBackSpin(grid, downPointer, upPointer, otherPointer, log)
-					if(move) {
-						moveFunctions[move]()
-						setHistory(h => [...h, move])
-					}
 
-				} else if(otherPointer){
+				if(isOnCube(otherPointer) !== isOnCube(upPointer)){
+					const move = spinFrontOrBack(grid, downPointer, upPointer, otherPointer)
+					move && moves.push(move)
+				} else {
+
 					const otherMovePointer = getPointer(movePointers, otherPointer.pointerId)
+
 					if(otherMovePointer){
-						// const theta1 = swipe1.theta
 						const swipe2 = swipeInfo(otherPointer, otherMovePointer)
-						// const t = { theta1, theta2 }
-						// log(JSON.stringify(t))
-						if(swipe1.axisDirection === swipe2.axisDirection || swipe1.quadrantDirection === swipe2.quadrantDirection) {
-							const move1 = spinRoXOrY(grid, downPointer, upPointer)
-							const move2 = spinRoXOrY(grid, otherPointer, otherMovePointer)
-							;[move1, move2].forEach(move => {
-								if(move) {
-									moveFunctions[move]()
-									setHistory(h => [...h, move])
-								}
-							})
+
+						if(swipe1.axisDirection === swipe2.axisDirection) {
+							const move1 = spinRowXOrY(grid, downPointer, upPointer)
+							move1 && moves.push(move1)
+
+							const move2 = spinRowXOrY(grid, otherPointer, otherMovePointer)
+							move2 && moves.push(move2)
+						} 
+
+						else {
+							const rotation = twoFingerRotationDirection(
+								[downPointer, upPointer],
+								[otherPointer, otherMovePointer]
+							)
+							if(rotation === 1) {
+								moves.push('F')
+							}
+							if(rotation === -1){
+								moves.push("F′")
+							}
 						}
 					}
 				}
-			} else if(fingers > 2) {
+			} 
+			
+			if(fingers > 2 && isSwipe) {
 				const { distance, time, axisDirection: compassDirection } = swipe1
-				if(distance > 10 && time < 500 ) {
-					const map: Record<AxisDirection, MoveCode> = {
-						'down': 'X',
-						'up': 'X′',
-						'right': 'Y',
-						'left': 'Y′',
-					}
-					const move: MoveCode = map[compassDirection]
-					moveFunctions[move]()
-					setHistory(h => [...h, move])
+				const map: Record<AxisDirection, MoveCode> = {
+					'down': 'X',
+					'up': 'X′',
+					'right': 'Y',
+					'left': 'Y′',
 				}
+				const move: MoveCode = map[compassDirection]
+				moves.push(move)
 				for(let p of Object.values(downPointers.current)){
-					removePointer(downPointers, p)
-					removePointer(movePointers, p)
+					removePointer(downPointers, p, log)
+					removePointer(movePointers, p, log)
 				}
-
-			} else if(downCube){
-				// console.log('TODO: handle pointer events originating outside the cubes')
-				const move = spinRoXOrY(grid, downPointer, upPointer)
-				if(move) {
-					moveFunctions[move]()
-					setHistory(h => [...h, move])
-				}
-			}
+			} 
+			moves.forEach(m => {
+				moveFunctions[m]()
+			})
+			setHistory((h) => [...h, ...moves])
 		}
-		removePointer (downPointers, upPointer)
-		removePointer (movePointers, upPointer)
-		if(!Object.values(downPointers.current).some(isOnCube)){
+		removePointer (downPointers, upPointer, log)
+		removePointer (movePointers, upPointer, log)
+		if(!Object.values(downPointers.current).some(isOnCube)) {
 				controlsRef.current!.enableRotate = true
 		}
-		// log(Object.values(downPointers.current).map((e: any) => e.pointerId).join('-') || 'none')
 	}
 
 	const handlePointerMove = (e: ThreeEvent<PointerEvent>) => {
 		movePointers.current[e.pointerId] = e
-		// console.log(e.pointerId)
 	}
-	// log(pointers.current.map((e: any) => e.pointerId).join('-') || 'none')
 	return (
 		<>
 			<pointLight position={[0, 0, 5]} visible={true} intensity={7} color={ new Color(1, 1, 1)} />
@@ -270,20 +260,11 @@ const CubesContainer = ({ setMessage }: CubesContainerProps) => {
 
 
 
-const Cubes = ({ setMessage }: { setMessage: (m: string) => void }) => { 
+const Cubes = () => { 
 	const canvas = useRef<HTMLCanvasElement>(null)
-
-	// useEffect(() => {
-	// 	setInterval(() => {
-
-	// 		console.log({ height: canvas.current?.height })
-	// 	}, 4000)
-	// }, [])
-
-
 	return (
 		<Canvas ref={canvas}>
-			<CubesContainer setMessage={setMessage}/>
+			<CubesContainer />
 		</Canvas>
 	)
 };

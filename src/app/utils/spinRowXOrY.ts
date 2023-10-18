@@ -4,12 +4,12 @@ import { ThreeEvent } from "@react-three/fiber"
 import { AxisDirection, swipeInfo } from "./pointers"
 import { MoveCode } from "./moveNotation"
 
-const spinRoXOrY = (
+const spinRowXOrY = (
     grid: GridModel, 
     downPointer: ThreeEvent<PointerEvent>, 
     upPointer: ThreeEvent<PointerEvent>
   ) => {
-    
+
   const [i,j] = getCubePosition(grid, downPointer.eventObject)!
 
   const { 
@@ -32,4 +32,4 @@ const spinRoXOrY = (
   }
 }
 
-export default spinRoXOrY
+export default spinRowXOrY
