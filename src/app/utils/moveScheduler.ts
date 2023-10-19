@@ -37,14 +37,12 @@ class MoveScheduler {
         this.#log(`ⓘ ${(m as ErrorMessage).error}`)
       }
       else {
-        // this.#log(`Queueing: ${m}`)
         this.#moves.push(m as MoveCode)
       }
     })
   }
 
   execute() {
-    // this.#log(`Executing: ${this.#moves.join('-')}`)
     this.#moves.forEach(move => this.#fns[move]())
     this.#onExecute(this.#moves)
   }

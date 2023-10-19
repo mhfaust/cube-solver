@@ -13,7 +13,7 @@ export const getPointer = (pointers: PointersRef, id: number) => {
 }
 
 export const getOtherPointer = (pointers: PointersRef, pointer: ThreeEvent<PointerEvent>) => {
-	return Object.values(pointers.current).find(p => p.pointerId !== pointer.pointerId)
+	return Object.values(pointers.current).find(p => p && p.pointerId !== pointer.pointerId)
 }
 
 export const removePointer = (

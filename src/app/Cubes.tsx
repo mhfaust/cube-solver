@@ -164,7 +164,6 @@ const CubesContainer = () => {
 			const fingers = Object.values(downPointers.current).length
 			const isSwipe = swipe1.distance > 5 && swipe1.time < 500
 
-			// log('fingers: '+ fingers.toString())
 			if(fingers === 1 && isSwipe){
 				const cubePosition = getCubePosition(grid, downPointer.eventObject)
 				if(cubePosition){
@@ -176,42 +175,50 @@ const CubesContainer = () => {
 			}
 
 			if(fingers === 2 && isSwipe) {
-				const otherPointer = getOtherPointer(downPointers, downPointer)!
+				const baseDownPointer = getOtherPointer(downPointers, downPointer)!
+				const baseMovePointer = getPointer(movePointers, baseDownPointer.pointerId)
+				const isUpFromCube = isOnCube(upPointer)
+				const isBaseOnCube = isOnCube(baseDownPointer)
+
+				//both fingers off:
+				if (!isUpFromCube && !isBaseOnCube){
+					// TODO: Z rotation
+				}
 				//1 finger on, 1 finger off:
-				if(isOnCube(upPointer) !== isOnCube(otherPointer)){
-					moves.queue(spinFrontOrBack(grid, downPointer, upPointer, otherPointer))
+				else if(isUpFromCube !== isBaseOnCube){
+					moves.queue(spinFrontOrBack(grid, downPointer, upPointer, baseDownPointer))
 				} 
 				//both fingers on:
-				else if(isOnCube(upPointer) && isOnCube(otherPointer)){
-					const otherMovePointer = getPointer(movePointers, otherPointer.pointerId)
-					if(otherMovePointer){
-						const swipe2 = swipeInfo(otherPointer, otherMovePointer)
-						if(swipe1.axisDirection === swipe2.axisDirection &&
+				else if(isUpFromCube && isBaseOnCube){
+
+					if(baseMovePointer){
+						const swipe2 = swipeInfo(baseDownPointer, baseMovePointer)
+						if(swipe2.time < 500 && swipe1.axisDirection === swipe2.axisDirection &&
 							!swipesAreCoincident(
 								grid, 
 								[upPointer, downPointer], 
-								[otherPointer, otherMovePointer]
-							),
-							swipe2.distance > 10
+								[baseDownPointer, baseMovePointer]
+							)
+							&& swipe2.distance > 10
 						) {
-							log('2-finger, double-spin')
 							moves.queue(spinRowXOrY(grid, downPointer, upPointer))
-							moves.queue(spinRowXOrY(grid, otherPointer, otherMovePointer))
+							moves.queue(spinRowXOrY(grid, baseDownPointer, baseMovePointer))
 						} 
 						else {
-							log('2-finger, spin-face')
 							const rotation = twoFingerRotationDirection(
 								[downPointer, upPointer],
-								[otherPointer, otherMovePointer]
+								[baseMovePointer, baseMovePointer]
 							)
 
 							moves.queue(rotation === 1 ? 'F' : rotation === -1 ? 'F′': undefined)
 						}
 					}
 				}
-				//both fingers off:
-				else {
-					// ???
+
+				//swap in most recently collected movepointer to establish the new 
+				//anchor point for the finger still down:
+				if (baseMovePointer) {
+					downPointers.current[baseDownPointer.pointerId] = baseMovePointer
 				}
 			} 
 			
