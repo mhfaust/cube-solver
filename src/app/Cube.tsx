@@ -83,7 +83,6 @@ const Cube = ({
         <mesh
           onPointerDown={onPointerDown}
           onPointerUp={onPointerUp}
-          // onWheel={onWheel}
           onPointerMove={onPointerMove}
           position={[x0-1, y0-1, z0-1]}
           geometry={geometryRef.current}

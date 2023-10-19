@@ -4,7 +4,7 @@ type LoggerSlice = {
   messages: string[];
   isOpen: boolean;
   actions: {
-    log: (msg: string) => void;
+    log: (...msg: string[]) => void;
     toggle: () => void;
   }
 }
@@ -13,8 +13,8 @@ const createLoggerSlice: StateCreator<LoggerSlice> = (set) =>( {
   messages: [],
   isOpen: false,
   actions: {
-    log: (msg: string) => {
-      set(({ messages }) => ({ messages: [...messages, msg] }))
+    log: (...msg: string[]) => {
+      set(({ messages }) => ({ messages: [...messages, ...msg] }))
     },
     toggle: () => {
       set(({ isOpen }) => ( { isOpen: !isOpen }))
