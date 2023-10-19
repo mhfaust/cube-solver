@@ -13,7 +13,7 @@ import { addPointer, getOtherPointer, getPointer, isOnCube, removePointer, reset
 import { GridModel, getCubePosition } from "./utils/grid"
 import spinFrontOrBack from "./utils/spinFrontOrBack"
 import spinRowXOrY from "./utils/spinRowXOrY"
-import twoFingerSpinDirection from "./utils/twoFingerRotationDirection"
+import twoFingerSpinDirection from "./utils/twoFingerSpinDirection"
 import useAppStore, { actionsSelector } from "./useAppStore"
 import MoveScheduler from "./utils/moveScheduler"
 import spinWholeCube from "./utils/spinWholeCube"
