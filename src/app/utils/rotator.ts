@@ -221,7 +221,7 @@ export const layerRotator = (
     objectOrbiter(cube, () => isRotating.current = false)
   })
   setGrid(gridLayerRotator(grid, layer))
-  navigator.vibrate([1])
+  navigator.vibrate?.([1])
 }
 
 export const cubeRotator = (
