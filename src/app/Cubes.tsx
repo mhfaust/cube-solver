@@ -182,7 +182,7 @@ const CubesContainer = () => {
 
 				//both fingers off:
 				if (!isUpFromCube && !isBaseOnCube){
-					moves.queue(...spinZ(downPointer, upPointer, baseDownPointer))
+					moves.queue(spinZ(downPointer, upPointer, baseDownPointer))
 				}
 				//1 finger on, 1 finger off:
 				else if(isUpFromCube !== isBaseOnCube){
