@@ -13,7 +13,7 @@ export const rotationDirection = (a: V, b: V): -1|0|1 => {
   return Math.sign(crossProduct) as -1|0|1
 }
 
-const twoFingerRotationDirection = (
+const twoFingerSpinDirection = (
   finger1: [ThreeEvent<PointerEvent>, ThreeEvent<PointerEvent>], 
   finger2: [ThreeEvent<PointerEvent>, ThreeEvent<PointerEvent>]
 ) => {
@@ -24,8 +24,6 @@ const twoFingerRotationDirection = (
   const endVector: V = [f2End.x - f1End.x, f2End.y - f1End.y]
 
   return rotationDirection(startVector, endVector)
-
-  
 }
 
-export default twoFingerRotationDirection
+export default twoFingerSpinDirection

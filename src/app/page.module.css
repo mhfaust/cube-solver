@@ -23,8 +23,9 @@
   height: calc(100vh - var(--log-line-height));
 }
 .logMessage {
+  font-size: .6em;
   padding-top: 3px;
-  border-top: 1px dashed black;
+  border-top: 1px dashed #ccc;
   margin-top: 3px;
 }
 .logToggle {

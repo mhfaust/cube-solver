@@ -1,10 +1,10 @@
 import { MoveCode } from "./moveCodes";
 
-type ErrorMessage = {
+export type ErrorMessage = {
   error: string
 }
 
-type InfoMessage = {
+export type InfoMessage = {
   info: string
 }
 
@@ -34,7 +34,7 @@ class MoveScheduler {
         this.#log(`⚠ ${(m as ErrorMessage).error}`)
       }
       if((m as InfoMessage).info) {
-        this.#log(`ⓘ ${(m as ErrorMessage).error}`)
+        this.#log(`ⓘ ${(m as InfoMessage).info}`)
       }
       else {
         this.#moves.push(m as MoveCode)

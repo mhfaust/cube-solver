@@ -28,7 +28,7 @@ const Log = () => {
       {messages.map((msg, i) => (
         <>
           <div key={i} className={styles.logMessage}>
-            {i}{") > "}{msg}
+            {i}{".) "}{msg}
           </div>
         </>
       ))}

@@ -13,11 +13,12 @@ import { addPointer, getOtherPointer, getPointer, isOnCube, removePointer, reset
 import { GridModel, getCubePosition } from "./utils/grid"
 import spinFrontOrBack from "./utils/spinFrontOrBack"
 import spinRowXOrY from "./utils/spinRowXOrY"
-import twoFingerRotationDirection from "./utils/twoFingerRotationDirection"
+import twoFingerSpinDirection from "./utils/twoFingerRotationDirection"
 import useAppStore, { actionsSelector } from "./useAppStore"
 import MoveScheduler from "./utils/moveScheduler"
 import spinWholeCube from "./utils/spinWholeCube"
 import swipesAreCoincident from "./utils/swipesAreCoincident"
+import spinZ from "./utils/spinZ"
 
 const { PI } = Math
 const FOV_ANGLE = PI/12
@@ -163,7 +164,6 @@ const CubesContainer = () => {
 			const swipe1 = swipeInfo(downPointer, upPointer)
 			const fingers = Object.values(downPointers.current).length
 			const isSwipe = swipe1.distance > 5 && swipe1.time < 500
-
 			if(fingers === 1 && isSwipe){
 				const cubePosition = getCubePosition(grid, downPointer.eventObject)
 				if(cubePosition){
@@ -182,7 +182,7 @@ const CubesContainer = () => {
 
 				//both fingers off:
 				if (!isUpFromCube && !isBaseOnCube){
-					// TODO: Z rotation
+					moves.queue(...spinZ(downPointer, upPointer, baseDownPointer))
 				}
 				//1 finger on, 1 finger off:
 				else if(isUpFromCube !== isBaseOnCube){
@@ -205,21 +205,21 @@ const CubesContainer = () => {
 							moves.queue(spinRowXOrY(grid, baseDownPointer, baseMovePointer))
 						} 
 						else {
-							const rotation = twoFingerRotationDirection(
+							const rotation = twoFingerSpinDirection(
 								[downPointer, upPointer],
 								[baseMovePointer, baseMovePointer]
 							)
 
 							moves.queue(rotation === 1 ? 'F' : rotation === -1 ? 'F′': undefined)
+							//swap in most recently collected movepointer to establish the new 
+							//anchor point for the finger still down:
+							// if (baseMovePointer) {
+							// 	downPointers.current[baseDownPointer.pointerId] = baseMovePointer
+							// }
 						}
 					}
 				}
 
-				//swap in most recently collected movepointer to establish the new 
-				//anchor point for the finger still down:
-				if (baseMovePointer) {
-					downPointers.current[baseDownPointer.pointerId] = baseMovePointer
-				}
 			} 
 			
 			if(fingers > 2 && isSwipe) {
