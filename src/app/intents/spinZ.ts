@@ -1,7 +1,7 @@
 import { ThreeEvent } from "@react-three/fiber";
-import { swipeInfo } from "./pointers";
-import { MoveCode } from "./moveCodes";
-import { InfoMessage } from "./moveScheduler";
+import { swipeInfo } from "../utils/pointers";
+import { MoveCode } from "../utils/moveCodes";
+import { InfoMessage } from "../utils/moveScheduler";
 
 const spinZ = (
   downPointer: ThreeEvent<PointerEvent>, 

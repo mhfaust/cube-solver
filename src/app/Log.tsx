@@ -26,20 +26,14 @@ const Log = () => {
       ref={logDiv}
     >
       {messages.map((msg, i) => (
-        <>
-          <div key={i} className={styles.logMessage}>
-            {i}{".) "}{msg}
-          </div>
-        </>
+        <div key={i} className={styles.logMessage}>
+          {i}{".) "}{msg}
+        </div>
       ))}
     </div>
     <div 
       onClick={toggle}
-      className={clsx(
-        styles.logToggle, { 
-          // [styles.open]: isOpen
-        }
-      )}
+      className={styles.logToggle}
     >{isOpen ? "↑ Log" : "↓ Log"}</div>
   </>
   )

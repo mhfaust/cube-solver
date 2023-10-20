@@ -10,19 +10,22 @@ export type InfoMessage = {
 
 class MoveScheduler {
   #moves: MoveCode[]
-  #fns: Record<MoveCode, () => void>
-  #onExecute: (moves: MoveCode[]) => void
+  #fns
+  #onExecute
   #log
+  #rotationTime
 
   constructor (
-    fns: Record<MoveCode, () => void>,
+    fns: Record<MoveCode, (time: number) => void>,
     onExecute: (moves: MoveCode[]) => void,
-    log: (message: string) => void
+    log: (message: string) => void,
+    rotationTime: number
   ) {
     this.#moves = []
     this.#fns = fns
     this.#onExecute = onExecute
     this.#log = log
+    this.#rotationTime = rotationTime
   }
 
   queue(...moves: (MoveCode | ErrorMessage | InfoMessage | undefined)[]) {
@@ -43,7 +46,7 @@ class MoveScheduler {
   }
 
   execute() {
-    this.#moves.forEach(move => this.#fns[move]())
+    this.#moves.forEach(move => this.#fns[move](this.#rotationTime))
     this.#onExecute(this.#moves)
   }
 }

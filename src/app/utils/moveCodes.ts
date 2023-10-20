@@ -1,3 +1,19 @@
+
+export const moveCodes =  [
+	'U' , 'U′' , 'D' , 'D′' , 'E' , 'E′' ,
+	'R' , 'R′' , 'L' , 'L′' , 'M' , 'M′' ,
+	'F' , 'F′' , 'B' , 'B′' , 'S' , 'S′' ,
+	'X' , 'X′' , 'Y' , 'Y′' , 'Z' , 'Z′'
+] as const
+
+export type MoveCode = typeof moveCodes[number]
+
+const inverseMoves: Record<MoveCode, MoveCode> = { 
+  'U':'U′','D':'D′','E':'E′','R':'R′','L':'L′','M':'M′','F':'F′','B':'B′','S':'S′','X':'X′','Y':'Y′','Z':'Z′',
+  'U′':'U','D′':'D','E′':'E','R′':'R','L′':'L','M′':'M','F′':'F','B′':'B','S′':'S','X′':'X','Y′':'Y','Z′':'Z',
+}
+export const inverse = (move: MoveCode) => inverseMoves[move]
+
 export const keyCodes = [
 	'u', 'U', 'd', 'D', 'e', 'E',
 	'l', 'L', 'r', 'R', 'm', 'M',
@@ -48,15 +64,4 @@ export const keyMoves: Record<KeyCode, MoveCode> = {
 	'Z': 'Z′'
 }
 
-export type MoveCode = |
-   'U' | 'U′' | 'D' | 'D′' | 'E' | 'E′' |
-   'R' | 'R′' | 'L' | 'L′' | 'M' | 'M′' |
-   'F' | 'F′' | 'B' | 'B′' | 'S' | 'S′' |
-   'X' | 'X′' | 'Y' | 'Y′' | 'Z' | 'Z′' 
-
-const inverseMoves: Record<MoveCode, MoveCode> = { 
-  'U':'U′','D':'D′','E':'E′','R':'R′','L':'L′','M':'M′','F':'F′','B':'B′','S':'S′','X':'X′','Y':'Y′','Z':'Z′',
-  'U′':'U','D′':'D','E′':'E','R′':'R','L′':'L','M′':'M','F′':'F','B′':'B','S′':'S','X′':'X','Y′':'Y','Z′':'Z',
-}
-export const inverse = (move: MoveCode) => inverseMoves[move]
 

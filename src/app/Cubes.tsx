@@ -11,17 +11,19 @@ import { cubeRotator,layerRotator } from "./utils/rotator"
 import { MoveCode, asKeyCode, inverse, keyMoves } from "@/app/utils/moveCodes"
 import { addPointer, getOtherPointer, getPointer, isOnCube, removePointer, resetPointers, swipeInfo } from "@/app/utils/pointers"
 import { GridModel, getCubePosition } from "./utils/grid"
-import spinFrontOrBack from "./utils/spinFrontOrBack"
-import spinRowXOrY from "./utils/spinRowXOrY"
-import twoFingerSpinDirection from "./utils/twoFingerSpinDirection"
+import spinFrontOrBack from "./intents/spinFrontOrBack"
+import spinRowXOrY from "./intents/spinRowXOrY"
+import twoFingerSpinDirection from "./intents/twoFingerSpinDirection"
 import useAppStore, { actionsSelector } from "./useAppStore"
 import MoveScheduler from "./utils/moveScheduler"
-import spinWholeCube from "./utils/spinWholeCube"
-import swipesAreCoincident from "./utils/swipesAreCoincident"
-import spinZ from "./utils/spinZ"
+import spinWholeCube from "./intents/spinWholeCube"
+import swipesAreCoincident from "./intents/swipesAreCoincident"
+import spinZ from "./intents/spinZ"
+import scramble from "./effects/scramble"
 
 const { PI } = Math
 const FOV_ANGLE = PI/12
+const NORMAL_ROTATION_TIME = 50
 
 const bgGeometry = new PlaneGeometry(50, 50)
 const bgMaterial = new MeshBasicMaterial( { color: 0x222222 } );
@@ -32,10 +34,12 @@ const CubesContainer = () => {
 	const { camera } = useThree();
 	const [_history, setHistory] = useState<MoveCode[]>([])
 	const { log } = useAppStore(actionsSelector)
-	const controlsRef = useRef<ThreeOrbitControls>(null);
+	const controls = useRef<ThreeOrbitControls>(null);
 	const isRotating = useRef<boolean>(false)
 	const downPointers = useRef<Record<string, ThreeEvent<PointerEvent>>>({})
 	const movePointers = useRef<Record<string, ThreeEvent<PointerEvent>>>({})
+
+	const [rotationTime, setRotationTime] = useState(30)
 
 	const containerRefs: GridModel = [
 			[
@@ -57,7 +61,7 @@ const CubesContainer = () => {
 	const [grid, setGrid] = useState(containerRefs)
 
 	useFrame(({ clock }) => {
-		controlsRef.current?.update()
+		controls.current?.update()
 	});
 
 	useEffect(() => {
@@ -66,19 +70,19 @@ const CubesContainer = () => {
 			camera.updateProjectionMatrix();
 		}
 		
-		if(!controlsRef.current) {
+		if(!controls.current) {
 				return
 		}
-		controlsRef.current.minPolarAngle = PI/2 - FOV_ANGLE;
-		controlsRef.current.maxPolarAngle = PI/2 + FOV_ANGLE;
-		controlsRef.current.minAzimuthAngle = - FOV_ANGLE;
-		controlsRef.current.maxAzimuthAngle =  FOV_ANGLE;
-		controlsRef.current.maxDistance = 16
-		controlsRef.current.minDistance = 16
-		controlsRef.current.enablePan = false
+		controls.current.minPolarAngle = PI/2 - FOV_ANGLE;
+		controls.current.maxPolarAngle = PI/2 + FOV_ANGLE;
+		controls.current.minAzimuthAngle = - FOV_ANGLE;
+		controls.current.maxAzimuthAngle =  FOV_ANGLE;
+		controls.current.maxDistance = 16
+		controls.current.minDistance = 16
+		controls.current.enablePan = false
 	}, [camera])
 
-	const moveFunctions: Record<MoveCode, () => void> = useMemo(() => ({
+	const moveFunctions: Record<MoveCode, (time: number) => void> = useMemo(() => ({
 		'U': layerRotator(grid, setGrid, 'y', 2, '-', isRotating),
 		'U′': layerRotator(grid, setGrid, 'y', 2, '+', isRotating),
 		'D': layerRotator(grid, setGrid, 'y', 0, '+', isRotating),
@@ -105,6 +109,17 @@ const CubesContainer = () => {
 		'S′': layerRotator(grid, setGrid, 'z', 1, '+', isRotating)
 	}), [])
 
+	const handleScramble = () => {
+
+
+	}
+
+	useEffect(() => {
+		scramble(moveFunctions, 5)
+	}, [rotationTime])
+
+	useEffect
+
 	const undo = useCallback(() => {
 		setHistory((h) => {
 			const newHistory = [...h]
@@ -112,7 +127,7 @@ const CubesContainer = () => {
 			if(!last) {
 				return h
 			}
-			moveFunctions[inverse(last)]()
+			moveFunctions[inverse(last)](NORMAL_ROTATION_TIME)
 			return newHistory
 		})
 	}, [])
@@ -127,7 +142,7 @@ const CubesContainer = () => {
 				undo()
 			} else {
 				const move = keyMoves[keyCode]
-				moveFunctions[move]()
+				moveFunctions[move](NORMAL_ROTATION_TIME)
 				setHistory(h => [...h, move])
 			}
 		};
@@ -140,8 +155,8 @@ const CubesContainer = () => {
 	const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
 		if(e.eventObject.uuid === e.intersections[0].eventObject.uuid){
 			addPointer(downPointers, e)
-			if(isOnCube(e)) {
-				controlsRef.current!.enableRotate = false
+			if(controls.current && isOnCube(e)){
+				controls.current.enableRotate = false
 			}
 		}
 	}
@@ -159,7 +174,8 @@ const CubesContainer = () => {
 			const moves = new MoveScheduler(
 				moveFunctions, 
 				moves => setHistory(h => [...h, ...moves]),
-				log
+				log,
+				NORMAL_ROTATION_TIME
 			)
 			const swipe1 = swipeInfo(downPointer, upPointer)
 			const fingers = Object.values(downPointers.current).length
@@ -211,11 +227,6 @@ const CubesContainer = () => {
 							)
 
 							moves.queue(rotation === 1 ? 'F' : rotation === -1 ? 'F′': undefined)
-							//swap in most recently collected movepointer to establish the new 
-							//anchor point for the finger still down:
-							// if (baseMovePointer) {
-							// 	downPointers.current[baseDownPointer.pointerId] = baseMovePointer
-							// }
 						}
 					}
 				}
@@ -237,7 +248,7 @@ const CubesContainer = () => {
 		removePointer (movePointers, upPointer)
 
 		if(!Object.values(downPointers.current).some(isOnCube)) {
-				controlsRef.current!.enableRotate = true
+				controls.current!.enableRotate = true
 		}
 	}
 
@@ -248,7 +259,7 @@ const CubesContainer = () => {
 		<>
 			<pointLight position={[0, 0, 5]} visible={true} intensity={7} color={ new Color(1, 1, 1)} />
 			<ambientLight visible={true} intensity={2} color={ new Color(1, 1, 1)} />
-			<OrbitControls ref={controlsRef}/>
+			<OrbitControls ref={controls}/>
 			<mesh
 				geometry={bgGeometry}
 				material={bgMaterial}
