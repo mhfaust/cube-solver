@@ -1,12 +1,12 @@
 import clsx from 'clsx'
-import styles from './page.module.css'
-import useAppStore, { actionsSelector, isOpenSelector, messagesSelector } from './useAppStore'
+import styles from '../page.module.css'
+import useAppStore, { actionsSelector, isOpenSelector, messagesSelector } from '../store/useAppStore'
 import { useEffect, useRef } from 'react'
 
 
 const Log = () => {
   
-  const { toggle } = useAppStore(actionsSelector)
+  const { toggleLog: toggle } = useAppStore(actionsSelector)
   const isOpen = useAppStore(isOpenSelector)
   const messages = useAppStore(messagesSelector)
   const logDiv = useRef<HTMLDivElement | null>(null);

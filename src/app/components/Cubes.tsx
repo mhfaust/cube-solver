@@ -5,21 +5,22 @@ import Cube from "./Cube"
 import { OrbitControls } from '@react-three/drei'
 import { Canvas, ThreeEvent, useFrame, useThree } from "@react-three/fiber"
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Color, Mesh, MeshBasicMaterial, Object3D, PlaneGeometry } from "three"
+import { Color, Mesh, MeshBasicMaterial, PlaneGeometry } from "three"
 import { OrbitControls as ThreeOrbitControls } from 'three-stdlib';
-import { cubeRotator,layerRotator } from "./utils/rotator"
+import { cubeRotator,layerRotator } from "../utils/rotator"
 import { MoveCode, asKeyCode, inverse, keyMoves } from "@/app/utils/moveCodes"
 import { addPointer, getOtherPointer, getPointer, isOnCube, removePointer, resetPointers, swipeInfo } from "@/app/utils/pointers"
-import { GridModel, getCubePosition } from "./utils/grid"
-import spinFrontOrBack from "./intents/spinFrontOrBack"
-import spinRowXOrY from "./intents/spinRowXOrY"
-import twoFingerSpinDirection from "./intents/twoFingerSpinDirection"
-import useAppStore, { actionsSelector } from "./useAppStore"
-import MoveScheduler from "./utils/moveScheduler"
-import spinWholeCube from "./intents/spinWholeCube"
-import swipesAreCoincident from "./intents/swipesAreCoincident"
-import spinZ from "./intents/spinZ"
-import scramble from "./effects/scramble"
+import { GridModel, getCubePosition } from "../utils/grid"
+import spinFrontOrBack from "../intents/spinFrontOrBack"
+import spinRowXOrY from "../intents/spinRowXOrY"
+import twoFingerSpinDirection from "../intents/twoFingerSpinDirection"
+import useAppStore, { actionsSelector } from "../store/useAppStore"
+import MoveScheduler from "../utils/moveScheduler"
+import spinWholeCube from "../intents/spinWholeCube"
+import swipesAreCoincident from "../intents/swipesAreCoincident"
+import spinZ from "../intents/spinZ"
+import scramble from "../effects/scramble"
+import styles from '../page.module.css'
 
 const { PI } = Math
 const FOV_ANGLE = PI/12
@@ -38,8 +39,6 @@ const CubesContainer = () => {
 	const isRotating = useRef<boolean>(false)
 	const downPointers = useRef<Record<string, ThreeEvent<PointerEvent>>>({})
 	const movePointers = useRef<Record<string, ThreeEvent<PointerEvent>>>({})
-
-	const [rotationTime, setRotationTime] = useState(30)
 
 	const containerRefs: GridModel = [
 			[
@@ -69,7 +68,7 @@ const CubesContainer = () => {
 			(camera as any).fov = 30 //r3-fiber isn't typing camera correctly :-(
 			camera.updateProjectionMatrix();
 		}
-		
+
 		if(!controls.current) {
 				return
 		}
@@ -80,6 +79,11 @@ const CubesContainer = () => {
 		controls.current.maxDistance = 16
 		controls.current.minDistance = 16
 		controls.current.enablePan = false
+
+		camera.rotation.y = FOV_ANGLE
+		camera.rotation.x = PI/2 + FOV_ANGLE
+		camera.lookAt(0,0,0)
+		camera.updateProjectionMatrix()
 	}, [camera])
 
 	const moveFunctions: Record<MoveCode, (time: number) => void> = useMemo(() => ({
@@ -110,13 +114,13 @@ const CubesContainer = () => {
 	}), [])
 
 	const handleScramble = () => {
-
+		scramble(moveFunctions, 5)
 
 	}
 
-	useEffect(() => {
-		scramble(moveFunctions, 5)
-	}, [rotationTime])
+	// useEffect(() => {
+	// 	scramble(moveFunctions, 5)
+	// }, [])
 
 	useEffect
 
@@ -284,14 +288,14 @@ const CubesContainer = () => {
 	)
 }
 
-
-
 const Cubes = () => { 
 	const canvas = useRef<HTMLCanvasElement>(null)
 	return (
-		<Canvas ref={canvas}>
-			<CubesContainer />
-		</Canvas>
+		<div className={styles.canvas}>
+			<Canvas ref={canvas} >
+				<CubesContainer />
+			</Canvas>
+		</div>
 	)
 };
 

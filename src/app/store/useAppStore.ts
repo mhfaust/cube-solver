@@ -3,21 +3,33 @@ import { StateCreator, create } from "zustand";
 type LoggerSlice = {
   messages: string[];
   isOpen: boolean;
+  isSolved: boolean;
+  startTime: number | null;
   actions: {
     log: (...msg: string[]) => void;
-    toggle: () => void;
+    toggleLog: () => void;
+    startTimer: () => void;
+    stopTimer: () => void;
   }
 }
 
 const createLoggerSlice: StateCreator<LoggerSlice> = (set) =>( {
   messages: [],
   isOpen: false,
+  isSolved: true,
+  startTime: null,
   actions: {
     log: (...msg: string[]) => {
       set(({ messages }) => ({ messages: [...messages, ...msg] }))
     },
-    toggle: () => {
+    toggleLog: () => {
       set(({ isOpen }) => ( { isOpen: !isOpen }))
+    },
+    startTimer: () => {
+      set(() => ({ startTime: Date.now() }))
+    },
+    stopTimer: () => {
+      set(() => ({ startTime: null }))
     }
   }
 })
@@ -33,4 +45,6 @@ const useAppStore = create<AppStore>()(
 export default useAppStore
 export const messagesSelector = ({ messages } : AppStore) => messages
 export const isOpenSelector = ({ isOpen } : AppStore) => isOpen
+export const startTimeSelector = ({ startTime } : AppStore) => startTime
+export const isSolvedSelector = ({ isSolved } : AppStore) => isSolved
 export const actionsSelector = ({ actions } : AppStore) => actions

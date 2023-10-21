@@ -1,5 +1,5 @@
 import { ThreeEvent } from '@react-three/fiber';
-import { useRef, useEffect, MutableRefObject } from 'react'
+import { useRef, useEffect, MutableRefObject, createRef } from 'react'
 import { 
   Mesh, 
   Color, 
@@ -28,6 +28,8 @@ const redWhiteBluePolys = [72, 73, 74, 75, 76, 77]
 const facePolygonIndices = new Set([...orangeGreenYellowPolys,  ...redWhiteBluePolys])
 
 export type CubeContainerRef = MutableRefObject<Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>>
+
+const r = createRef()
 
 type CubeProps = {
   x0: 0| 1| 2; 

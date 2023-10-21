@@ -1,9 +1,10 @@
 
 'use client'
 
-import Cubes from './Cubes'
+import Cubes from './components/Cubes'
 import styles from './page.module.css'
-import Log from './Log'
+import Log from './components/Log'
+import GameControls from './components/GameControls/GameCntrols'
 
 
 export default function App() {
@@ -12,6 +13,7 @@ export default function App() {
     <div className={styles.main}>
       <Log />
       <Cubes />
+      <GameControls />
     </div>
   )
 }
