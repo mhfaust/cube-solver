@@ -20,6 +20,7 @@ import swipesAreCoincident from "../intents/swipesAreCoincident"
 import spinZ from "../intents/spinZ"
 import styles from '../page.module.css'
 import useMoveFunctions from "../utils/useMoveFunctions"
+import isSolved, { serialize } from "../utils/isSolved"
 
 const { PI } = Math
 const FOV_ANGLE = PI/12
@@ -38,11 +39,9 @@ const CubesContainer = () => {
 	const movePointers = useRef<Record<string, ThreeEvent<PointerEvent>>>({})
 	const grid = useAppStore(gridModelSelector)
 
-	const isSolved = grid.every((_,i) => _.every((__,j) => __.every((cube, k) => {
-		return cube.intialPosition[0] === i && cube.intialPosition[1] === j && cube.intialPosition[2] === k
-	})))
-
-	console.log({ isSolved })
+	if(isSolved(grid)){
+		console.log('SOLVED')
+	}
 
 	useFrame(({ clock }) => {
 		controls.current?.update()
