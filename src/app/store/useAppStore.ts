@@ -1,50 +1,34 @@
 import { StateCreator, create } from "zustand";
+import { GameControlSlice, createGameControllerSlice } from "./gameControlSlice";
+import { LoggerSlice, createLoggerSlice } from "./loggerSlice";
+import { CubeSlice, createCubeSlice } from "./cubeSlice";
 
-type LoggerSlice = {
-  messages: string[];
-  isOpen: boolean;
-  isSolved: boolean;
-  startTime: number | null;
-  actions: {
-    log: (...msg: string[]) => void;
-    toggleLog: () => void;
-    startTimer: () => void;
-    stopTimer: () => void;
-  }
-}
 
-const createLoggerSlice: StateCreator<LoggerSlice> = (set) =>( {
-  messages: [],
-  isOpen: false,
-  isSolved: true,
-  startTime: null,
-  actions: {
-    log: (...msg: string[]) => {
-      set(({ messages }) => ({ messages: [...messages, ...msg] }))
-    },
-    toggleLog: () => {
-      set(({ isOpen }) => ( { isOpen: !isOpen }))
-    },
-    startTimer: () => {
-      set(() => ({ startTime: Date.now() }))
-    },
-    stopTimer: () => {
-      set(() => ({ startTime: null }))
-    }
-  }
-})
-
-export type AppStore = LoggerSlice
+type AppStore = LoggerSlice & GameControlSlice & CubeSlice
 
 const useAppStore = create<AppStore>()(
   (setState, getState, store) => ({
-    ...createLoggerSlice(setState, getState, store)
+    ...createLoggerSlice(setState, getState, store),
+    ...createGameControllerSlice(setState, getState, store),
+    ...createCubeSlice(setState, getState, store)
   })
 )
 
 export default useAppStore
-export const messagesSelector = ({ messages } : AppStore) => messages
-export const isOpenSelector = ({ isOpen } : AppStore) => isOpen
-export const startTimeSelector = ({ startTime } : AppStore) => startTime
-export const isSolvedSelector = ({ isSolved } : AppStore) => isSolved
-export const actionsSelector = ({ actions } : AppStore) => actions
+
+
+const select = <T>(fn: (store: AppStore) => T) => fn
+
+export const messagesSelector = select(s => s.messages)
+export const isOpenSelector = select(s => s.logIsOpen)
+export const startTimeSelector = select(s => s.startTime)
+export const isSolvedSelector = select(s => s.isSolved)
+export const gridModelSelector = select(s => s.grid)
+// export const controlsSelector = select(s => s.controls)
+
+export const actionsSelector = select(
+  ({ log, toggleLog, startTimer, stopTimer, setGrid }) => 
+  ({ log, toggleLog, startTimer, stopTimer, setGrid })
+)
+
+export const setGridSelector = select(s => s.setGrid)

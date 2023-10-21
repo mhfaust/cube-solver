@@ -1,7 +1,8 @@
 import { ThreeEvent } from "@react-three/fiber"
 import { isOnCube, swipeInfo } from "../utils/pointers"
-import { GridModel, getCubePosition } from "../utils/grid"
+import { getCubePosition } from "../utils/grid"
 import { MoveCode } from "../utils/moveCodes"
+import { GridModel } from "../store/cubeSlice"
 
 const spinFrontOrBack = (
   grid: GridModel,

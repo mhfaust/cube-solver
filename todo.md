@@ -11,7 +11,7 @@ Components:
     what happens when they close the app? Go to another app?
 
 states: 
-  - isInPlay
-  - time
-  - isSolved
+  - (isInPlay) just use startTime !== null
+  - startTime (number | null)
+  - isSolved (boolean)
 

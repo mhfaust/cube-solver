@@ -10,11 +10,11 @@ import { OrbitControls as ThreeOrbitControls } from 'three-stdlib';
 import { cubeRotator,layerRotator } from "../utils/rotator"
 import { MoveCode, asKeyCode, inverse, keyMoves } from "@/app/utils/moveCodes"
 import { addPointer, getOtherPointer, getPointer, isOnCube, removePointer, resetPointers, swipeInfo } from "@/app/utils/pointers"
-import { GridModel, getCubePosition } from "../utils/grid"
+import { _012, getCubePosition } from "../utils/grid"
 import spinFrontOrBack from "../intents/spinFrontOrBack"
 import spinRowXOrY from "../intents/spinRowXOrY"
 import twoFingerSpinDirection from "../intents/twoFingerSpinDirection"
-import useAppStore, { actionsSelector } from "../store/useAppStore"
+import useAppStore, { actionsSelector, gridModelSelector, setGridSelector } from "../store/useAppStore"
 import MoveScheduler from "../utils/moveScheduler"
 import spinWholeCube from "../intents/spinWholeCube"
 import swipesAreCoincident from "../intents/swipesAreCoincident"
@@ -29,7 +29,7 @@ const NORMAL_ROTATION_TIME = 50
 const bgGeometry = new PlaneGeometry(50, 50)
 const bgMaterial = new MeshBasicMaterial( { color: 0x222222 } );
 
-const _012 = [0,1,2] as const
+
 
 const CubesContainer = () => {
 	const { camera } = useThree();
@@ -39,25 +39,9 @@ const CubesContainer = () => {
 	const isRotating = useRef<boolean>(false)
 	const downPointers = useRef<Record<string, ThreeEvent<PointerEvent>>>({})
 	const movePointers = useRef<Record<string, ThreeEvent<PointerEvent>>>({})
+	const grid = useAppStore(gridModelSelector)
 
-	const containerRefs: GridModel = [
-			[
-					[useRef({} as Mesh), useRef({} as Mesh), useRef({} as Mesh)],
-					[useRef({} as Mesh), useRef({} as Mesh), useRef({} as Mesh)],
-					[useRef({} as Mesh), useRef({} as Mesh), useRef({} as Mesh)]
-			],
-			[
-					[useRef({} as Mesh), useRef({} as Mesh), useRef({} as Mesh)],
-					[useRef({} as Mesh), useRef({} as Mesh), useRef({} as Mesh)],
-					[useRef({} as Mesh), useRef({} as Mesh), useRef({} as Mesh)]
-			],
-			[
-					[useRef({} as Mesh), useRef({} as Mesh), useRef({} as Mesh)],
-					[useRef({} as Mesh), useRef({} as Mesh), useRef({} as Mesh)],
-					[useRef({} as Mesh), useRef({} as Mesh), useRef({} as Mesh)]
-			],
-	]
-	const [grid, setGrid] = useState(containerRefs)
+	const setGrid = useAppStore(setGridSelector)
 
 	useFrame(({ clock }) => {
 		controls.current?.update()
@@ -278,7 +262,7 @@ const CubesContainer = () => {
 					x0={x0} 
 					y0={y0} 
 					z0={z0} 
-					containerRef={containerRefs[x0][y0][z0]}
+					containerRef={grid[x0][y0][z0]}
 					onPointerDown={handlePointerDown}
 					onPointerUp={handlePointerUp}
 					onPointerMove={handlePointerMove}

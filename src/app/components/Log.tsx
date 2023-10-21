@@ -6,7 +6,7 @@ import { useEffect, useRef } from 'react'
 
 const Log = () => {
   
-  const { toggleLog: toggle } = useAppStore(actionsSelector)
+  const { toggleLog } = useAppStore(actionsSelector)
   const isOpen = useAppStore(isOpenSelector)
   const messages = useAppStore(messagesSelector)
   const logDiv = useRef<HTMLDivElement | null>(null);
@@ -32,7 +32,7 @@ const Log = () => {
       ))}
     </div>
     <div 
-      onClick={toggle}
+      onClick={toggleLog}
       className={styles.logToggle}
     >{isOpen ? "↑ Log" : "↓ Log"}</div>
   </>

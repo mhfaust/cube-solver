@@ -1,6 +1,6 @@
 import { MutableRefObject } from "react";
 import { Mesh, Object3D, Vector3 } from "three";
-import { GridModel } from "./grid";
+import { GridModel } from "../store/cubeSlice";
 
 function copyModel<T> (grid: T[][][]) {
   return grid.map(dim2 => dim2.map(dim1 => dim1.slice()))
