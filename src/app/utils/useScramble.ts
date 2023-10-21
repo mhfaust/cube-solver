@@ -17,22 +17,18 @@ const useScramble = () => {
 
   return useCallback(() => {
 
-    const a = Array.from(
+    const randomSequence = Array.from(
       { length: 100 }, 
       () => oneLayerSpins[Math.floor(Math.random() * numSpinTypes)]
     )
     const recurse = () => {
-      if(!a?.length) {
-        return
-      }
-      const c = a.pop()
-      moveFunctions[c!](SRAMBLE_ROTATION_TIME)
-      if(a.length){
+      const nextMove = randomSequence.pop()
+      moveFunctions[nextMove!](SRAMBLE_ROTATION_TIME)
+      if(randomSequence.length){
         setTimeout(recurse, SRAMBLE_ROTATION_TIME)
       }
     }
     recurse()
-    return 
   }, [moveFunctions])
 }
 

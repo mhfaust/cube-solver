@@ -4,24 +4,22 @@
 import Cube from "./Cube"
 import { OrbitControls } from '@react-three/drei'
 import { Canvas, ThreeEvent, useFrame, useThree } from "@react-three/fiber"
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Color, Mesh, MeshBasicMaterial, PlaneGeometry, Vector3 } from "three"
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { Color, MeshBasicMaterial, PlaneGeometry, Vector3 } from "three"
 import { OrbitControls as ThreeOrbitControls } from 'three-stdlib';
-import { cubeRotator,layerRotator } from "../utils/rotator"
 import { MoveCode, asKeyCode, inverse, keyMoves } from "@/app/utils/moveCodes"
-import { addPointer, getOtherPointer, getPointer, isOnCube, removePointer, resetPointers, swipeInfo } from "@/app/utils/pointers"
+import { addPointer, getOtherPointer, getPointer, isOnCube, removePointer, swipeInfo } from "@/app/utils/pointers"
 import { _012, getCubePosition } from "../utils/grid"
 import spinFrontOrBack from "../intents/spinFrontOrBack"
 import spinRowXOrY from "../intents/spinRowXOrY"
 import twoFingerSpinDirection from "../intents/twoFingerSpinDirection"
-import useAppStore, { actionsSelector, gridModelSelector, isRotatingSelector, setGridSelector } from "../store/useAppStore"
+import useAppStore, { actionsSelector, gridModelSelector, isRotatingSelector } from "../store/useAppStore"
 import MoveScheduler from "../utils/moveScheduler"
 import spinWholeCube from "../intents/spinWholeCube"
 import swipesAreCoincident from "../intents/swipesAreCoincident"
 import spinZ from "../intents/spinZ"
 import styles from '../page.module.css'
 import useMoveFunctions from "../utils/useMoveFunctions"
-import useScramble from "../utils/useScramble"
 
 const { PI } = Math
 const FOV_ANGLE = PI/12
@@ -71,18 +69,6 @@ const CubesContainer = () => {
 	}, [camera])
 
 	const moveFunctions = useMoveFunctions()
-	const scramble = useScramble()
-
-	const handleScramble = () => {
-		scramble()
-
-	}
-
-	// useEffect(() => {
-	// 	scramble()
-	// }, [])
-
-	useEffect
 
 	const undo = useCallback(() => {
 		setHistory((h) => {
