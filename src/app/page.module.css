@@ -13,20 +13,18 @@
 
 .log {
   position: fixed; 
-  top: 0; 
+  bottom: 0; 
   left: 0; 
   right: 0; 
-  height: 2.5em;
+  height: 0;
   z-index: 1; 
   overflow: scroll;
   background-color: white;
   color: black;
   transition: height .25s;
-  height: var(--log-line-height);
-  --log-line-height: 1.5em;
 }
 .log.open {
-  height: calc(100vh - var(--log-line-height));
+  height: 100vh;
 }
 .logMessage {
   font-size: .6em;
@@ -36,7 +34,7 @@
 }
 .logToggle {
   position: fixed;
-  top: 0;
+  bottom: 0;
   right: 0;
   width: 72px;
   height: 36px;

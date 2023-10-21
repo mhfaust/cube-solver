@@ -34,7 +34,7 @@ const Log = () => {
     <div 
       onClick={toggleLog}
       className={styles.logToggle}
-    >{isOpen ? "↑ Log" : "↓ Log"}</div>
+    >{isOpen ? "↓ Log" : "↑ Log"}</div>
   </>
   )
 }

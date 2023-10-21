@@ -12,8 +12,8 @@ export default function App() {
   return (
     <div className={styles.main}>
       <Log />
-      <Cubes />
       <GameControls />
+      <Cubes />
     </div>
   )
 }
