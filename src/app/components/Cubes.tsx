@@ -38,6 +38,12 @@ const CubesContainer = () => {
 	const movePointers = useRef<Record<string, ThreeEvent<PointerEvent>>>({})
 	const grid = useAppStore(gridModelSelector)
 
+	const isSolved = grid.every((_,i) => _.every((__,j) => __.every((cube, k) => {
+		return cube.intialPosition[0] === i && cube.intialPosition[1] === j && cube.intialPosition[2] === k
+	})))
+
+	console.log({ isSolved })
+
 	useFrame(({ clock }) => {
 		controls.current?.update()
 	});

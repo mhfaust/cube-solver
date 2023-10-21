@@ -6,155 +6,106 @@ function copyModel<T> (grid: T[][][]) {
   return grid.map(dim2 => dim2.map(dim1 => dim1.slice()))
 }
 
+type Swaps = [0|1|2, 0|1|2, 0|1|2, 0|1|2, 0|1|2, 0|1|2][]
+
+const swap = (grid: GridModel, swaps: Swaps) => {
+  const newGrid = copyModel(grid)
+
+  const news = swaps.map(s => ({ 
+    current: grid[s[3]][s[4]][s[5]].wrapperMesh.current ,
+    initialPosition: grid[s[3]][s[4]][s[5]].intialPosition
+  }))
+  swaps.forEach((s, i) => {
+    newGrid[s[0]][s[1]][s[2]].wrapperMesh.current = news[i].current
+    newGrid[s[0]][s[1]][s[2]].intialPosition = news[i].initialPosition
+  })
+  return newGrid
+}
+
 
 const rotateModelXLayerPositive = (grid: GridModel, x: 0|1|2) => {
-  const newx00Mesh = grid[x][0][2].wrapperMesh.current
-  const newx01Mesh = grid[x][1][2].wrapperMesh.current
-  const newx02Mesh = grid[x][2][2].wrapperMesh.current
-  const newx10Mesh = grid[x][0][1].wrapperMesh.current
-  const newx11Mesh = grid[x][1][1].wrapperMesh.current
-  const newx12Mesh = grid[x][2][1].wrapperMesh.current
-  const newx20Mesh = grid[x][0][0].wrapperMesh.current
-  const newx21Mesh = grid[x][1][0].wrapperMesh.current
-  const newx22Mesh = grid[x][2][0].wrapperMesh.current
-
-  const newGrid = copyModel(grid)
-  newGrid[x][0][0].wrapperMesh.current = newx00Mesh
-  newGrid[x][0][1].wrapperMesh.current = newx01Mesh
-  newGrid[x][0][2].wrapperMesh.current = newx02Mesh
-  newGrid[x][1][0].wrapperMesh.current = newx10Mesh
-  newGrid[x][1][1].wrapperMesh.current = newx11Mesh
-  newGrid[x][1][2].wrapperMesh.current = newx12Mesh
-  newGrid[x][2][0].wrapperMesh.current = newx20Mesh
-  newGrid[x][2][1].wrapperMesh.current = newx21Mesh
-  newGrid[x][2][2].wrapperMesh.current = newx22Mesh
-  
-  return newGrid
+  return swap(grid, [
+    [x,0,0, x,0,2],
+    [x,0,1, x,1,2],
+    [x,0,2, x,2,2],
+    [x,1,0, x,0,1],
+    [x,1,1, x,1,1],
+    [x,1,2, x,2,1],
+    [x,2,0, x,0,0],
+    [x,2,1, x,1,0],
+    [x,2,2, x,2,0],
+  ])
 }
 
 const rotateModelXLayerNegative: LayerRotator = (grid: GridModel, x: 0|1|2) => {
-  const newx00Mesh = grid[x][2][0].wrapperMesh.current
-  const newx01Mesh = grid[x][1][0].wrapperMesh.current
-  const newx02Mesh = grid[x][0][0].wrapperMesh.current
-  const newx10Mesh = grid[x][2][1].wrapperMesh.current
-  const newx11Mesh = grid[x][1][1].wrapperMesh.current
-  const newx12Mesh = grid[x][0][1].wrapperMesh.current
-  const newx20Mesh = grid[x][2][2].wrapperMesh.current
-  const newx21Mesh = grid[x][1][2].wrapperMesh.current
-  const newx22Mesh = grid[x][0][2].wrapperMesh.current
-
-  const newGrid = copyModel(grid)
-  newGrid[x][0][0].wrapperMesh.current = newx00Mesh
-  newGrid[x][0][1].wrapperMesh.current = newx01Mesh
-  newGrid[x][0][2].wrapperMesh.current = newx02Mesh
-  newGrid[x][1][0].wrapperMesh.current = newx10Mesh
-  newGrid[x][1][1].wrapperMesh.current = newx11Mesh
-  newGrid[x][1][2].wrapperMesh.current = newx12Mesh
-  newGrid[x][2][0].wrapperMesh.current = newx20Mesh
-  newGrid[x][2][1].wrapperMesh.current = newx21Mesh
-  newGrid[x][2][2].wrapperMesh.current = newx22Mesh
-  
-  return newGrid
+  return swap(grid, [
+    [x,0,0, x,2,0],
+    [x,0,1, x,1,0],
+    [x,0,2, x,0,0],
+    [x,1,0, x,2,1],
+    [x,1,1, x,1,1],
+    [x,1,2, x,0,1],
+    [x,2,0, x,2,2],
+    [x,2,1, x,1,2],
+    [x,2,2, x,0,2],
+  ])
 }
 
 const rotateModelYLayerPositive: LayerRotator = (grid: GridModel, y: 0|1|2) => {
-  const new0y0Mesh = grid[2][y][0].wrapperMesh.current
-  const new0y1Mesh = grid[1][y][0].wrapperMesh.current
-  const new0y2Mesh = grid[0][y][0].wrapperMesh.current
-  const new1y0Mesh = grid[2][y][1].wrapperMesh.current
-  const new1y1Mesh = grid[1][y][1].wrapperMesh.current
-  const new1y2Mesh = grid[0][y][1].wrapperMesh.current
-  const new2y0Mesh = grid[2][y][2].wrapperMesh.current
-  const new2y1Mesh = grid[1][y][2].wrapperMesh.current
-  const new2y2Mesh = grid[0][y][2].wrapperMesh.current
 
-  const newGrid = copyModel(grid)
-  newGrid[0][y][0].wrapperMesh.current = new0y0Mesh
-  newGrid[0][y][1].wrapperMesh.current = new0y1Mesh
-  newGrid[0][y][2].wrapperMesh.current = new0y2Mesh
-  newGrid[1][y][0].wrapperMesh.current = new1y0Mesh
-  newGrid[1][y][1].wrapperMesh.current = new1y1Mesh
-  newGrid[1][y][2].wrapperMesh.current = new1y2Mesh
-  newGrid[2][y][0].wrapperMesh.current = new2y0Mesh
-  newGrid[2][y][1].wrapperMesh.current = new2y1Mesh
-  newGrid[2][y][2].wrapperMesh.current = new2y2Mesh
-  
-  return newGrid
+  return swap(grid, [
+    [0,y,0, 2,y,0],
+    [0,y,1, 1,y,0],
+    [0,y,2, 0,y,0],
+    [1,y,0, 2,y,1],
+    [1,y,1, 1,y,1],
+    [1,y,2, 0,y,1],
+    [2,y,0, 2,y,2],
+    [2,y,1, 1,y,2],
+    [2,y,2, 0,y,2],
+  ])
 }
 
 const rotateModelYLayerNegative: LayerRotator = (grid: GridModel, y: 0|1|2) => {
-  const new0y0Mesh = grid[0][y][2].wrapperMesh.current
-  const new0y1Mesh = grid[1][y][2].wrapperMesh.current
-  const new0y2Mesh = grid[2][y][2].wrapperMesh.current
-  const new1y0Mesh = grid[0][y][1].wrapperMesh.current
-  const new1y1Mesh = grid[1][y][1].wrapperMesh.current
-  const new1y2Mesh = grid[2][y][1].wrapperMesh.current
-  const new2y0Mesh = grid[0][y][0].wrapperMesh.current
-  const new2y1Mesh = grid[1][y][0].wrapperMesh.current
-  const new2y2Mesh = grid[2][y][0].wrapperMesh.current
-
-  const newGrid = copyModel(grid)
-  newGrid[0][y][0].wrapperMesh.current = new0y0Mesh
-  newGrid[0][y][1].wrapperMesh.current = new0y1Mesh
-  newGrid[0][y][2].wrapperMesh.current = new0y2Mesh
-  newGrid[1][y][0].wrapperMesh.current = new1y0Mesh
-  newGrid[1][y][1].wrapperMesh.current = new1y1Mesh
-  newGrid[1][y][2].wrapperMesh.current = new1y2Mesh
-  newGrid[2][y][0].wrapperMesh.current = new2y0Mesh
-  newGrid[2][y][1].wrapperMesh.current = new2y1Mesh
-  newGrid[2][y][2].wrapperMesh.current = new2y2Mesh
-  
-  return newGrid
+  return swap(grid, [
+    [0,y,0, 0,y,2],
+    [0,y,1, 1,y,2],
+    [0,y,2, 2,y,2],
+    [1,y,0, 0,y,1],
+    [1,y,1, 1,y,1],
+    [1,y,2, 2,y,1],
+    [2,y,0, 0,y,0],
+    [2,y,1, 1,y,0],
+    [2,y,2, 2,y,0],
+  ])
 }
 
 const rotateModelZLayerPositive: LayerRotator = (grid: GridModel, z: 0|1|2) => {
-  const new00zMesh = grid[0][2][z].wrapperMesh.current
-  const new01zMesh = grid[1][2][z].wrapperMesh.current
-  const new02zMesh = grid[2][2][z].wrapperMesh.current
-  const new10zMesh = grid[0][1][z].wrapperMesh.current
-  const new11zMesh = grid[1][1][z].wrapperMesh.current
-  const new12zMesh = grid[2][1][z].wrapperMesh.current
-  const new20zMesh = grid[0][0][z].wrapperMesh.current
-  const new21zMesh = grid[1][0][z].wrapperMesh.current
-  const new22zMesh = grid[2][0][z].wrapperMesh.current
-
-  const newGrid = copyModel(grid)
-  newGrid[0][0][z].wrapperMesh.current = new00zMesh
-  newGrid[0][1][z].wrapperMesh.current = new01zMesh
-  newGrid[0][2][z].wrapperMesh.current = new02zMesh
-  newGrid[1][0][z].wrapperMesh.current = new10zMesh
-  newGrid[1][1][z].wrapperMesh.current = new11zMesh
-  newGrid[1][2][z].wrapperMesh.current = new12zMesh
-  newGrid[2][0][z].wrapperMesh.current = new20zMesh
-  newGrid[2][1][z].wrapperMesh.current = new21zMesh
-  newGrid[2][2][z].wrapperMesh.current = new22zMesh
-  
-  return newGrid
+  return swap(grid, [
+    [0,0,z, 0,2,z],
+    [0,1,z, 1,2,z],
+    [0,2,z, 2,2,z],
+    [1,0,z, 0,1,z],
+    [1,1,z, 1,1,z],
+    [1,2,z, 2,1,z],
+    [2,0,z, 0,0,z],
+    [2,1,z, 1,0,z],
+    [2,2,z, 2,0,z],
+  ])
 }
 
 const rotateModelZLayerNegative: LayerRotator = (grid: GridModel, z: 0|1|2) => {
-  const new00zMesh = grid[2][0][z].wrapperMesh.current
-  const new01zMesh = grid[1][0][z].wrapperMesh.current
-  const new02zMesh = grid[0][0][z].wrapperMesh.current
-  const new10zMesh = grid[2][1][z].wrapperMesh.current
-  const new11zMesh = grid[1][1][z].wrapperMesh.current
-  const new12zMesh = grid[0][1][z].wrapperMesh.current
-  const new20zMesh = grid[2][2][z].wrapperMesh.current
-  const new21zMesh = grid[1][2][z].wrapperMesh.current
-  const new22zMesh = grid[0][2][z].wrapperMesh.current
-
-  const newGrid = copyModel(grid)
-  newGrid[0][0][z].wrapperMesh.current = new00zMesh
-  newGrid[0][1][z].wrapperMesh.current = new01zMesh
-  newGrid[0][2][z].wrapperMesh.current = new02zMesh
-  newGrid[1][0][z].wrapperMesh.current = new10zMesh
-  newGrid[1][1][z].wrapperMesh.current = new11zMesh
-  newGrid[1][2][z].wrapperMesh.current = new12zMesh
-  newGrid[2][0][z].wrapperMesh.current = new20zMesh
-  newGrid[2][1][z].wrapperMesh.current = new21zMesh
-  newGrid[2][2][z].wrapperMesh.current = new22zMesh
-  
-  return newGrid
+  return swap(grid, [
+    [0,0,z, 2,0,z],
+    [0,1,z, 1,0,z],
+    [0,2,z, 0,0,z],
+    [1,0,z, 2,1,z],
+    [1,1,z, 1,1,z],
+    [1,2,z, 0,1,z],
+    [2,0,z, 2,2,z],
+    [2,1,z, 1,2,z],
+    [2,2,z, 0,2,z],
+  ])
 }
 
 type LayerRotator = typeof rotateModelXLayerPositive
