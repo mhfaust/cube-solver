@@ -9,7 +9,7 @@ const oneLayerSpins: MoveCode[] = [
 ]
 const numSpinTypes = Object.keys(oneLayerSpins).length
 
-const SRAMBLE_ROTATION_TIME = 3 //very fast 
+const SRAMBLE_ROTATION_TIME = 5 //very fast 
 
 const useScramble = () => {
 

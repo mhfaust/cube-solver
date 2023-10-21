@@ -5,7 +5,7 @@ import Cube from "./Cube"
 import { OrbitControls } from '@react-three/drei'
 import { Canvas, ThreeEvent, useFrame, useThree } from "@react-three/fiber"
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Color, Mesh, MeshBasicMaterial, PlaneGeometry } from "three"
+import { Color, Mesh, MeshBasicMaterial, PlaneGeometry, Vector3 } from "three"
 import { OrbitControls as ThreeOrbitControls } from 'three-stdlib';
 import { cubeRotator,layerRotator } from "../utils/rotator"
 import { MoveCode, asKeyCode, inverse, keyMoves } from "@/app/utils/moveCodes"
@@ -61,9 +61,12 @@ const CubesContainer = () => {
 		controls.current.minDistance = 16
 		controls.current.enablePan = false
 
-		camera.rotation.y = FOV_ANGLE
-		camera.rotation.x = PI/2 + FOV_ANGLE
-		camera.lookAt(0,0,0)
+		camera.position.set(
+			controls.current.minPolarAngle,
+			FOV_ANGLE,
+			0
+		);
+		camera.lookAt(new Vector3(0,0,0)); // Set look at coordinate like this
 		camera.updateProjectionMatrix()
 	}, [camera])
 
