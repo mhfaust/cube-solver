@@ -1,6 +1,6 @@
 import { MutableRefObject } from "react";
 import { Object3D, Vector3 } from "three";
-import { GridModel } from "../store/cubeSlice";
+import { Cube, GridModel } from "../store/cubeSlice";
 
 function copyModel<T> (grid: T[][][]) {
   return grid.map(dim2 => dim2.map(dim1 => dim1.slice()))
@@ -8,151 +8,151 @@ function copyModel<T> (grid: T[][][]) {
 
 
 const rotateModelXLayerPositive = (grid: GridModel, x: 0|1|2) => {
-  const newx00 = grid[x][0][2].current
-  const newx01 = grid[x][1][2].current
-  const newx02 = grid[x][2][2].current
-  const newx10 = grid[x][0][1].current
-  const newx11 = grid[x][1][1].current
-  const newx12 = grid[x][2][1].current
-  const newx20 = grid[x][0][0].current
-  const newx21 = grid[x][1][0].current
-  const newx22 = grid[x][2][0].current
+  const newx00Mesh = grid[x][0][2].wrapperMesh.current
+  const newx01Mesh = grid[x][1][2].wrapperMesh.current
+  const newx02Mesh = grid[x][2][2].wrapperMesh.current
+  const newx10Mesh = grid[x][0][1].wrapperMesh.current
+  const newx11Mesh = grid[x][1][1].wrapperMesh.current
+  const newx12Mesh = grid[x][2][1].wrapperMesh.current
+  const newx20Mesh = grid[x][0][0].wrapperMesh.current
+  const newx21Mesh = grid[x][1][0].wrapperMesh.current
+  const newx22Mesh = grid[x][2][0].wrapperMesh.current
 
   const newGrid = copyModel(grid)
-  newGrid[x][0][0].current = newx00
-  newGrid[x][0][1].current = newx01
-  newGrid[x][0][2].current = newx02
-  newGrid[x][1][0].current = newx10
-  newGrid[x][1][1].current = newx11
-  newGrid[x][1][2].current = newx12
-  newGrid[x][2][0].current = newx20
-  newGrid[x][2][1].current = newx21
-  newGrid[x][2][2].current = newx22
+  newGrid[x][0][0].wrapperMesh.current = newx00Mesh
+  newGrid[x][0][1].wrapperMesh.current = newx01Mesh
+  newGrid[x][0][2].wrapperMesh.current = newx02Mesh
+  newGrid[x][1][0].wrapperMesh.current = newx10Mesh
+  newGrid[x][1][1].wrapperMesh.current = newx11Mesh
+  newGrid[x][1][2].wrapperMesh.current = newx12Mesh
+  newGrid[x][2][0].wrapperMesh.current = newx20Mesh
+  newGrid[x][2][1].wrapperMesh.current = newx21Mesh
+  newGrid[x][2][2].wrapperMesh.current = newx22Mesh
   
   return newGrid
 }
 
 const rotateModelXLayerNegative: LayerRotator = (grid: GridModel, x: 0|1|2) => {
-  const newx00 = grid[x][2][0].current
-  const newx01 = grid[x][1][0].current
-  const newx02 = grid[x][0][0].current
-  const newx10 = grid[x][2][1].current
-  const newx11 = grid[x][1][1].current
-  const newx12 = grid[x][0][1].current
-  const newx20 = grid[x][2][2].current
-  const newx21 = grid[x][1][2].current
-  const newx22 = grid[x][0][2].current
+  const newx00Mesh = grid[x][2][0].wrapperMesh.current
+  const newx01Mesh = grid[x][1][0].wrapperMesh.current
+  const newx02Mesh = grid[x][0][0].wrapperMesh.current
+  const newx10Mesh = grid[x][2][1].wrapperMesh.current
+  const newx11Mesh = grid[x][1][1].wrapperMesh.current
+  const newx12Mesh = grid[x][0][1].wrapperMesh.current
+  const newx20Mesh = grid[x][2][2].wrapperMesh.current
+  const newx21Mesh = grid[x][1][2].wrapperMesh.current
+  const newx22Mesh = grid[x][0][2].wrapperMesh.current
 
   const newGrid = copyModel(grid)
-  newGrid[x][0][0].current = newx00
-  newGrid[x][0][1].current = newx01
-  newGrid[x][0][2].current = newx02
-  newGrid[x][1][0].current = newx10
-  newGrid[x][1][1].current = newx11
-  newGrid[x][1][2].current = newx12
-  newGrid[x][2][0].current = newx20
-  newGrid[x][2][1].current = newx21
-  newGrid[x][2][2].current = newx22
+  newGrid[x][0][0].wrapperMesh.current = newx00Mesh
+  newGrid[x][0][1].wrapperMesh.current = newx01Mesh
+  newGrid[x][0][2].wrapperMesh.current = newx02Mesh
+  newGrid[x][1][0].wrapperMesh.current = newx10Mesh
+  newGrid[x][1][1].wrapperMesh.current = newx11Mesh
+  newGrid[x][1][2].wrapperMesh.current = newx12Mesh
+  newGrid[x][2][0].wrapperMesh.current = newx20Mesh
+  newGrid[x][2][1].wrapperMesh.current = newx21Mesh
+  newGrid[x][2][2].wrapperMesh.current = newx22Mesh
   
   return newGrid
 }
 
 const rotateModelYLayerPositive: LayerRotator = (grid: GridModel, y: 0|1|2) => {
-  const new0y0 = grid[2][y][0].current
-  const new0y1 = grid[1][y][0].current
-  const new0y2 = grid[0][y][0].current
-  const new1y0 = grid[2][y][1].current
-  const new1y1 = grid[1][y][1].current
-  const new1y2 = grid[0][y][1].current
-  const new2y0 = grid[2][y][2].current
-  const new2y1 = grid[1][y][2].current
-  const new2y2 = grid[0][y][2].current
+  const new0y0Mesh = grid[2][y][0].wrapperMesh.current
+  const new0y1Mesh = grid[1][y][0].wrapperMesh.current
+  const new0y2Mesh = grid[0][y][0].wrapperMesh.current
+  const new1y0Mesh = grid[2][y][1].wrapperMesh.current
+  const new1y1Mesh = grid[1][y][1].wrapperMesh.current
+  const new1y2Mesh = grid[0][y][1].wrapperMesh.current
+  const new2y0Mesh = grid[2][y][2].wrapperMesh.current
+  const new2y1Mesh = grid[1][y][2].wrapperMesh.current
+  const new2y2Mesh = grid[0][y][2].wrapperMesh.current
 
   const newGrid = copyModel(grid)
-  newGrid[0][y][0].current = new0y0
-  newGrid[0][y][1].current = new0y1
-  newGrid[0][y][2].current = new0y2
-  newGrid[1][y][0].current = new1y0
-  newGrid[1][y][1].current = new1y1
-  newGrid[1][y][2].current = new1y2
-  newGrid[2][y][0].current = new2y0
-  newGrid[2][y][1].current = new2y1
-  newGrid[2][y][2].current = new2y2
+  newGrid[0][y][0].wrapperMesh.current = new0y0Mesh
+  newGrid[0][y][1].wrapperMesh.current = new0y1Mesh
+  newGrid[0][y][2].wrapperMesh.current = new0y2Mesh
+  newGrid[1][y][0].wrapperMesh.current = new1y0Mesh
+  newGrid[1][y][1].wrapperMesh.current = new1y1Mesh
+  newGrid[1][y][2].wrapperMesh.current = new1y2Mesh
+  newGrid[2][y][0].wrapperMesh.current = new2y0Mesh
+  newGrid[2][y][1].wrapperMesh.current = new2y1Mesh
+  newGrid[2][y][2].wrapperMesh.current = new2y2Mesh
   
   return newGrid
 }
 
 const rotateModelYLayerNegative: LayerRotator = (grid: GridModel, y: 0|1|2) => {
-  const new0y0 = grid[0][y][2].current
-  const new0y1 = grid[1][y][2].current
-  const new0y2 = grid[2][y][2].current
-  const new1y0 = grid[0][y][1].current
-  const new1y1 = grid[1][y][1].current
-  const new1y2 = grid[2][y][1].current
-  const new2y0 = grid[0][y][0].current
-  const new2y1 = grid[1][y][0].current
-  const new2y2 = grid[2][y][0].current
+  const new0y0Mesh = grid[0][y][2].wrapperMesh.current
+  const new0y1Mesh = grid[1][y][2].wrapperMesh.current
+  const new0y2Mesh = grid[2][y][2].wrapperMesh.current
+  const new1y0Mesh = grid[0][y][1].wrapperMesh.current
+  const new1y1Mesh = grid[1][y][1].wrapperMesh.current
+  const new1y2Mesh = grid[2][y][1].wrapperMesh.current
+  const new2y0Mesh = grid[0][y][0].wrapperMesh.current
+  const new2y1Mesh = grid[1][y][0].wrapperMesh.current
+  const new2y2Mesh = grid[2][y][0].wrapperMesh.current
 
   const newGrid = copyModel(grid)
-  newGrid[0][y][0].current = new0y0
-  newGrid[0][y][1].current = new0y1
-  newGrid[0][y][2].current = new0y2
-  newGrid[1][y][0].current = new1y0
-  newGrid[1][y][1].current = new1y1
-  newGrid[1][y][2].current = new1y2
-  newGrid[2][y][0].current = new2y0
-  newGrid[2][y][1].current = new2y1
-  newGrid[2][y][2].current = new2y2
+  newGrid[0][y][0].wrapperMesh.current = new0y0Mesh
+  newGrid[0][y][1].wrapperMesh.current = new0y1Mesh
+  newGrid[0][y][2].wrapperMesh.current = new0y2Mesh
+  newGrid[1][y][0].wrapperMesh.current = new1y0Mesh
+  newGrid[1][y][1].wrapperMesh.current = new1y1Mesh
+  newGrid[1][y][2].wrapperMesh.current = new1y2Mesh
+  newGrid[2][y][0].wrapperMesh.current = new2y0Mesh
+  newGrid[2][y][1].wrapperMesh.current = new2y1Mesh
+  newGrid[2][y][2].wrapperMesh.current = new2y2Mesh
   
   return newGrid
 }
 
 const rotateModelZLayerPositive: LayerRotator = (grid: GridModel, z: 0|1|2) => {
-  const new00z = grid[0][2][z].current
-  const new01z = grid[1][2][z].current
-  const new02z = grid[2][2][z].current
-  const new10z = grid[0][1][z].current
-  const new11z = grid[1][1][z].current
-  const new12z = grid[2][1][z].current
-  const new20z = grid[0][0][z].current
-  const new21z = grid[1][0][z].current
-  const new22z = grid[2][0][z].current
+  const new00zMesh = grid[0][2][z].wrapperMesh.current
+  const new01zMesh = grid[1][2][z].wrapperMesh.current
+  const new02zMesh = grid[2][2][z].wrapperMesh.current
+  const new10zMesh = grid[0][1][z].wrapperMesh.current
+  const new11zMesh = grid[1][1][z].wrapperMesh.current
+  const new12zMesh = grid[2][1][z].wrapperMesh.current
+  const new20zMesh = grid[0][0][z].wrapperMesh.current
+  const new21zMesh = grid[1][0][z].wrapperMesh.current
+  const new22zMesh = grid[2][0][z].wrapperMesh.current
 
   const newGrid = copyModel(grid)
-  newGrid[0][0][z].current = new00z
-  newGrid[0][1][z].current = new01z
-  newGrid[0][2][z].current = new02z
-  newGrid[1][0][z].current = new10z
-  newGrid[1][1][z].current = new11z
-  newGrid[1][2][z].current = new12z
-  newGrid[2][0][z].current = new20z
-  newGrid[2][1][z].current = new21z
-  newGrid[2][2][z].current = new22z
+  newGrid[0][0][z].wrapperMesh.current = new00zMesh
+  newGrid[0][1][z].wrapperMesh.current = new01zMesh
+  newGrid[0][2][z].wrapperMesh.current = new02zMesh
+  newGrid[1][0][z].wrapperMesh.current = new10zMesh
+  newGrid[1][1][z].wrapperMesh.current = new11zMesh
+  newGrid[1][2][z].wrapperMesh.current = new12zMesh
+  newGrid[2][0][z].wrapperMesh.current = new20zMesh
+  newGrid[2][1][z].wrapperMesh.current = new21zMesh
+  newGrid[2][2][z].wrapperMesh.current = new22zMesh
   
   return newGrid
 }
 
 const rotateModelZLayerNegative: LayerRotator = (grid: GridModel, z: 0|1|2) => {
-  const new00z = grid[2][0][z].current
-  const new01z = grid[1][0][z].current
-  const new02z = grid[0][0][z].current
-  const new10z = grid[2][1][z].current
-  const new11z = grid[1][1][z].current
-  const new12z = grid[0][1][z].current
-  const new20z = grid[2][2][z].current
-  const new21z = grid[1][2][z].current
-  const new22z = grid[0][2][z].current
+  const new00zMesh = grid[2][0][z].wrapperMesh.current
+  const new01zMesh = grid[1][0][z].wrapperMesh.current
+  const new02zMesh = grid[0][0][z].wrapperMesh.current
+  const new10zMesh = grid[2][1][z].wrapperMesh.current
+  const new11zMesh = grid[1][1][z].wrapperMesh.current
+  const new12zMesh = grid[0][1][z].wrapperMesh.current
+  const new20zMesh = grid[2][2][z].wrapperMesh.current
+  const new21zMesh = grid[1][2][z].wrapperMesh.current
+  const new22zMesh = grid[0][2][z].wrapperMesh.current
 
   const newGrid = copyModel(grid)
-  newGrid[0][0][z].current = new00z
-  newGrid[0][1][z].current = new01z
-  newGrid[0][2][z].current = new02z
-  newGrid[1][0][z].current = new10z
-  newGrid[1][1][z].current = new11z
-  newGrid[1][2][z].current = new12z
-  newGrid[2][0][z].current = new20z
-  newGrid[2][1][z].current = new21z
-  newGrid[2][2][z].current = new22z
+  newGrid[0][0][z].wrapperMesh.current = new00zMesh
+  newGrid[0][1][z].wrapperMesh.current = new01zMesh
+  newGrid[0][2][z].wrapperMesh.current = new02zMesh
+  newGrid[1][0][z].wrapperMesh.current = new10zMesh
+  newGrid[1][1][z].wrapperMesh.current = new11zMesh
+  newGrid[1][2][z].wrapperMesh.current = new12zMesh
+  newGrid[2][0][z].wrapperMesh.current = new20zMesh
+  newGrid[2][1][z].wrapperMesh.current = new21zMesh
+  newGrid[2][2][z].wrapperMesh.current = new22zMesh
   
   return newGrid
 }
@@ -182,12 +182,12 @@ function orbit(
   recurse(0)
 }
 
-function layerObjects <T>(model: MutableRefObject<T>[][][], axis: 'x'|'y'|'z', layer: 0|1|2) {
+function layerObjects <T>(model: Cube[][][], axis: 'x'|'y'|'z', layer: 0|1|2) {
 return {
   'x': () => model[layer].flat(),
   'y': () => model.map(i => i[layer]).flat(),
   'z': () => model.map(j => j.map(y => y[layer])).flat()
-}[axis]().map(r => r.current)
+}[axis]()
 }
 
 const xAxis = new Vector3(1, 0,0 ).normalize()
@@ -232,9 +232,9 @@ export const layerRotator = (
   ) => {
       isRotating.current = true
       const [gridLayerRotator, objectOrbiter] = fns[axis][direction]
-      layerObjects(grid, axis, layer).forEach((cube: Object3D) => {
+      layerObjects(grid, axis, layer).forEach((cube: Cube) => {
         objectOrbiter(
-          cube, 
+          cube.wrapperMesh.current, 
           () => isRotating.current = false, 
           animationTime
         )

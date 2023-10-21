@@ -23,7 +23,7 @@ import useMoveFunctions from "../utils/useMoveFunctions"
 
 const { PI } = Math
 const FOV_ANGLE = PI/12
-const NORMAL_ROTATION_TIME = 50
+const NORMAL_ROTATION_TIME = 150
 
 const bgGeometry = new PlaneGeometry(50, 50)
 const bgMaterial = new MeshBasicMaterial( { color: 0x222222 } );
@@ -224,7 +224,7 @@ const CubesContainer = () => {
 					x0={x0} 
 					y0={y0} 
 					z0={z0} 
-					containerRef={grid[x0][y0][z0]}
+					containerRef={grid[x0][y0][z0].wrapperMesh}
 					onPointerDown={handlePointerDown}
 					onPointerUp={handlePointerUp}
 					onPointerMove={handlePointerMove}
