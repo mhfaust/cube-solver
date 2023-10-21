@@ -1,5 +1,5 @@
 import { MutableRefObject } from "react";
-import { Mesh, Object3D, Vector3 } from "three";
+import { Object3D, Vector3 } from "three";
 import { GridModel } from "../store/cubeSlice";
 
 function copyModel<T> (grid: T[][][]) {
