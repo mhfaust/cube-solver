@@ -14,13 +14,14 @@ import { _012, getCubePosition } from "../utils/grid"
 import spinFrontOrBack from "../intents/spinFrontOrBack"
 import spinRowXOrY from "../intents/spinRowXOrY"
 import twoFingerSpinDirection from "../intents/twoFingerSpinDirection"
-import useAppStore, { actionsSelector, gridModelSelector, setGridSelector } from "../store/useAppStore"
+import useAppStore, { actionsSelector, gridModelSelector, isRotatingSelector, setGridSelector } from "../store/useAppStore"
 import MoveScheduler from "../utils/moveScheduler"
 import spinWholeCube from "../intents/spinWholeCube"
 import swipesAreCoincident from "../intents/swipesAreCoincident"
 import spinZ from "../intents/spinZ"
-import scramble from "../effects/scramble"
 import styles from '../page.module.css'
+import useMoveFunctions from "../utils/useMoveFunctions"
+import useScramble from "../utils/useScramble"
 
 const { PI } = Math
 const FOV_ANGLE = PI/12
@@ -29,19 +30,15 @@ const NORMAL_ROTATION_TIME = 50
 const bgGeometry = new PlaneGeometry(50, 50)
 const bgMaterial = new MeshBasicMaterial( { color: 0x222222 } );
 
-
-
 const CubesContainer = () => {
 	const { camera } = useThree();
 	const [_history, setHistory] = useState<MoveCode[]>([])
 	const { log } = useAppStore(actionsSelector)
 	const controls = useRef<ThreeOrbitControls>(null);
-	const isRotating = useRef<boolean>(false)
+	const isRotating = useAppStore(isRotatingSelector)
 	const downPointers = useRef<Record<string, ThreeEvent<PointerEvent>>>({})
 	const movePointers = useRef<Record<string, ThreeEvent<PointerEvent>>>({})
 	const grid = useAppStore(gridModelSelector)
-
-	const setGrid = useAppStore(setGridSelector)
 
 	useFrame(({ clock }) => {
 		controls.current?.update()
@@ -70,40 +67,16 @@ const CubesContainer = () => {
 		camera.updateProjectionMatrix()
 	}, [camera])
 
-	const moveFunctions: Record<MoveCode, (time: number) => void> = useMemo(() => ({
-		'U': layerRotator(grid, setGrid, 'y', 2, '-', isRotating),
-		'U′': layerRotator(grid, setGrid, 'y', 2, '+', isRotating),
-		'D': layerRotator(grid, setGrid, 'y', 0, '+', isRotating),
-		'D′': layerRotator(grid, setGrid, 'y', 0, '-', isRotating),
-		'L': layerRotator(grid, setGrid, 'x', 0, '+', isRotating),
-		'L′': layerRotator(grid, setGrid, 'x', 0, '-', isRotating),
-		'R': layerRotator(grid, setGrid, 'x', 2, '-', isRotating),
-		'R′': layerRotator(grid, setGrid, 'x', 2, '+', isRotating),
-		'F': layerRotator(grid, setGrid, 'z', 2, '-', isRotating),
-		'F′': layerRotator(grid, setGrid, 'z', 2, '+', isRotating),
-		'B': layerRotator(grid, setGrid, 'z', 0, '+', isRotating),
-		'B′': layerRotator(grid, setGrid, 'z', 0, '-', isRotating),
-		'Y′': cubeRotator(grid, setGrid, 'y', '-', isRotating),
-		'Y': cubeRotator(grid, setGrid, 'y', '+', isRotating),
-		'X′': cubeRotator(grid, setGrid, 'x', '-', isRotating),
-		'X': cubeRotator(grid, setGrid, 'x', '+', isRotating),
-		'Z′': cubeRotator(grid, setGrid, 'z', '+', isRotating),
-		'Z': cubeRotator(grid, setGrid, 'z', '-', isRotating),
-		'E': layerRotator(grid, setGrid, 'y', 1 , '+', isRotating),
-		'E′': layerRotator(grid, setGrid, 'y', 1, '-', isRotating),
-		'M': layerRotator(grid, setGrid, 'x', 1, '+', isRotating),
-		'M′': layerRotator(grid, setGrid, 'x', 1, '-', isRotating),
-		'S': layerRotator(grid, setGrid, 'z', 1, '-', isRotating),
-		'S′': layerRotator(grid, setGrid, 'z', 1, '+', isRotating)
-	}), [])
+	const moveFunctions = useMoveFunctions()
+	const scramble = useScramble()
 
 	const handleScramble = () => {
-		scramble(moveFunctions, 5)
+		scramble()
 
 	}
 
 	// useEffect(() => {
-	// 	scramble(moveFunctions, 5)
+	// 	scramble()
 	// }, [])
 
 	useEffect

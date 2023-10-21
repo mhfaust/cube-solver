@@ -221,11 +221,11 @@ const fns = {
 } as const
 
 export const layerRotator = (
-  grid: GridModel,
-  setGrid: (g :GridModel) => void,
   axis: 'x'|'y'|'z',
   layer: 0|1|2,
-  direction: '+' | '-',
+  direction: '+'|'-',
+  grid: GridModel,
+  setGrid: (g :GridModel) => void,
   isRotating: MutableRefObject<boolean>,
 ) => (
     animationTime: number
@@ -244,15 +244,15 @@ export const layerRotator = (
 }
 
 export const cubeRotator = (
+  axis: 'x'|'y'|'z',
+  direction: '+'|'-',
   grid: GridModel,
   setGrid: (g :GridModel) => void,
-  axis: 'x'|'y'|'z',
-  direction: '+' | '-',
   isRotating: MutableRefObject<boolean>,
 ) => (
   animationTime: number
 ) => {
-  layerRotator(grid, setGrid, axis, 0, direction, isRotating)(animationTime)
-  layerRotator(grid, setGrid, axis, 1, direction, isRotating)(animationTime)
-  layerRotator(grid, setGrid, axis, 2, direction, isRotating)(animationTime)
+  layerRotator(axis, 0, direction, grid, setGrid, isRotating)(animationTime)
+  layerRotator(axis, 1, direction, grid, setGrid, isRotating)(animationTime)
+  layerRotator(axis, 2, direction, grid, setGrid, isRotating)(animationTime)
 }

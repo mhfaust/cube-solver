@@ -24,6 +24,7 @@ export const isOpenSelector = select(s => s.logIsOpen)
 export const startTimeSelector = select(s => s.startTime)
 export const isSolvedSelector = select(s => s.isSolved)
 export const gridModelSelector = select(s => s.grid)
+export const isRotatingSelector = select(s => s.isRotating)
 // export const controlsSelector = select(s => s.controls)
 
 export const actionsSelector = select(
