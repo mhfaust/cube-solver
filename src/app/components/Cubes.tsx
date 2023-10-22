@@ -117,7 +117,7 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 			addDownPointer(pointers.current, e)
 
 			if(controls.current) {
-					controls.current.enableRotate = !isOnCube(e) && e.offsetY / (canvas.current?.height || 1) < .2
+					controls.current.enableRotate = !isOnCube(e) && e.offsetY / (canvas.current?.height || 1) < .25
 			}
 			// if(controls.current){
 			// 	controls.current.enableRotate = false
