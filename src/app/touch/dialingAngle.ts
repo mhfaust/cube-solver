@@ -10,24 +10,24 @@ const dialingAngle = (pointers: Pointers, e: ThreeEvent<PointerEvent>) => {
   const { moves } = pointers[e.pointerId] || {}
   
   if (!pointers[e.pointerId]) { 
-    console.log('//no down-pointer found for up-pointer (unexpected)')
+    // console.log('//no down-pointer found for up-pointer (unexpected)')
     return 0
   }
   if (!moves || moves?.length < 3) { 
-    console.log('//too few moves')
+    // console.log('//too few moves')
     return 0
   }
 
   const cumulativeAngle = moves.reduce<number>((cum, move, i) => {
     if(i < 2){
-      console.log('too few angles')
+      // console.log('too few angles')
       return 0
     }
     return cum + angle(move, moves[i-1], moves[i-2])
   }, 0)
 
-  console.log({cumulativeAngle})
-  console.log('====================')
+  // console.log({cumulativeAngle})
+  // console.log('====================')
 
   return cumulativeAngle
 }
@@ -42,12 +42,6 @@ const angle = (
     let vector1 = { x: e2.x - e1.x, y: e2.y - e1.y };
     let vector2 = { x: e3.x - e2.x, y: e3.y - e2.y };
 
-    //if either move wasn't a move:
-    // if((e2.x === e1.x && e2.y === e1.y) || (e3.x === e2.x && e3.y === e2.y)) {
-    //   console.log((e2.x === e1.x && e2.y === e1.y) , (e3.x === e2.x && e3.y === e2.y))
-      
-    //   return 0
-    // }
     let dotProduct = vector1.x * vector2.x + vector1.y * vector2.y;
 
     let magnitude1 = sqrt(square(vector1.x) + square(vector1.y));
@@ -67,7 +61,7 @@ const angle = (
       [vector2.x, vector2.y]
     )
     // console.log({dir})
-    const theta = acos(cosTheta) * (180 / PI) * dir
+    // const theta = acos(cosTheta) * (180 / PI) * dir
     // console.log( {theta})
     // console.log('----------------------')
 

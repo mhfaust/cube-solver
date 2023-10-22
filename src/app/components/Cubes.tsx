@@ -4,7 +4,7 @@
 import Cube from "./Cube"
 import { OrbitControls } from '@react-three/drei'
 import { Canvas, ThreeEvent, useFrame, useThree } from "@react-three/fiber"
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { MutableRefObject, RefObject, useCallback, useEffect, useRef, useState } from 'react'
 import { Color, MeshBasicMaterial, PlaneGeometry, Vector3 } from "three"
 import { OrbitControls as ThreeOrbitControls } from 'three-stdlib';
 import { MoveCode, asKeyCode, inverse, keyMoves } from "@/app/utils/moveCodes"
@@ -33,7 +33,7 @@ export type Pointers = Record<number, {
 	moves: ThreeEvent<PointerEvent>[],
 }>
 
-const CubesContainer = () => {
+const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => {
 	const { camera } = useThree();
 	const [_history, setHistory] = useState<MoveCode[]>([])
 	const { log } = useAppStore(actionsSelector)
@@ -59,6 +59,7 @@ const CubesContainer = () => {
 		if(!controls.current) {
 				return
 		}
+		controls.current.enableRotate = true
 		controls.current.minPolarAngle = PI/2 - FOV_ANGLE;
 		controls.current.maxPolarAngle = PI/2 + FOV_ANGLE;
 		controls.current.minAzimuthAngle = - FOV_ANGLE;
@@ -110,17 +111,26 @@ const CubesContainer = () => {
 		};
 	}, [spinFunctions]);
 
-	const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
+	const handlePointerDown = useCallback((e: ThreeEvent<PointerEvent>) => {
+
 		if(e.eventObject.uuid === e.intersections[0].eventObject.uuid){
 			addDownPointer(pointers.current, e)
 
-			if(controls.current && isOnCube(e)){
-				controls.current.enableRotate = false
+			if(controls.current) {
+					controls.current.enableRotate = !isOnCube(e) && e.offsetY / (canvas.current?.height || 1) < .2
 			}
+			// if(controls.current){
+			// 	controls.current.enableRotate = false
+			// 	setTimeout(() => {
+			// 		if(controls.current){
+			// 			controls.current.enableRotate = true
+			// 		} 
+			// 	}, 500)
+			// }
 		}
-	}
+	}, [controls.current?.enableRotate])
 
-	const handlePointerUp = (upPointer: ThreeEvent<PointerEvent>) => {
+	const handlePointerUp = useCallback((upPointer: ThreeEvent<PointerEvent>) => {
 
 		const downPointer = pointers.current[upPointer.pointerId]?.down
 		if(isRotating.current || !downPointer){
@@ -138,10 +148,16 @@ const CubesContainer = () => {
 			const swipe1 = swipeInfo(downPointer, upPointer)
 			const fingers = Object.values(pointers.current).length
 			const isSwipe = swipe1.distance > 5 && swipe1.time < 500
+			if(swipe1.distance < 5){
+				log(`no-action: swipe too short (fingers: ${fingers}).`)
+			}
+			if(swipe1.time >= 5){
+				log(`no-action: swipe too slow (fingers: ${fingers}).`)
+			}
 
 			const dial = dialingAngle(pointers.current, upPointer)
-			if(dial > 60 && dial < 90) {
-				 //do nothing: ambigous, dial vs swipe
+			if(dial > 45 && dial < MIN_DIAL) {
+				 log(`no-action: ambiguous dial: ${dial.toFixed(1)}°  (fingers: ${fingers})`)
 			}
 			else if(fingers === 1 && isSwipe){
 				const cubePosition = getCubePosition(grid, downPointer.eventObject)
@@ -225,16 +241,16 @@ const CubesContainer = () => {
 		}
 		removePointer(pointers.current, upPointer.pointerId)
 
-		if(!Object.values(pointers.current).map(p => p.down).some(isOnCube)) {
-				controls.current!.enableRotate = true
-		}
-	}
+		// if(!Object.values(pointers.current).map(p => p.down).some(isOnCube)) {
+		// 		controls.current!.enableRotate = true
+		// }
+	}, [controls.current?.enableRotate])
 
-	const handlePointerMove = (e: ThreeEvent<PointerEvent>) => {
+	const handlePointerMove = useCallback((e: ThreeEvent<PointerEvent>) => {
 		if(e.eventObject.uuid === e.intersections[0].eventObject.uuid) {
 			addMovePointer(pointers.current, e)
 		}
-	}
+	}, [controls.current?.enableRotate])
 	return (
 		<>
 			<pointLight position={[0, 0, 5]} visible={true} intensity={7} color={ new Color(1, 1, 1)} />
@@ -270,7 +286,7 @@ const Cubes = () => {
 	return (
 		<div className={styles.canvas}>
 			<Canvas ref={canvas} >
-				<CubesContainer />
+				<CubesContainer canvas={canvas}/>
 			</Canvas>
 		</div>
 	)
