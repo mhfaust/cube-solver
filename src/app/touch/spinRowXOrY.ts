@@ -1,6 +1,6 @@
 import { getCubePosition } from "../utils/grid"
 import { ThreeEvent } from "@react-three/fiber"
-import { AxisDirection, swipeInfo } from "../utils/pointers"
+import { AxisDirection, swipeInfo } from "./pointers"
 import { MoveCode } from "../utils/moveCodes"
 import { GridModel } from "../store/cubeSlice"
 

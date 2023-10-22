@@ -1,5 +1,5 @@
 import { MoveCode } from "../utils/moveCodes"
-import { AxisDirection, swipeInfo } from "../utils/pointers"
+import { AxisDirection, swipeInfo } from "./pointers"
 
 const map: Record<AxisDirection, MoveCode> = {
   'down': 'X',

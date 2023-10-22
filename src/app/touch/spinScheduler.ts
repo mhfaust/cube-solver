@@ -1,4 +1,4 @@
-import { MoveCode } from "./moveCodes";
+import { MoveCode } from "../utils/moveCodes";
 
 export type ErrorMessage = {
   error: string
@@ -8,7 +8,7 @@ export type InfoMessage = {
   info: string
 }
 
-class MoveScheduler {
+class SpinScheduler {
   #moves: MoveCode[]
   #fns
   #onExecute
@@ -51,5 +51,5 @@ class MoveScheduler {
   }
 }
 
-export default MoveScheduler
+export default SpinScheduler
 

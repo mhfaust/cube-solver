@@ -4,7 +4,6 @@ import {
   Mesh, 
   Color, 
   BufferAttribute,
-  MeshBasicMaterial,
   BufferGeometry,
   NormalBufferAttributes,
   Material,

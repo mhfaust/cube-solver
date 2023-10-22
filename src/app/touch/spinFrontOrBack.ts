@@ -1,5 +1,5 @@
 import { ThreeEvent } from "@react-three/fiber"
-import { isOnCube, swipeInfo } from "../utils/pointers"
+import { isOnCube, swipeInfo } from "./pointers"
 import { getCubePosition } from "../utils/grid"
 import { MoveCode } from "../utils/moveCodes"
 import { GridModel } from "../store/cubeSlice"

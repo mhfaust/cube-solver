@@ -1,34 +1,42 @@
 import { ThreeEvent } from "@react-three/fiber"
 import { MutableRefObject } from "react"
+import { Pointers } from "../components/Cubes"
 
 const { PI, abs, sqrt, pow, atan } = Math
-type  PointersRef = MutableRefObject<Record<number, ThreeEvent<PointerEvent>>>
+// type  PointersRef = MutableRefObject<Record<number, ThreeEvent<PointerEvent>>>
 
-export const addPointer = (pointers: PointersRef, pointer: ThreeEvent<PointerEvent>) => {
-  pointers.current[pointer.pointerId] = pointer
+export function addDownPointer(pointers: Pointers, downPointer: ThreeEvent<PointerEvent>) {
+  pointers[downPointer.pointerId] = {
+    down: downPointer,
+    moves: []
+  }
+}
+export function addMovePointer(pointers: Pointers, movePointer: ThreeEvent<PointerEvent>) {
+  const p = pointers[movePointer.pointerId]?.moves.push(movePointer)
 }
 
-export const getPointer = (pointers: PointersRef, id: number) => {
-	return pointers.current[id]
+export const getLatestMove = (pointers: Pointers, pointerId: number) => {
+  const { moves } = pointers[pointerId]
+  return moves[moves.length - 1]
 }
 
-export const getOtherPointer = (pointers: PointersRef, pointer: ThreeEvent<PointerEvent>) => {
-	return Object.values(pointers.current).find(p => p && p.pointerId !== pointer.pointerId)
+export const getOtherPointer = (pointers: Pointers, pointer: ThreeEvent<PointerEvent>) => {
+	return Object.values(pointers).find(p => p && p.down.pointerId !== pointer.pointerId)
 }
 
 export const removePointer = (
-	pointers: PointersRef, 
-	pointer: ThreeEvent<PointerEvent>,
+	pointers: Pointers, 
+	pointerId: number,
 ) => {
-  if (pointers.current[pointer.pointerId]){
-    delete pointers.current[pointer.pointerId]
+  if (pointers[pointerId]){
+    delete pointers[pointerId]
   }
 	
   //(p => p.pointerId !== pointer.pointerId)
 }
 
-export const resetPointers = (pointers: PointersRef) => {
-  Object.values(pointers).forEach(p => delete pointers.current[p.pointerId])
+export const resetPointers = (pointers: Pointers) => {
+  Object.values(pointers).forEach(p => delete pointers[p.down.pointerId])
 }
 
 export const isOnCube = (e?: ThreeEvent<PointerEvent>) => {

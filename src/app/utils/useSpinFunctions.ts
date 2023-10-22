@@ -7,7 +7,7 @@ import useAppStore, {
 import { MoveCode } from "./moveCodes"
 import { cubeRotator, layerRotator } from "./rotator"
 
-const useMoveFunctions = () => {
+const useSpinFunctions = () => {
 
   const grid = useAppStore(gridModelSelector)
   const setGrid = useAppStore(setGridSelector)
@@ -43,4 +43,4 @@ const useMoveFunctions = () => {
   return moveFunctions
 }
 
-export default useMoveFunctions
+export default useSpinFunctions

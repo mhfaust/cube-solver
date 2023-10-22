@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { MoveCode } from "./moveCodes"
-import useMoveFunctions from "./useMoveFunctions"
+import useSpinFunctions from "./useSpinFunctions"
 
 const oneLayerSpins: MoveCode[] = [
   'U' , 'U′' , 'D' , 'D′' , 'E' , 'E′' ,
@@ -13,7 +13,7 @@ const SRAMBLE_ROTATION_TIME = 5 //very fast
 
 const useScramble = () => {
 
-  const moveFunctions = useMoveFunctions()
+  const moveFunctions = useSpinFunctions()
 
   return useCallback(() => {
 
