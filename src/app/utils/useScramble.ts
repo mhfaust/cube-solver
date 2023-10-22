@@ -13,7 +13,7 @@ const SRAMBLE_ROTATION_TIME = 5 //very fast
 
 const useScramble = () => {
 
-  const moveFunctions = useSpinFunctions()
+  const spinFunctions = useSpinFunctions()
 
   return useCallback(() => {
 
@@ -23,13 +23,13 @@ const useScramble = () => {
     )
     const recurse = () => {
       const nextMove = randomSequence.pop()
-      moveFunctions[nextMove!](SRAMBLE_ROTATION_TIME)
+      spinFunctions[nextMove!](SRAMBLE_ROTATION_TIME)
       if(randomSequence.length){
         setTimeout(recurse, SRAMBLE_ROTATION_TIME)
       }
     }
     recurse()
-  }, [moveFunctions])
+  }, [spinFunctions])
 }
 
 export default useScramble

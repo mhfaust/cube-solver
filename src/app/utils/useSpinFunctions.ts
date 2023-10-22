@@ -13,7 +13,7 @@ const useSpinFunctions = () => {
   const setGrid = useAppStore(setGridSelector)
   const isRotating = useAppStore(isRotatingSelector)
 
-  const moveFunctions: Record<MoveCode, (time: number) => void> = useMemo(() => ({
+  const spinFunctions: Record<MoveCode, (time: number) => void> = useMemo(() => ({
 		'U': layerRotator('y', 2, '-', grid, setGrid, isRotating ),
 		'U′': layerRotator('y', 2, '+', grid, setGrid, isRotating ),
 		'D': layerRotator('y', 0, '+', grid, setGrid, isRotating ),
@@ -40,7 +40,7 @@ const useSpinFunctions = () => {
 		'S′': layerRotator('z', 1, '+', grid, setGrid, isRotating )
 	}), [grid, isRotating, setGrid])
 
-  return moveFunctions
+  return spinFunctions
 }
 
 export default useSpinFunctions

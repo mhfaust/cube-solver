@@ -5,7 +5,6 @@ import { _012 } from "../utils/grid";
 
 export type CubeWrapperMesh = Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>
 
-// export type Cube = CubeWrapperMesh
 export type Cube = {
   wrapperMesh: MutableRefObject<CubeWrapperMesh>,
   intialPosition: [0|1|2, 0|1|2, 0|1|2],

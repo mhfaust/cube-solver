@@ -21,11 +21,10 @@ import spinZ from "../touch/spinZ"
 import styles from '../page.module.css'
 import useSpinFunctions from "../utils/useSpinFunctions"
 import isSolved from "../utils/isSolved"
+import dialingAngle from "../touch/dialingAngle"
+import { FOV_ANGLE, MIN_DIAL, NORMAL_ROTATION_TIME } from "../utils/constants"
 
 const { PI } = Math
-const FOV_ANGLE = PI/12
-const NORMAL_ROTATION_TIME = 200
-
 const bgGeometry = new PlaneGeometry(50, 50)
 const bgMaterial = new MeshBasicMaterial( { color: 0x222222 } );
 
@@ -44,7 +43,7 @@ const CubesContainer = () => {
 	const grid = useAppStore(gridModelSelector)
 
 	if(isSolved(grid)){
-		console.log('SOLVED')
+		// console.log('SOLVED')
 	}
 
 	useFrame(({ clock }) => {
@@ -128,9 +127,7 @@ const CubesContainer = () => {
 			removePointer(pointers.current, upPointer.pointerId)
 			return
 		}
-		if(upPointer.eventObject.uuid === upPointer.intersections[0].eventObject.uuid){
-
-			console.log(pointers.current[upPointer.pointerId].moves.length)
+		if(upPointer.eventObject.uuid === upPointer.intersections[0].eventObject.uuid) {
 
 			const spins = new SpinScheduler(
 				spinFunctions, 
@@ -141,13 +138,35 @@ const CubesContainer = () => {
 			const swipe1 = swipeInfo(downPointer, upPointer)
 			const fingers = Object.values(pointers.current).length
 			const isSwipe = swipe1.distance > 5 && swipe1.time < 500
-			if(fingers === 1 && isSwipe){
+
+			const dial = dialingAngle(pointers.current, upPointer)
+			if(dial > 60 && dial < 90) {
+				 //do nothing: ambigous, dial vs swipe
+			}
+			else if(fingers === 1 && isSwipe){
 				const cubePosition = getCubePosition(grid, downPointer.eventObject)
+
 				if(cubePosition){
-					spins.queue(spinRowXOrY(grid, downPointer, upPointer))
+					if(dial > MIN_DIAL) {
+						spins.queue('F')
+					}
+					else if (dial < -MIN_DIAL){
+						spins.queue('F′')
+					}
+					else {
+						spins.queue(spinRowXOrY(grid, downPointer, upPointer))
+					}
 				} 
 				else {
-					spins.queue(spinWholeCube(swipe1))
+					if(dial > MIN_DIAL) {
+						spins.queue('Z')
+					}
+					else if (dial < -MIN_DIAL){
+						spins.queue('Z′')
+					}
+					else {
+						spins.queue(spinWholeCube(swipe1))
+					}
 				}
 			}
 
@@ -212,7 +231,9 @@ const CubesContainer = () => {
 	}
 
 	const handlePointerMove = (e: ThreeEvent<PointerEvent>) => {
-		addMovePointer(pointers.current, e)
+		if(e.eventObject.uuid === e.intersections[0].eventObject.uuid) {
+			addMovePointer(pointers.current, e)
+		}
 	}
 	return (
 		<>
@@ -225,6 +246,7 @@ const CubesContainer = () => {
 				position={[0,0,-10]}
 				onPointerUp={handlePointerUp}
 				onPointerDown={handlePointerDown}
+				onPointerMove={handlePointerMove}
 			/>
 
 			{(_012).map(x0 => (_012).map(y0 => (_012).map(z0 =>(
