@@ -15,3 +15,9 @@ states:
   - startTime (number | null)
   - isSolved (boolean)
 
+SETTINGS
+
+Themes
+  - pick from list
+  - create theme
+

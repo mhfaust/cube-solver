@@ -16,6 +16,11 @@ function storeHelpers <T> (set: ZSet<T>) {
         set(() => ({ [propName]: arg }) as Partial<T>)
       }
     },
+    setValueUsing: <K extends keyof T, TV>(propName: K, fn: () => T[K]) => {
+      return () => {
+        set(() => ({ [propName]: fn() }) as unknown as Partial<T>)
+      }
+    },
     pushValueTo: <F extends ArrayKeys<T, V>, V>(propName: F) => {
       return (args: V) => {
         set((store) => ({ [propName]: [...store[propName] as V[], args]}) as Partial<T>)

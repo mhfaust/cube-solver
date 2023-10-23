@@ -26,11 +26,12 @@ export const isSolvedSelector = select(s => s.isSolved)
 export const gridModelSelector = select(s => s.grid)
 export const isRotatingSelector = select(s => s.isRotating)
 export const fingersOnSelector = select(s => s.fingersOn)
+export const themeNameSelector = select(s => s.themeName)
 // export const controlsSelector = select(s => s.controls)
 
 export const actionsSelector = select(
-  ({ log, toggleLog, startTimer, stopTimer, setGrid, setFingersOn }) => 
-  ({ log, toggleLog, startTimer, stopTimer, setGrid, setFingersOn })
+  ({ log, toggleLog, startTimer, stopTimer, setGrid, setFingersOn, setThemeName }) => 
+  ({ log, toggleLog, startTimer, stopTimer, setGrid, setFingersOn, setThemeName })
 )
 
 export const setGridSelector = select(s => s.setGrid)

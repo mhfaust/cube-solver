@@ -2,7 +2,6 @@ import { ThreeEvent } from '@react-three/fiber';
 import { useRef, useEffect, MutableRefObject, createRef } from 'react'
 import { 
   Mesh, 
-  Color, 
   BufferAttribute,
   BufferGeometry,
   NormalBufferAttributes,
@@ -11,29 +10,18 @@ import {
   MeshPhongMaterial,
 } from 'three'
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
+import useTheme from '../utils/useTheme';
 
-const red = new Color(.5, 0, 0);
-const green = new Color(0, .4, 0);
-const blue = new Color(.0, .02, 1);
-const orange = new Color(.8, .2, 0)
-const yellow = new Color(.7, .7, 0)
-const white = new Color(1, 1, 1)
-const frameColor = new Color(.8, .8, .8)
-
-const colors = [red, orange, blue, green, white, yellow]
-
-const orangeGreenYellowPolys = [22, 23, 24, 25, 26, 27]
-const redWhiteBluePolys = [72, 73, 74, 75, 76, 77]
-const facePolygonIndices = new Set([...orangeGreenYellowPolys,  ...redWhiteBluePolys])
+const facePolygonIndices = new Set([72, 73, 74, 75, 76, 77])
 
 export type CubeContainerRef = MutableRefObject<Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>>
 
 const r = createRef()
 
 type CubeProps = {
-  x0: 0| 1| 2; 
-  y0: 0| 1| 2; 
-  z0: 0| 1| 2;
+  x0: 0|1|2; 
+  y0: 0|1|2; 
+  z0: 0|1|2;
   containerRef: CubeContainerRef;
   onPointerDown: (event: ThreeEvent<PointerEvent>) => void,
   onPointerUp: (event: ThreeEvent<PointerEvent>) => void,
@@ -49,6 +37,8 @@ const Cube = ({
   onPointerMove
 }: CubeProps) => {
 
+  const { frameColor, faceColors } = useTheme()
+
   const geometryRef = useRef(new RoundedBoxGeometry(1.0, 1.0, 1.0, 2, .1))
   const materialRef = useRef(new MeshPhongMaterial({ vertexColors: true }))
 
@@ -63,21 +53,21 @@ const Cube = ({
         geometryRef.current
           .attributes.color.setXYZ(i ,frameColor.r, frameColor.g, frameColor.b)
       } else {
-        const faceColor = colors[Math.floor(i / 6) % 6]
+        const faceColor = faceColors[Math.floor(i / 6) % 6]
         if(
           //only color exposed sides:
-          faceColor === red && x0 === 2 ||
-          faceColor === orange && x0 === 0 ||
-          faceColor === blue && y0 === 2 ||
-          faceColor === green && y0 === 0 ||
-          faceColor === white && z0 === 2 || 
-          faceColor === yellow && z0 === 0
+          faceColor === faceColors[0] && x0 === 2 ||
+          faceColor === faceColors[1] && x0 === 0 ||
+          faceColor === faceColors[2] && y0 === 2 ||
+          faceColor === faceColors[3] && y0 === 0 ||
+          faceColor === faceColors[4] && z0 === 2 || 
+          faceColor === faceColors[5] && z0 === 0
         ){
           geometryRef.current.attributes.color.setXYZ(i ,faceColor.r, faceColor.g, faceColor.b)
         }
       }
     }
-  }, [x0, y0, z0])
+  }, [faceColors, frameColor.b, frameColor.g, frameColor.r, x0, y0, z0])
 
   return (
     <mesh ref={containerRef} >

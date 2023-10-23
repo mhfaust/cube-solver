@@ -3,6 +3,7 @@ import { MutableRefObject, RefObject, createRef } from "react";
 import { BufferGeometry, Material, Mesh, NormalBufferAttributes, Object3DEventMap } from "three";
 import { _012 } from "../utils/grid";
 import storeHelpers from "./storeHelpers";
+import { Theme, ThemeName } from "../utils/useTheme";
 
 export type CubeWrapperMesh = Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>
 
@@ -18,17 +19,19 @@ export type CubeSlice = {
   isRotating: MutableRefObject<boolean>,
   // controls: GridModel,
   setGrid: ((grid: GridModel) => void),
+  themeName: ThemeName,
+  setThemeName: (name: ThemeName) => void,
 }  
 
 export const createCubeSlice: StateCreator<CubeSlice> = (set) =>{ 
   const { setValueOf } = storeHelpers(set)
-  
+
   return {
     grid: _012.map(
       (i: 0|1|2) => _012.map(
         (j: 0|1|2) => _012.map(
           (k: 0|1|2) => ({
-            wrapperMesh: { current: {} as Mesh},
+            wrapperMesh: { current: {} as Mesh },
             intialPosition: [i,j,k]
           })
         )
@@ -36,7 +39,9 @@ export const createCubeSlice: StateCreator<CubeSlice> = (set) =>{
     ),
     isRotating: { current: false },
     // controls: createRef(),
-    setGrid: setValueOf('grid')
+    setGrid: setValueOf('grid'),
+    themeName: 'bright',
+    setThemeName: setValueOf('themeName')
   }
 }
 

@@ -4,7 +4,7 @@
 import Cube from "./Cube"
 import { OrbitControls } from '@react-three/drei'
 import { Canvas, ThreeEvent, useFrame, useThree } from "@react-three/fiber"
-import { MutableRefObject, RefObject, useCallback, useEffect, useRef, useState } from 'react'
+import { RefObject, useCallback, useEffect, useRef, useState } from 'react'
 import { Color, MeshBasicMaterial, PlaneGeometry, Vector3 } from "three"
 import { OrbitControls as ThreeOrbitControls } from 'three-stdlib';
 import { MoveCode, asKeyCode, inverse, keyMoves } from "@/app/utils/moveCodes"
@@ -23,15 +23,16 @@ import useSpinFunctions from "../utils/useSpinFunctions"
 import isSolved from "../utils/isSolved"
 import dialingAngle from "../touch/dialingAngle"
 import { FOV_ANGLE, MAX_SWIPE_TIME, MIN_DIAL_ANGLE, ANIMATION_TIME } from "../utils/constants"
+import useTheme from "../utils/useTheme"
 
 const { PI } = Math
 const bgGeometry = new PlaneGeometry(50, 50)
-const bgMaterial = new MeshBasicMaterial( { color: 0x222222 } );
 
 export type Pointers = Record<number, {
 	down: ThreeEvent<PointerEvent>,
 	moves: ThreeEvent<PointerEvent>[],
 }>
+
 
 const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => {
 	const { camera } = useThree();
@@ -42,6 +43,7 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 	const pointers = useRef<Pointers>({})
 	const grid = useAppStore(gridModelSelector)
 	const swipeTimeout = useRef<NodeJS.Timeout | null>(null)
+	const { bgMaterial, pointLightIntensity, ambientLightIntensity } = useTheme()
 
 	if(isSolved(grid)){
 		// console.log('SOLVED')
@@ -115,7 +117,7 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 	const handlePointerDown = useCallback((e: ThreeEvent<PointerEvent>) => {
 
 		setTimeout(() => controls.current!.enableRotate = false, 0)
-		
+
 		if(e.eventObject.uuid === e.intersections[0].eventObject.uuid){
 			addDownPointer(pointers.current, e)
 			setFingersOn(Object.keys(pointers.current).length)
@@ -245,8 +247,17 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 	}, [controls.current?.enableRotate])
 	return (
 		<>
-			<pointLight position={[0, 0, 5]} visible={true} intensity={7} color={ new Color(1, 1, 1)} />
-			<ambientLight visible={true} intensity={2} color={ new Color(1, 1, 1)} />
+			<pointLight 
+				position={[0, 0, 3]} 
+				visible={true} 
+				intensity={pointLightIntensity} 
+				color={ new Color(1, 1, 1)} 
+			/>
+			<ambientLight 
+				visible={true} 
+				intensity={ambientLightIntensity} 
+				color={ new Color(1, 1, 1)}
+			/>
 			<OrbitControls ref={controls}/>
 			<mesh
 				geometry={bgGeometry}

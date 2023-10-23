@@ -5,6 +5,9 @@ export const ANIMATION_TIME = 120
 export const MIN_DIAL_ANGLE = 90
 export const MAX_SWIPE_TIME = 500
 
+
+
+
 // R--U-Ri-U--R--U2--Ri (front-left fixed, rotates clockwise)
 // Li-Ui-L-Ui-Li-Ui2-L (front-right fixed, rotates counter-clockwise)
 
