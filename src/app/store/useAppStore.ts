@@ -25,11 +25,12 @@ export const startTimeSelector = select(s => s.startTime)
 export const isSolvedSelector = select(s => s.isSolved)
 export const gridModelSelector = select(s => s.grid)
 export const isRotatingSelector = select(s => s.isRotating)
+export const fingersOnSelector = select(s => s.fingersOn)
 // export const controlsSelector = select(s => s.controls)
 
 export const actionsSelector = select(
-  ({ log, toggleLog, startTimer, stopTimer, setGrid }) => 
-  ({ log, toggleLog, startTimer, stopTimer, setGrid })
+  ({ log, toggleLog, startTimer, stopTimer, setGrid, setFingersOn }) => 
+  ({ log, toggleLog, startTimer, stopTimer, setGrid, setFingersOn })
 )
 
 export const setGridSelector = select(s => s.setGrid)

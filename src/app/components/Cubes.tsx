@@ -22,7 +22,7 @@ import styles from '../page.module.css'
 import useSpinFunctions from "../utils/useSpinFunctions"
 import isSolved from "../utils/isSolved"
 import dialingAngle from "../touch/dialingAngle"
-import { FOV_ANGLE, MAX_SWIPE_TIME, MIN_DIAL, NORMAL_ROTATION_TIME } from "../utils/constants"
+import { FOV_ANGLE, MAX_SWIPE_TIME, MIN_DIAL_ANGLE, ANIMATION_TIME } from "../utils/constants"
 
 const { PI } = Math
 const bgGeometry = new PlaneGeometry(50, 50)
@@ -36,7 +36,7 @@ export type Pointers = Record<number, {
 const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => {
 	const { camera } = useThree();
 	const [_history, setHistory] = useState<MoveCode[]>([])
-	const { log } = useAppStore(actionsSelector)
+	const { log, setFingersOn } = useAppStore(actionsSelector)
 	const controls = useRef<ThreeOrbitControls>(null);
 	const isRotating = useAppStore(isRotatingSelector)
 	const pointers = useRef<Pointers>({})
@@ -87,7 +87,7 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 			if(!last) {
 				return h
 			}
-			spinFunctions[inverse(last)](NORMAL_ROTATION_TIME)
+			spinFunctions[inverse(last)](ANIMATION_TIME)
 			return newHistory
 		})
 	}, [])
@@ -102,7 +102,7 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 				undo()
 			} else {
 				const move = keyMoves[keyCode]
-				spinFunctions[move](NORMAL_ROTATION_TIME)
+				spinFunctions[move](ANIMATION_TIME)
 				setHistory(h => [...h, move])
 			}
 		};
@@ -114,10 +114,12 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 
 	const handlePointerDown = useCallback((e: ThreeEvent<PointerEvent>) => {
 
+		setTimeout(() => controls.current!.enableRotate = false, 0)
+		
 		if(e.eventObject.uuid === e.intersections[0].eventObject.uuid){
 			addDownPointer(pointers.current, e)
+			setFingersOn(Object.keys(pointers.current).length)
 			clearTimeout(swipeTimeout.current!)
-			setTimeout(() => controls.current!.enableRotate = false, 0)
 			swipeTimeout.current = setTimeout(() => controls.current!.enableRotate = true, MAX_SWIPE_TIME)
 		}
 	}, [controls.current?.enableRotate])
@@ -135,30 +137,26 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 				spinFunctions, 
 				moves => setHistory(h => [...h, ...moves]),
 				log,
-				NORMAL_ROTATION_TIME
+				ANIMATION_TIME
 			)
 			const swipe1 = swipeInfo(downPointer, upPointer)
 			const fingers = Object.values(pointers.current).length
+
 			const isSwipe = swipe1.distance > 5 && swipe1.time <= MAX_SWIPE_TIME
-			if(swipe1.distance < 5){
-				log(`no-action: swipe too short (fingers: ${fingers}).`)
-			}
-			if(swipe1.time >= 5){
-				log(`no-action: swipe too slow (fingers: ${fingers}).`)
-			}
 
 			const dial = dialingAngle(pointers.current, upPointer)
-			if(dial > 45 && dial < MIN_DIAL) {
+			if(dial > 45 && dial < MIN_DIAL_ANGLE) {
+				//do nothing
 				 log(`no-action: ambiguous dial: ${dial.toFixed(1)}°  (fingers: ${fingers})`)
 			}
 			else if(fingers === 1 && isSwipe){
 				const cubePosition = getCubePosition(grid, downPointer.eventObject)
 
 				if(cubePosition){
-					if(dial > MIN_DIAL) {
+					if(dial > MIN_DIAL_ANGLE) {
 						spins.queue('F')
 					}
-					else if (dial < -MIN_DIAL){
+					else if (dial < -MIN_DIAL_ANGLE){
 						spins.queue('F′')
 					}
 					else {
@@ -166,10 +164,10 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 					}
 				} 
 				else {
-					if(dial > MIN_DIAL) {
+					if(dial > MIN_DIAL_ANGLE) {
 						spins.queue('Z')
 					}
-					else if (dial < -MIN_DIAL){
+					else if (dial < -MIN_DIAL_ANGLE){
 						spins.queue('Z′')
 					}
 					else {
@@ -198,7 +196,7 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 
 					if(baseMovePointer){
 						const swipe2 = swipeInfo(baseDownPointer, baseMovePointer)
-						if(swipe2.time < 500 && swipe1.axisDirection === swipe2.axisDirection &&
+						if(swipe2.time < MAX_SWIPE_TIME && swipe1.axisDirection === swipe2.axisDirection &&
 							!swipesAreCoincident(
 								grid, 
 								[upPointer, downPointer], 
@@ -233,8 +231,10 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 		}
 		removePointer(pointers.current, upPointer.pointerId)
 
+		setFingersOn(Object.keys(pointers.current).length)
 		// if(!Object.values(pointers.current).map(p => p.down).some(isOnCube)) {
-		// 		controls.current!.enableRotate = true
+		// 		controls.current!.enableRotate = false
+		// 		clearTimeout(swipeTimeout.current!)
 		// }
 	}, [controls.current?.enableRotate])
 
