@@ -1,5 +1,5 @@
 import { StateCreator } from "zustand";
-import storeHelpers from "./storeHelpers";
+import storeSetters from "./storeHelpers";
 
 export type GameControlsSlice = {
   isSolved: boolean;
@@ -9,7 +9,7 @@ export type GameControlsSlice = {
 }
 
 export const createGameControlsSlice: StateCreator<GameControlsSlice> = (set) =>{
-  const { setValueUsing } = storeHelpers(set)
+  const { setValueUsing } = storeSetters(set)
   return  {
     isSolved: true,
     startTime: null,

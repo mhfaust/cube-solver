@@ -8,7 +8,7 @@ type ArrayKeys<T, V> = {
   [K in keyof T]: T[K] extends Array<V> ? K : never;
 }[keyof T];
 
-function storeHelpers <T> (set: ZSet<T>) {
+function storeSetters <T> (set: ZSet<T>) {
 
   return ({
     setValueOf: (propName: keyof T) => {
@@ -35,8 +35,8 @@ function storeHelpers <T> (set: ZSet<T>) {
       return () => {
         set(( store ) => ({ [propName]: !store[propName] }) as Partial<T>)
       }      
-    }
+    },
   })
 }
 
-export default storeHelpers
+export default storeSetters

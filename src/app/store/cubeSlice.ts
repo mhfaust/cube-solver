@@ -2,7 +2,7 @@ import { StateCreator } from "zustand";
 import { MutableRefObject, RefObject, createRef } from "react";
 import { BufferGeometry, Material, Mesh, NormalBufferAttributes, Object3DEventMap } from "three";
 import { _012 } from "../utils/grid";
-import storeHelpers from "./storeHelpers";
+import storeSetters from "./storeHelpers";
 import { Theme, ThemeName } from "../utils/useTheme";
 
 export type CubeWrapperMesh = Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>
@@ -24,7 +24,7 @@ export type CubeSlice = {
 }  
 
 export const createCubeSlice: StateCreator<CubeSlice> = (set) =>{ 
-  const { setValueOf } = storeHelpers(set)
+  const { setValueOf } = storeSetters(set)
 
   return {
     grid: _012.map(

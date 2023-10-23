@@ -1,5 +1,5 @@
 import { StateCreator } from "zustand";
-import storeHelpers from "./storeHelpers";
+import storeSetters from "./storeHelpers";
 
 export type LoggerSlice = {
   messages: string[];
@@ -12,7 +12,7 @@ export type LoggerSlice = {
 
 export const createLoggerSlice: StateCreator<LoggerSlice> = (set) => { 
 
-  const { setValueOf, pushValuesTo, toggleValueOf } = storeHelpers(set)
+  const { setValueOf, pushValuesTo, toggleValueOf } = storeSetters(set)
 
   return {
     messages: [],
