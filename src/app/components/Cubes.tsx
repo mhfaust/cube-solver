@@ -22,7 +22,7 @@ import styles from '../page.module.css'
 import useSpinFunctions from "../utils/useSpinFunctions"
 import isSolved from "../utils/isSolved"
 import dialingAngle from "../touch/dialingAngle"
-import { FOV_ANGLE, MIN_DIAL, NORMAL_ROTATION_TIME } from "../utils/constants"
+import { FOV_ANGLE, MAX_SWIPE_TIME, MIN_DIAL, NORMAL_ROTATION_TIME } from "../utils/constants"
 
 const { PI } = Math
 const bgGeometry = new PlaneGeometry(50, 50)
@@ -41,6 +41,7 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 	const isRotating = useAppStore(isRotatingSelector)
 	const pointers = useRef<Pointers>({})
 	const grid = useAppStore(gridModelSelector)
+	const swipeTimeout = useRef<NodeJS.Timeout | null>(null)
 
 	if(isSolved(grid)){
 		// console.log('SOLVED')
@@ -115,18 +116,9 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 
 		if(e.eventObject.uuid === e.intersections[0].eventObject.uuid){
 			addDownPointer(pointers.current, e)
-
-			if(controls.current) {
-					controls.current.enableRotate = !isOnCube(e) && e.offsetY / (canvas.current?.height || 1) < .25
-			}
-			// if(controls.current){
-			// 	controls.current.enableRotate = false
-			// 	setTimeout(() => {
-			// 		if(controls.current){
-			// 			controls.current.enableRotate = true
-			// 		} 
-			// 	}, 500)
-			// }
+			clearTimeout(swipeTimeout.current!)
+			setTimeout(() => controls.current!.enableRotate = false, 0)
+			swipeTimeout.current = setTimeout(() => controls.current!.enableRotate = true, MAX_SWIPE_TIME)
 		}
 	}, [controls.current?.enableRotate])
 
@@ -147,7 +139,7 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 			)
 			const swipe1 = swipeInfo(downPointer, upPointer)
 			const fingers = Object.values(pointers.current).length
-			const isSwipe = swipe1.distance > 5 && swipe1.time < 500
+			const isSwipe = swipe1.distance > 5 && swipe1.time <= MAX_SWIPE_TIME
 			if(swipe1.distance < 5){
 				log(`no-action: swipe too short (fingers: ${fingers}).`)
 			}
