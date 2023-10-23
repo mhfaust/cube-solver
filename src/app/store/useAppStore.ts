@@ -1,15 +1,15 @@
-import { StateCreator, create } from "zustand";
-import { GameControlSlice, createGameControllerSlice } from "./gameControlSlice";
+import { create } from "zustand";
+import { GameControlsSlice, createGameControlsSlice } from "./gameControlsSlice";
 import { LoggerSlice, createLoggerSlice } from "./loggerSlice";
 import { CubeSlice, createCubeSlice } from "./cubeSlice";
 
 
-type AppStore = LoggerSlice & GameControlSlice & CubeSlice
+type AppStore = LoggerSlice & GameControlsSlice & CubeSlice
 
 const useAppStore = create<AppStore>()(
   (setState, getState, store) => ({
     ...createLoggerSlice(setState, getState, store),
-    ...createGameControllerSlice(setState, getState, store),
+    ...createGameControlsSlice(setState, getState, store),
     ...createCubeSlice(setState, getState, store)
   })
 )

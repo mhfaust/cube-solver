@@ -1,14 +1,14 @@
 import { StateCreator } from "zustand";
 import storeHelpers from "./storeHelpers";
 
-export type GameControlSlice = {
+export type GameControlsSlice = {
   isSolved: boolean;
   startTime: number | null;
   startTimer: () => void;
   stopTimer: () => void;
 }
 
-export const createGameControllerSlice: StateCreator<GameControlSlice> = (set) =>{
+export const createGameControlsSlice: StateCreator<GameControlsSlice> = (set) =>{
   const { setValueUsing } = storeHelpers(set)
   return  {
     isSolved: true,
