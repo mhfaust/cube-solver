@@ -52,7 +52,7 @@ const themes: Record<ThemeName, Theme> = {
     faceColors: brightColors,
     pointLightIntensity: 6,
     ambientLightIntensity: 2,
-    boxRoundness: .3
+    boxRoundness: .2
   }
 } as const
 

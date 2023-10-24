@@ -1,6 +1,6 @@
 const { PI } = Math
 
-export const FOV_ANGLE = PI / 9
+export const FOV_ANGLE = PI / 10
 export const ANIMATION_TIME = 120
 export const MIN_DIAL_ANGLE = 60
 export const MAX_SWIPE_ANGLE = 45
@@ -19,3 +19,4 @@ export const MIN_SPEED_ASSESS_TIME = 100
   // R-U-Ri-Ui-R-F-R2-Ui-Ri-Ui-R-U-Ri-Fi
 
 
+  // F-F-U-M'-U-U-M-U-F-F

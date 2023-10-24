@@ -1,10 +1,10 @@
 import { ThreeEvent } from "@react-three/fiber"
 import { swipeInfo } from "./pointers"
 import { getCubePosition } from "../utils/grid"
-import { GridModel } from "../store/cubeSlice"
+import { CubesGrid } from "../store/cubeSlice"
 
 const swipesAreCoincident = (
-  grid: GridModel,
+  grid: CubesGrid,
   finger1: [ThreeEvent<PointerEvent>, ThreeEvent<PointerEvent>], 
   finger2: [ThreeEvent<PointerEvent>, ThreeEvent<PointerEvent>],
 

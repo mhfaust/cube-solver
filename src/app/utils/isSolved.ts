@@ -1,10 +1,10 @@
-import { GridModel } from "../store/cubeSlice"
+import { CubesGrid } from "../store/cubeSlice"
 
-const isSolved = (grid: GridModel) => solvedStates.has(serialize(grid))
+const isSolved = (grid: CubesGrid) => solvedStates.has(serialize(grid))
 
 export default isSolved
 
-export const serialize = (grid: GridModel) => grid.flat(3)
+export const serialize = (grid: CubesGrid) => grid.flat(3)
   .map(cube => cube.intialPosition.join(''))
   .join('')
 

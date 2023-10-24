@@ -23,14 +23,15 @@ import useSpinFunctions from "../utils/useSpinFunctions"
 import isSolved from "../utils/isSolved"
 import dialingAngle from "../touch/dialingAngle"
 import { FOV_ANGLE, MAX_SWIPE_TIME, MIN_DIAL_ANGLE, ANIMATION_TIME, MAX_SWIPE_ANGLE } from "../utils/constants"
-import useTheme from "../utils/useTheme"
+import useTheme from "../themes/useTheme"
 
 const { PI, abs } = Math
 const bgGeometry = new PlaneGeometry(50, 50)
 
+export type MovePointer = ThreeEvent<PointerEvent & { displacement: number }>
 export type Pointers = Record<number, {
 	down: ThreeEvent<PointerEvent>,
-	moves: ThreeEvent<PointerEvent>[],
+	moves: MovePointer[],
 }>
 
 

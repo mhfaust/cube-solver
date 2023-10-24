@@ -10,7 +10,7 @@ import {
   MeshPhongMaterial,
 } from 'three'
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
-import useTheme from '../utils/useTheme';
+import useTheme from '../themes/useTheme';
 
 const facePolygonIndices = new Set([72, 73, 74, 75, 76, 77])
 

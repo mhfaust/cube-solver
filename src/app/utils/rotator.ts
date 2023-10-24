@@ -1,6 +1,6 @@
 import { MutableRefObject } from "react";
 import { Object3D, Vector3 } from "three";
-import { Cube, GridModel } from "../store/cubeSlice";
+import { CubeModel, CubesGrid } from "../store/cubeSlice";
 
 function copyModel<T> (grid: T[][][]) {
   return grid.map(dim2 => dim2.map(dim1 => dim1.slice()))
@@ -8,7 +8,7 @@ function copyModel<T> (grid: T[][][]) {
 
 type Swaps = [0|1|2, 0|1|2, 0|1|2, 0|1|2, 0|1|2, 0|1|2][]
 
-const swap = (grid: GridModel, swaps: Swaps) => {
+const swap = (grid: CubesGrid, swaps: Swaps) => {
   const newGrid = copyModel(grid)
 
   const news = swaps.map(s => ({ 
@@ -23,7 +23,7 @@ const swap = (grid: GridModel, swaps: Swaps) => {
 }
 
 
-const rotateModelXLayerPositive = (grid: GridModel, x: 0|1|2) => {
+const rotateModelXLayerPositive = (grid: CubesGrid, x: 0|1|2) => {
   return swap(grid, [
     [x,0,0, x,0,2],
     [x,0,1, x,1,2],
@@ -37,7 +37,7 @@ const rotateModelXLayerPositive = (grid: GridModel, x: 0|1|2) => {
   ])
 }
 
-const rotateModelXLayerNegative: LayerRotator = (grid: GridModel, x: 0|1|2) => {
+const rotateModelXLayerNegative: LayerRotator = (grid: CubesGrid, x: 0|1|2) => {
   return swap(grid, [
     [x,0,0, x,2,0],
     [x,0,1, x,1,0],
@@ -51,7 +51,7 @@ const rotateModelXLayerNegative: LayerRotator = (grid: GridModel, x: 0|1|2) => {
   ])
 }
 
-const rotateModelYLayerPositive: LayerRotator = (grid: GridModel, y: 0|1|2) => {
+const rotateModelYLayerPositive: LayerRotator = (grid: CubesGrid, y: 0|1|2) => {
 
   return swap(grid, [
     [0,y,0, 2,y,0],
@@ -66,7 +66,7 @@ const rotateModelYLayerPositive: LayerRotator = (grid: GridModel, y: 0|1|2) => {
   ])
 }
 
-const rotateModelYLayerNegative: LayerRotator = (grid: GridModel, y: 0|1|2) => {
+const rotateModelYLayerNegative: LayerRotator = (grid: CubesGrid, y: 0|1|2) => {
   return swap(grid, [
     [0,y,0, 0,y,2],
     [0,y,1, 1,y,2],
@@ -80,7 +80,7 @@ const rotateModelYLayerNegative: LayerRotator = (grid: GridModel, y: 0|1|2) => {
   ])
 }
 
-const rotateModelZLayerPositive: LayerRotator = (grid: GridModel, z: 0|1|2) => {
+const rotateModelZLayerPositive: LayerRotator = (grid: CubesGrid, z: 0|1|2) => {
   return swap(grid, [
     [0,0,z, 0,2,z],
     [0,1,z, 1,2,z],
@@ -94,7 +94,7 @@ const rotateModelZLayerPositive: LayerRotator = (grid: GridModel, z: 0|1|2) => {
   ])
 }
 
-const rotateModelZLayerNegative: LayerRotator = (grid: GridModel, z: 0|1|2) => {
+const rotateModelZLayerNegative: LayerRotator = (grid: CubesGrid, z: 0|1|2) => {
   return swap(grid, [
     [0,0,z, 2,0,z],
     [0,1,z, 1,0,z],
@@ -133,11 +133,11 @@ function orbit(
   recurse(0)
 }
 
-function layerObjects <T>(model: Cube[][][], axis: 'x'|'y'|'z', layer: 0|1|2) {
+function layerObjects <T>(grid: CubesGrid, axis: 'x'|'y'|'z', layer: 0|1|2) {
 return {
-  'x': () => model[layer].flat(),
-  'y': () => model.map(i => i[layer]).flat(),
-  'z': () => model.map(j => j.map(y => y[layer])).flat()
+  'x': () => grid[layer].flat(),
+  'y': () => grid.map(i => i[layer]).flat(),
+  'z': () => grid.map(j => j.map(y => y[layer])).flat()
 }[axis]()
 }
 
@@ -175,15 +175,15 @@ export const layerRotator = (
   axis: 'x'|'y'|'z',
   layer: 0|1|2,
   direction: '+'|'-',
-  grid: GridModel,
-  setGrid: (g :GridModel) => void,
+  grid: CubesGrid,
+  setGrid: (g :CubesGrid) => void,
   isRotating: MutableRefObject<boolean>,
 ) => (
     animationTime: number
   ) => {
       isRotating.current = true
       const [gridLayerRotator, objectOrbiter] = fns[axis][direction]
-      layerObjects(grid, axis, layer).forEach((cube: Cube) => {
+      layerObjects(grid, axis, layer).forEach((cube: CubeModel) => {
         objectOrbiter(
           cube.wrapperMesh.current, 
           () => isRotating.current = false, 
@@ -197,8 +197,8 @@ export const layerRotator = (
 export const cubeRotator = (
   axis: 'x'|'y'|'z',
   direction: '+'|'-',
-  grid: GridModel,
-  setGrid: (g :GridModel) => void,
+  grid: CubesGrid,
+  setGrid: (g :CubesGrid) => void,
   isRotating: MutableRefObject<boolean>,
 ) => (
   animationTime: number

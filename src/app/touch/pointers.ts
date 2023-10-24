@@ -1,6 +1,6 @@
 import { ThreeEvent } from "@react-three/fiber"
 import { MutableRefObject } from "react"
-import { Pointers } from "../components/Cubes"
+import { MovePointer, Pointers } from "../components/Cubes"
 import { displacement, interval } from "../utils/vectors"
 import { MIN_SPEED_ASSESS_TIME } from "../utils/constants"
 
@@ -19,7 +19,10 @@ export function addMovePointer(pointers: Pointers, e: ThreeEvent<PointerEvent>) 
   {
     return undefined
   }
-  p.moves.push(e)
+  (e as MovePointer).displacement = p.moves.length > 1
+    ? displacement(e, p.moves[p.moves.length - 1])
+    : 0
+  p.moves.push(e as MovePointer)
 
   if(p.moves.length < 2) {
     return undefined
@@ -27,7 +30,7 @@ export function addMovePointer(pointers: Pointers, e: ThreeEvent<PointerEvent>) 
 
   let cumTime = 0, travelled = 0, i = p.moves.length - 1
   while(cumTime < MIN_SPEED_ASSESS_TIME && i > 0) {
-    travelled += displacement(p.moves[i -1], p.moves[i])
+    travelled += p.moves[i -1].displacement
     cumTime += interval(p.moves[i -1], p.moves[i])
     i--
   }
@@ -56,8 +59,6 @@ export const removePointer = (
   if (pointers[pointerId]){
     delete pointers[pointerId]
   }
-	
-  //(p => p.pointerId !== pointer.pointerId)
 }
 
 export const resetPointers = (pointers: Pointers) => {
@@ -102,84 +103,3 @@ export const swipeInfo = (
 
   return { dx, dy, distance, time, isVertical, theta, axisDirection, quadrantDirection }
 }
-
-// class PointerSet {
-
-//   pointers: Record<number, ThreeEvent<PointerEvent>>
-
-//   constructor () {
-//     this.pointers = {}
-//   }
-
-//   add (pointer: ThreeEvent<PointerEvent>) {
-//     this.pointers[pointer.pointerId] = pointer
-//   }
-
-//   remove (pointer: ThreeEvent<PointerEvent>) {
-//     delete this.pointers[pointer.pointerId]
-//   }
-
-//   retrieve (id: number) {
-//     return this.pointers[id]
-//     // return Object.values(this.pointers).find(p => p.pointerId === id)
-//   }
-
-//   clear () {
-//     Object.values(this.pointers).forEach(p => delete this.pointers[p.pointerId])
-//   }
-
-//   siblings (pointer: ThreeEvent<PointerEvent>) {
-//     return Object.values(this.pointers).filter(p => p.pointerId !== pointer.pointerId)
-//   }
-
-//   isOnCube = (e?: ThreeEvent<PointerEvent>) => {
-//     return Boolean(e?.eventObject.parent?.parent)
-//   }
-// }
-
-// export class Pointers {
-//   down: PointerSet
-//   move: PointerSet
-
-//   constructor () {
-//     this.down = new PointerSet()
-//     this.move = new PointerSet()
-//   }
-
-//   swipeInfo(up: ThreeEvent<PointerEvent>) {
-//     const down = this.down.retrieve(up.pointerId)
-//     return swipeInfo(down, up)
-//   }
-
-//   allSwipeInfo() {
-//     Object.values(this.down).map((down) => {
-//       return swipeInfo(down, this.move.retrieve(down.pointerId))
-//     })
-//   }
-
-//   clear() {
-//     this.down.clear()
-//     this.move.clear()
-//   }
-
-//   isOnCube = (e: ThreeEvent<PointerEvent>) => {
-//     return Boolean(e.eventObject.parent?.parent)
-//   }
-
-//   getDown(upPointer: ThreeEvent<PointerEvent>) {
-//     return this.down.retrieve(upPointer.pointerId)
-//   }
-
-//   remove(e: ThreeEvent<PointerEvent>) {
-//     this.down.remove(e)
-//     this.move.remove(e)
-//   }
-
-//   get fingers() {
-//     return Object.values(this.move).length
-//   }
-
-//   anyOnCube() {
-//     return Object.values(this.down.pointers).some(p => parent?.parent)
-//   }
-// }

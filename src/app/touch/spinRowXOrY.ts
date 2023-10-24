@@ -2,10 +2,10 @@ import { getCubePosition } from "../utils/grid"
 import { ThreeEvent } from "@react-three/fiber"
 import { AxisDirection, swipeInfo } from "./pointers"
 import { MoveCode } from "../utils/moveCodes"
-import { GridModel } from "../store/cubeSlice"
+import { CubesGrid } from "../store/cubeSlice"
 
 const spinRowXOrY = (
-    grid: GridModel, 
+    grid: CubesGrid, 
     downPointer: ThreeEvent<PointerEvent>, 
     upPointer: ThreeEvent<PointerEvent>
   ) => {
