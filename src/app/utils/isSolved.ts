@@ -5,7 +5,7 @@ const isSolved = (grid: CubesGrid) => solvedStates.has(serialize(grid))
 export default isSolved
 
 const serialize = (grid: CubesGrid) => grid.flat(3)
-  .map(cube => cube.intialPosition.join(''))
+  .map(cube => cube.intialPosition).flat()
   .join('')
 
 const solvedStates = new Set(
