@@ -1,7 +1,6 @@
 import { ThreeEvent } from "@react-three/fiber"
 import { rotationDirection } from "./rotationDirection"
-
-export type V = [number, number]
+import { V } from "../utils/vectors"
 
 const twoFingerSpinDirection = (
   finger1: [ThreeEvent<PointerEvent>, ThreeEvent<PointerEvent>], 

@@ -1,6 +1,8 @@
 import { ThreeEvent } from "@react-three/fiber"
 import { MutableRefObject } from "react"
 import { Pointers } from "../components/Cubes"
+import { displacement, interval } from "../utils/vectors"
+import { MIN_SPEED_ASSESS_TIME } from "../utils/constants"
 
 const { PI, abs, sqrt, pow, atan } = Math
 // type  PointersRef = MutableRefObject<Record<number, ThreeEvent<PointerEvent>>>
@@ -8,11 +10,34 @@ const { PI, abs, sqrt, pow, atan } = Math
 export function addDownPointer(pointers: Pointers, downPointer: ThreeEvent<PointerEvent>) {
   pointers[downPointer.pointerId] = {
     down: downPointer,
-    moves: []
+    moves: [],
   }
 }
-export function addMovePointer(pointers: Pointers, movePointer: ThreeEvent<PointerEvent>) {
-  const p = pointers[movePointer.pointerId]?.moves.push(movePointer)
+export function addMovePointer(pointers: Pointers, e: ThreeEvent<PointerEvent>) {
+  const p = pointers[e.pointerId]
+  if(!p)
+  {
+    return undefined
+  }
+  p.moves.push(e)
+
+  if(p.moves.length < 2) {
+    return undefined
+  }
+
+  let cumTime = 0, travelled = 0, i = p.moves.length - 1
+  while(cumTime < MIN_SPEED_ASSESS_TIME && i > 0) {
+    travelled += displacement(p.moves[i -1], p.moves[i])
+    cumTime += interval(p.moves[i -1], p.moves[i])
+    i--
+  }
+  if (cumTime < MIN_SPEED_ASSESS_TIME ) {
+    return undefined
+  }
+  const avSpeed = travelled / cumTime
+  console.log({travelled, cumTime, avSpeed, moves: p.moves.length -1 - i})
+
+  return avSpeed
 }
 
 export const getLatestMove = (pointers: Pointers, pointerId: number) => {

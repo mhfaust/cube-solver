@@ -35,7 +35,8 @@ const themes: Record<ThemeName, Theme> = {
     backgroundColor: grayScale(.03),
     faceColors: standardColors,
     pointLightIntensity: 7,
-    ambientLightIntensity: 2
+    ambientLightIntensity: 2,
+    boxRoundness: 0.1
   },
   light: {
     frameColor: grayScale(.75),
@@ -43,13 +44,15 @@ const themes: Record<ThemeName, Theme> = {
     faceColors: standardColors,
     pointLightIntensity: 10,
     ambientLightIntensity: 2,
+    boxRoundness: 0.1
   },
   bright: {
-    frameColor: grayScale(.0),
-    backgroundColor: grayScale(.03),
+    frameColor: grayScale(.025),
+    backgroundColor: grayScale(.0),
     faceColors: brightColors,
-    pointLightIntensity: 0,
-    ambientLightIntensity: 5,
+    pointLightIntensity: 6,
+    ambientLightIntensity: 2,
+    boxRoundness: .3
   }
 } as const
 
@@ -57,23 +60,32 @@ const themes: Record<ThemeName, Theme> = {
 export type Theme = {
   frameColor: Color,
   backgroundColor: Color,
-  faceColors: [Color, Color, Color, Color, Color, Color]
-  pointLightIntensity: number
-  ambientLightIntensity: number
+  faceColors: [Color, Color, Color, Color, Color, Color],
+  pointLightIntensity: number,
+  ambientLightIntensity: number,
+  boxRoundness: number,
 }
 
 const useTheme = () => {
   const themeName = useAppStore(themeNameSelector)
 
-  const { frameColor, faceColors, backgroundColor, pointLightIntensity, ambientLightIntensity } = themes[themeName]
+  const { 
+    frameColor, 
+    faceColors, 
+    backgroundColor, 
+    pointLightIntensity, 
+    ambientLightIntensity,
+    boxRoundness
+  } = themes[themeName]
 
   return useMemo(() => ({
     frameColor,
     faceColors, 
     bgMaterial: new MeshBasicMaterial( { color: backgroundColor } ),
     pointLightIntensity,
-    ambientLightIntensity
-  }),[ambientLightIntensity, backgroundColor, faceColors, frameColor, pointLightIntensity])
+    ambientLightIntensity,
+    boxRoundness
+  }),[ambientLightIntensity, backgroundColor, boxRoundness, faceColors, frameColor, pointLightIntensity])
 }
 
 export default useTheme

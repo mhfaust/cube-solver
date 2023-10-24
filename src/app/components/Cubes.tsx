@@ -22,10 +22,10 @@ import styles from '../page.module.css'
 import useSpinFunctions from "../utils/useSpinFunctions"
 import isSolved from "../utils/isSolved"
 import dialingAngle from "../touch/dialingAngle"
-import { FOV_ANGLE, MAX_SWIPE_TIME, MIN_DIAL_ANGLE, ANIMATION_TIME } from "../utils/constants"
+import { FOV_ANGLE, MAX_SWIPE_TIME, MIN_DIAL_ANGLE, ANIMATION_TIME, MAX_SWIPE_ANGLE } from "../utils/constants"
 import useTheme from "../utils/useTheme"
 
-const { PI } = Math
+const { PI, abs } = Math
 const bgGeometry = new PlaneGeometry(50, 50)
 
 export type Pointers = Record<number, {
@@ -116,15 +116,15 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 
 	const handlePointerDown = useCallback((e: ThreeEvent<PointerEvent>) => {
 
-		setTimeout(() => controls.current!.enableRotate = false, 0)
-
+		
 		if(e.eventObject.uuid === e.intersections[0].eventObject.uuid){
+			setTimeout(() => controls.current!.enableRotate = false, 0)
 			addDownPointer(pointers.current, e)
 			setFingersOn(Object.keys(pointers.current).length)
 			clearTimeout(swipeTimeout.current!)
 			swipeTimeout.current = setTimeout(() => controls.current!.enableRotate = true, MAX_SWIPE_TIME)
 		}
-	}, [controls.current?.enableRotate])
+	}, [])
 
 	const handlePointerUp = useCallback((upPointer: ThreeEvent<PointerEvent>) => {
 
@@ -147,7 +147,7 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 			const isSwipe = swipe1.distance > 5 && swipe1.time <= MAX_SWIPE_TIME
 
 			const dial = dialingAngle(pointers.current, upPointer)
-			if(dial > 45 && dial < MIN_DIAL_ANGLE) {
+			if(dial > MAX_SWIPE_ANGLE && dial < MIN_DIAL_ANGLE) {
 				//do nothing
 				 log(`no-action: ambiguous dial: ${dial.toFixed(1)}°  (fingers: ${fingers})`)
 			}
@@ -161,7 +161,7 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 					else if (dial < -MIN_DIAL_ANGLE){
 						spins.queue('F′')
 					}
-					else {
+					else if (abs(dial) < MAX_SWIPE_ANGLE) {
 						spins.queue(spinRowXOrY(grid, downPointer, upPointer))
 					}
 				} 
@@ -172,7 +172,7 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 					else if (dial < -MIN_DIAL_ANGLE){
 						spins.queue('Z′')
 					}
-					else {
+					else if (abs(dial) < MAX_SWIPE_ANGLE) {
 						spins.queue(spinWholeCube(swipe1))
 					}
 				}
@@ -238,13 +238,19 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 		// 		controls.current!.enableRotate = false
 		// 		clearTimeout(swipeTimeout.current!)
 		// }
-	}, [controls.current?.enableRotate])
+	}, [])
 
 	const handlePointerMove = useCallback((e: ThreeEvent<PointerEvent>) => {
 		if(e.eventObject.uuid === e.intersections[0].eventObject.uuid) {
-			addMovePointer(pointers.current, e)
+
+			const speed = addMovePointer(pointers.current, e)
+
+			if(controls.current){
+				controls.current.enableRotate = speed !== undefined && speed < .25
+			}
 		}
-	}, [controls.current?.enableRotate])
+	}, [])
+
 	return (
 		<>
 			<pointLight 

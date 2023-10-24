@@ -1,4 +1,4 @@
-import { V } from "./twoFingerSpinDirection";
+import { V } from "../utils/vectors";
 
 
 /**

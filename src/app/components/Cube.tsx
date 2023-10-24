@@ -37,10 +37,14 @@ const Cube = ({
   onPointerMove
 }: CubeProps) => {
 
-  const { frameColor, faceColors } = useTheme()
+  const { frameColor, faceColors, boxRoundness } = useTheme()
 
-  const geometryRef = useRef(new RoundedBoxGeometry(1.0, 1.0, 1.0, 2, .3))
+  const geometryRef = useRef(new RoundedBoxGeometry(1.0, 1.0, 1.0, 2, boxRoundness))
   const materialRef = useRef(new MeshPhongMaterial({ vertexColors: true }))
+
+  useEffect(() => {
+    console.log(geometryRef.current.attributes)
+  }, [])
 
   useEffect (() => {
     let { count } = geometryRef.current.attributes.position
