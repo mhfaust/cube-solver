@@ -3,7 +3,6 @@ import { MutableRefObject } from "react";
 import { BufferGeometry, Material, Mesh, NormalBufferAttributes, Object3DEventMap } from "three";
 import { _012 } from "../utils/grid";
 import storeSetters from "./storeHelpers";
-import { ThemeName } from "../themes/useTheme";
 
 export type CubeWrapperMesh = Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>
 
@@ -18,8 +17,6 @@ export type CubeSlice = {
   grid: CubesGrid,
   isRotating: MutableRefObject<boolean>,
   setGrid: ((grid: CubesGrid) => void),
-  themeName: ThemeName,
-  setThemeName: (name: ThemeName) => void,
 }  
 
 export const createCubeSlice: StateCreator<CubeSlice> = (set) =>{ 
@@ -38,8 +35,6 @@ export const createCubeSlice: StateCreator<CubeSlice> = (set) =>{
     ),
     isRotating: { current: false },
     setGrid: setValueOf('grid'),
-    themeName: 'bright',
-    setThemeName: setValueOf('themeName')
   }
 }
 

@@ -1,11 +1,10 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
 import Cube from "./Cube"
 import { OrbitControls } from '@react-three/drei'
 import { Canvas, ThreeEvent, useFrame, useThree } from "@react-three/fiber"
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react'
-import { Color, MeshBasicMaterial, PlaneGeometry, Vector3 } from "three"
+import { Color, PlaneGeometry, Vector3 } from "three"
 import { OrbitControls as ThreeOrbitControls } from 'three-stdlib';
 import { MoveCode, asKeyCode, inverse, keyMoves } from "@/app/utils/moveCodes"
 import { addDownPointer, addMovePointer, getLatestMove, getOtherPointer, isOnCube, removePointer, swipeInfo } from "@/app/touch/pointers"
@@ -25,7 +24,7 @@ import dialingAngle from "../touch/dialingAngle"
 import { FOV_ANGLE, MAX_SWIPE_TIME, MIN_DIAL_ANGLE, ANIMATION_TIME, MAX_SWIPE_ANGLE } from "../utils/constants"
 import useTheme from "../themes/useTheme"
 
-const { PI, abs } = Math
+const { PI, abs, floor, max } = Math
 const bgGeometry = new PlaneGeometry(50, 50)
 
 export type MovePointer = ThreeEvent<PointerEvent & { displacement: number }>
@@ -47,7 +46,7 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 	const { bgMaterial, pointLightIntensity, ambientLightIntensity } = useTheme()
 
 	if(isSolved(grid)){
-		// console.log('SOLVED')
+		console.log('SOLVED')
 	}
 
 	useFrame(({ clock }) => {
@@ -113,7 +112,7 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 		return () => {
 				document.removeEventListener('keydown', handleKeyDown);
 		};
-	}, [spinFunctions]);
+	}, [isRotating, spinFunctions, undo]);
 
 	const handlePointerDown = useCallback((e: ThreeEvent<PointerEvent>) => {
 
@@ -125,7 +124,7 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 			clearTimeout(swipeTimeout.current!)
 			swipeTimeout.current = setTimeout(() => controls.current!.enableRotate = true, MAX_SWIPE_TIME)
 		}
-	}, [])
+	}, [setFingersOn])
 
 	const handlePointerUp = useCallback((upPointer: ThreeEvent<PointerEvent>) => {
 
@@ -157,9 +156,11 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 
 				if(cubePosition){
 					if(dial > MIN_DIAL_ANGLE) {
-						spins.queue('F')
+						// Array(floor(dial + (90 - MIN_DIAL_ANGLE) / 90)).fill('').forEach(() => {
+							spins.queue('F')
+						// })
 					}
-					else if (dial < -MIN_DIAL_ANGLE){
+					else if (dial < - MIN_DIAL_ANGLE){
 						spins.queue('F′')
 					}
 					else if (abs(dial) < MAX_SWIPE_ANGLE) {
@@ -235,11 +236,8 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 		removePointer(pointers.current, upPointer.pointerId)
 
 		setFingersOn(Object.keys(pointers.current).length)
-		// if(!Object.values(pointers.current).map(p => p.down).some(isOnCube)) {
-		// 		controls.current!.enableRotate = false
-		// 		clearTimeout(swipeTimeout.current!)
-		// }
-	}, [])
+
+	}, [grid, isRotating, log, setFingersOn, spinFunctions])
 
 	const handlePointerMove = useCallback((e: ThreeEvent<PointerEvent>) => {
 		if(e.eventObject.uuid === e.intersections[0].eventObject.uuid) {

@@ -38,7 +38,6 @@ export function addMovePointer(pointers: Pointers, e: ThreeEvent<PointerEvent>) 
     return undefined
   }
   const avSpeed = travelled / cumTime
-  console.log({travelled, cumTime, avSpeed, moves: p.moves.length -1 - i})
 
   return avSpeed
 }

@@ -8,6 +8,7 @@ import {
   Material,
   Object3DEventMap,
   MeshPhongMaterial,
+  MeshStandardMaterial,
 } from 'three'
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import useTheme from '../themes/useTheme';
@@ -40,11 +41,7 @@ const Cube = ({
   const { frameColor, faceColors, boxRoundness } = useTheme()
 
   const geometryRef = useRef(new RoundedBoxGeometry(1.0, 1.0, 1.0, 2, boxRoundness))
-  const materialRef = useRef(new MeshPhongMaterial({ vertexColors: true }))
-
-  useEffect(() => {
-    console.log(geometryRef.current.attributes)
-  }, [])
+  const materialRef = useRef(new MeshStandardMaterial({ vertexColors: true }))
 
   useEffect (() => {
     let { count } = geometryRef.current.attributes.position
