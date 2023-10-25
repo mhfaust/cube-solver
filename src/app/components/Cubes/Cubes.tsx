@@ -1,8 +1,9 @@
 'use client'
 
-import Cube from "@/app/components/Cube"
+import Cube from "@/app/components/Cubes/Cube"
 import styles from '@/app/page.module.css'
-import { useActions, useGridModel, useIsRotating } from "@/app/store/useAppStore"
+import { useActions } from "@/app/store/useAppStore"
+import { useGridModel, useIsRotating } from "@/app/store/selectors"
 import useTheme from "@/app/themes/useTheme"
 import dialingAngle from "@/app/touch/dialingAngle"
 import { Pointers, addDownPointer, addMovePointer, getLatestMove, getOtherPointer, isOnCube, removePointer, swipeInfo } from "@/app/touch/pointers"

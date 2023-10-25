@@ -1,5 +1,5 @@
 import styles from '@/app/page.module.css'
-import { useFingersOn } from '@/app/store/useAppStore'
+import { useFingersOn } from "../store/selectors"
 
 const DebugFingers = () => {
 

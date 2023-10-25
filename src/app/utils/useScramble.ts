@@ -17,7 +17,7 @@ const useScramble = () => {
 
   return useCallback(() => {
 
-    return spinFunctions.F(SCRAMBLE_ROTATION_TIME)
+    // return spinFunctions.F(SCRAMBLE_ROTATION_TIME)
 
     const randomSequence = Array.from(
       { length: 100 }, 

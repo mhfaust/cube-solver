@@ -1,0 +1,28 @@
+
+.completed {
+  z-index: 1;
+  font-size: 2em;
+  position: absolute;
+  height: 30vh;
+  right: 20vw;
+  bottom: 10vh;
+  left: 20vw;
+  background-color: black;
+  color: white;
+  outline: 1px solid white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.completedButtons {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+.completedButtons button {
+  width: 150px;
+  height: 50px;
+  background: blue;
+}

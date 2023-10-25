@@ -1,5 +1,6 @@
-import useAppStore, { useActions, useStartTime } from '@/app/store/useAppStore'
-import styles from '@/app/page.module.css'
+import useAppStore, { useActions } from '@/app/store/useAppStore'
+import { useStartTime } from "@/app/store/selectors";
+import styles from './StartStop.module.css'
 import useScramble from '@/app/utils/useScramble';
 import clsx from 'clsx'
 

@@ -2,7 +2,8 @@ import { useMemo } from "react"
 
 import { MoveCode } from "./moveCodes"
 import { cubeRotator, layerRotator } from "./rotator"
-import { useActions, useGridModel, useIsRotating } from "../store/useAppStore"
+import { useActions } from "../store/useAppStore"
+import { useGridModel, useIsRotating } from "../store/selectors"
 
 const useSpinFunctions = () => {
 

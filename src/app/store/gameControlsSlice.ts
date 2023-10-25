@@ -7,6 +7,7 @@ export type GameControlsSlice = {
   completionTime: number | null
   startTimer: () => void;
   stopTimer: (isComplete: boolean) => void;
+  resetTimer: () => void;
 }
 
 export type PlayMode = 'casual' | 'in-play' | 'complete'
@@ -23,6 +24,12 @@ export const createGameControlsSlice: StateCreator<GameControlsSlice> = (set) =>
         ...!isComplete && { startTime: null }, 
         completionTime: isComplete ? Date.now() : null
       }))
-    }
+    },
+    resetTimer: () => {
+      set(() => ({
+        startTime: null,
+        completionTime: null
+      }))
+    },
   }
 }

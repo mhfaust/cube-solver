@@ -7,7 +7,10 @@ import StartStop from './components/Timer/StartStop'
 import Timer from './components/Timer'
 import isSolved from './utils/isSolved'
 import { useEffect } from 'react'
-import { useActions, useGridModel, useStartTime } from './store/useAppStore'
+import { useActions } from './store/useAppStore'
+import { usePlayMode } from "./store/selectors"
+import { useGridModel, useStartTime } from "./store/selectors"
+import Completed from './components/Completed'
 
 export default function App() {
 //   const { setThemeName } = useAppStore(actionsSelector)
@@ -17,12 +20,15 @@ export default function App() {
 //     }, 4000)
 //   }, [setThemeName])
 
+  const playMode = usePlayMode()
+
   const grid = useGridModel()
   const startTime = useStartTime()
   const { startTimer, stopTimer } = useActions()
 
   useEffect(() => {
     if (startTime && isSolved(grid)) {
+
       stopTimer(true)
     }
   }, [grid, startTime, stopTimer])
@@ -33,8 +39,13 @@ export default function App() {
 
   return (
     <div className={styles.main}>
+      {playMode === 'complete' && (
+        <Completed />
+      )}
       <Cubes />
-      <Timer />
+      {playMode !== 'complete' && (
+        <Timer />
+      )}
     </div>
   )
 }

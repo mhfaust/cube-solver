@@ -3,11 +3,12 @@ import { GameControlsSlice, PlayMode, createGameControlsSlice } from "./gameCont
 import { LoggerSlice, createLoggerSlice } from "./loggerSlice";
 import { CubeSlice, createCubeSlice } from "./cubeSlice";
 import { ThemeSlice, createThemeSlice } from "./themeSlice";
+import { select } from "./selectors";
 
 
-type AppStore = LoggerSlice & GameControlsSlice & CubeSlice & ThemeSlice
+export type AppStore = LoggerSlice & GameControlsSlice & CubeSlice & ThemeSlice
 
-const useAppStore = create<AppStore>()(
+export const useAppStore = create<AppStore>()(
   (setState, getState, store) => ({
     ...createLoggerSlice(setState, getState, store),
     ...createGameControlsSlice(setState, getState, store),
@@ -18,32 +19,31 @@ const useAppStore = create<AppStore>()(
 
 export default useAppStore
 
-const select = <T>(fn: (store: AppStore) => T) => fn
-
-const selectProp = <TK extends keyof AppStore>(prop: TK) => {
-  return (store: AppStore) => store[prop]
-}
-
-export const useMessages = () => useAppStore(selectProp('messages'))
-export const useIsLogOpen = () => useAppStore(selectProp('logIsOpen'))
-export const useStartTime = () => useAppStore(selectProp('startTime'))
-export const useIsSolved = () => useAppStore(selectProp('isSolved'))
-export const useGridModel = () => useAppStore(selectProp('grid'))
-export const useIsRotating = () => useAppStore(selectProp('isRotating'))
-export const useFingersOn = () => useAppStore(selectProp('fingersOn'))
-export const useThemeName = () => useAppStore(selectProp('themeName'))
-
-export const usePlayMode = () => {
-  return useAppStore(({ startTime, completionTime }) => {
-    return startTime && completionTime 
-      ? 'complete' 
-      : startTime ? 'in-play' : 'casual'
-  })
+const makeActionsSelector = (actions: (keyof AppStore)[]) => {
+  
 }
 
 export const useActions = () => {
   return useAppStore(select(
-    ({ log, toggleLog, startTimer, stopTimer, setGrid, setFingersOn, setThemeName }) => 
-    ({ log, toggleLog, startTimer, stopTimer, setGrid, setFingersOn, setThemeName })
+    ({ 
+      log, 
+      toggleLog, 
+      startTimer, 
+      stopTimer, 
+      setGrid, 
+      setFingersOn, 
+      setThemeName,
+      resetTimer
+    }) => 
+    ({ 
+      log, 
+      toggleLog, 
+      startTimer, 
+      stopTimer, 
+      setGrid, 
+      setFingersOn, 
+      setThemeName,
+      resetTimer
+    })
   ))
 }

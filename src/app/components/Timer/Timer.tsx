@@ -1,25 +1,8 @@
 import { useEffect, useRef, useState } from "react"
-import styles from '@/app/page.module.css'
-import { useStartTime } from "@/app/store/useAppStore"
+import styles from './Timer.module.css'
+import { usePlayMode, useStartTime } from "@/app/store/selectors"
 import StartStop from "@/app/components/Timer/StartStop"
-
-const { floor, pow, min } = Math
-const ps = ['','0','00','000']
-const pad0 = (n: number, p = 2) => {
-  const s = n.toString()
-  return `${ps[min(p - s.length)]}${s}`
-}
-
-const displayTime = (milis: number | undefined) => {
-  if(milis === undefined) {
-    return ''
-  }
-  const hun = floor(milis / 10) % 100
-  const s = floor(milis / 1000) % 60
-  const m = floor(milis / 60000) % 60
-  const h = floor (milis / 3600000)
-  return `${pad0(h)}:${pad0(m)}:${pad0(s)}.${pad0(hun)}`
-}
+import { stopWatchTime } from "@/app/utils/displayTime"
 
 const Timer = () => {
 
@@ -27,27 +10,27 @@ const Timer = () => {
 
   const [ellapsedTime, setEllapsedTime] = useState<number>()
   const startTime = useStartTime()
+  const mode = usePlayMode()
   
   useEffect(() => {
 
-    console.log({startTime}, {timer: timerRef.current})
-    if( !timerRef.current && startTime !== null ) {
+    if( startTime && !timerRef.current && mode === 'in-play' ) {
       timerRef.current = setInterval(() => {
           setEllapsedTime(Date.now() - startTime)
       }, 10)
     }
 
-    if (timerRef.current && startTime === null){
+    if (timerRef.current && mode !== 'in-play'){
       clearTimeout(timerRef.current)
       timerRef.current = undefined
       setEllapsedTime(undefined)
     }
-  }, [startTime])
+  }, [mode, startTime])
 
 
   return (
     <div className={styles.timer}>
-      {displayTime(ellapsedTime)}
+      {stopWatchTime(ellapsedTime)}
       <StartStop />
     </div>
   )

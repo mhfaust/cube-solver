@@ -4,7 +4,8 @@
 
 import { useMemo } from "react"
 import { BufferGeometry, Color, MeshBasicMaterial } from "three"
-import useAppStore, { useThemeName } from "@/app/store/useAppStore"
+import useAppStore from "@/app/store/useAppStore"
+import { useThemeName } from "../store/selectors"
 import { standardColors, brightColors, standardBox, curvierBox } from "./assets"
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js"
 
