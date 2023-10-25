@@ -3,15 +3,16 @@
  */
 
 import { useMemo } from "react"
-import { Color, MeshBasicMaterial } from "three"
+import { BufferGeometry, Color, MeshBasicMaterial } from "three"
 import useAppStore, { themeNameSelector } from "../store/useAppStore"
-import { standardColors, brightColors } from "./themeAssets"
+import { standardColors, brightColors, standardBox, curvierBox } from "./assets"
+import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js"
 
 
 
 const grayScale = (n: number) => new Color(n,n,n)
 
-export type ThemeName = 'dark' | 'light' | 'bright'
+export type ThemeName = 'dark' | 'light' | 'neon'
 
 const themes: Record<ThemeName, Theme> = {
   dark: {
@@ -20,7 +21,7 @@ const themes: Record<ThemeName, Theme> = {
     faceColors: standardColors,
     pointLightIntensity: 7,
     ambientLightIntensity: 2,
-    boxRoundness: 0.1
+    boxRoundness: 0.1,
   },
   light: {
     frameColor: grayScale(.75),
@@ -28,15 +29,15 @@ const themes: Record<ThemeName, Theme> = {
     faceColors: standardColors,
     pointLightIntensity: 10,
     ambientLightIntensity: 2,
-    boxRoundness: 0.1
+    boxRoundness: 0.1,
   },
-  bright: {
+  neon: {
     frameColor: grayScale(.025),
     backgroundColor: grayScale(.0),
     faceColors: brightColors,
     pointLightIntensity: 6,
     ambientLightIntensity: 2,
-    boxRoundness: .2
+    boxRoundness: 0.2,
   }
 } as const
 
@@ -59,7 +60,7 @@ const useTheme = () => {
     backgroundColor, 
     pointLightIntensity, 
     ambientLightIntensity,
-    boxRoundness
+    boxRoundness,
   } = themes[themeName]
 
   return useMemo(() => ({
@@ -68,7 +69,8 @@ const useTheme = () => {
     bgMaterial: new MeshBasicMaterial( { color: backgroundColor } ),
     pointLightIntensity,
     ambientLightIntensity,
-    boxRoundness
+    boxRoundness,
+    cubeGeometry: new RoundedBoxGeometry(1.0, 1.0, 1.0, 2, boxRoundness)
   }),[ambientLightIntensity, backgroundColor, boxRoundness, faceColors, frameColor, pointLightIntensity])
 }
 

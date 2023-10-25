@@ -10,7 +10,6 @@ import {
   MeshPhongMaterial,
   MeshStandardMaterial,
 } from 'three'
-import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import useTheme from '../themes/useTheme';
 
 const facePolygonIndices = new Set([72, 73, 74, 75, 76, 77])
@@ -38,20 +37,25 @@ const Cube = ({
   onPointerMove
 }: CubeProps) => {
 
-  const { frameColor, faceColors, boxRoundness } = useTheme()
+  const { frameColor, faceColors, boxRoundness, cubeGeometry } = useTheme()
 
-  const geometryRef = useRef(new RoundedBoxGeometry(1.0, 1.0, 1.0, 2, boxRoundness))
+  const cubeRef = useRef<Mesh>({} as Mesh)
+
   const materialRef = useRef(new MeshStandardMaterial({ vertexColors: true }))
 
   useEffect (() => {
-    let { count } = geometryRef.current.attributes.position
-    geometryRef.current
+    cubeRef.current.geometry = cubeGeometry
+
+    cubeRef.current.material = materialRef.current
+
+    let { count } = cubeGeometry.attributes.position
+    cubeGeometry
       .setAttribute('color', new BufferAttribute(new Float32Array( count * 3 ), 3 ))
+
     for(let i = 0; i < count; i++){
       const imod = i % 150
-
       if(!facePolygonIndices.has(imod)) {
-        geometryRef.current
+        cubeGeometry
           .attributes.color.setXYZ(i ,frameColor.r, frameColor.g, frameColor.b)
       } else {
         const faceColor = faceColors[Math.floor(i / 6) % 6]
@@ -64,21 +68,22 @@ const Cube = ({
           faceColor === faceColors[4] && z0 === 2 || 
           faceColor === faceColors[5] && z0 === 0
         ){
-          geometryRef.current.attributes.color.setXYZ(i ,faceColor.r, faceColor.g, faceColor.b)
+          cubeGeometry.attributes.color.setXYZ(i ,faceColor.r, faceColor.g, faceColor.b)
         }
       }
     }
-  }, [faceColors, frameColor.b, frameColor.g, frameColor.r, x0, y0, z0])
+  }, [cubeGeometry, faceColors, frameColor.b, frameColor.g, frameColor.r, x0, y0, z0])
 
   return (
     <mesh ref={containerRef} >
         <mesh
+          ref={cubeRef}
           onPointerDown={onPointerDown}
           onPointerUp={onPointerUp}
           onPointerMove={onPointerMove}
           position={[x0-1, y0-1, z0-1]}
-          geometry={geometryRef.current}
-          material={materialRef.current} 
+          geometry={cubeGeometry}
+          // material={materialRef.current} 
         />
     </mesh>
   )

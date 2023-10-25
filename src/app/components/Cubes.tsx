@@ -44,6 +44,14 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 	const grid = useAppStore(gridModelSelector)
 	const swipeTimeout = useRef<NodeJS.Timeout | null>(null)
 	const { bgMaterial, pointLightIntensity, ambientLightIntensity } = useTheme()
+  const { setThemeName } = useAppStore(actionsSelector)
+
+
+	useEffect(() => {
+    setTimeout(() => {
+      setThemeName('neon')
+    }, 4000)
+  }, [setThemeName])
 
 	if(isSolved(grid)){
 		console.log('SOLVED')
@@ -92,7 +100,7 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 			spinFunctions[inverse(last)](ANIMATION_TIME)
 			return newHistory
 		})
-	}, [])
+	}, [spinFunctions])
 	
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
