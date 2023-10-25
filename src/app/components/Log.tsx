@@ -1,14 +1,14 @@
-import clsx from 'clsx'
 import styles from '@/app/page.module.css'
-import useAppStore, { actionsSelector, isOpenSelector, messagesSelector } from '@/app/store/useAppStore'
+import useAppStore, { useActions, useIsLogOpen, useMessages } from '@/app/store/useAppStore'
+import clsx from 'clsx'
 import { useEffect, useRef } from 'react'
 
 
 const Log = () => {
   
-  const { toggleLog } = useAppStore(actionsSelector)
-  const isOpen = useAppStore(isOpenSelector)
-  const messages = useAppStore(messagesSelector)
+  const { toggleLog } = useActions()
+  const isLogOpen = useIsLogOpen()
+  const messages = useMessages()
   const logDiv = useRef<HTMLDivElement | null>(null);
 
   //always scroll to bottom on new message:
@@ -21,7 +21,7 @@ const Log = () => {
   return (<>
     <div 
       className={clsx(styles.log, { 
-        [styles.open]: isOpen
+        [styles.open]: isLogOpen
       })}
       ref={logDiv}
     >
@@ -34,7 +34,7 @@ const Log = () => {
     <div 
       onClick={toggleLog}
       className={styles.logToggle}
-    >{isOpen ? "↓ Log" : "↑ Log"}</div>
+    >{isLogOpen ? "↓ Log" : "↑ Log"}</div>
   </>
   )
 }

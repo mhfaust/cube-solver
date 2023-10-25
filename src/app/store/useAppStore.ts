@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { GameControlsSlice, createGameControlsSlice } from "./gameControlsSlice";
+import { GameControlsSlice, PlayMode, createGameControlsSlice } from "./gameControlsSlice";
 import { LoggerSlice, createLoggerSlice } from "./loggerSlice";
 import { CubeSlice, createCubeSlice } from "./cubeSlice";
 import { ThemeSlice, createThemeSlice } from "./themeSlice";
@@ -18,26 +18,32 @@ const useAppStore = create<AppStore>()(
 
 export default useAppStore
 
-
 const select = <T>(fn: (store: AppStore) => T) => fn
 
-export const messagesSelector = select(s => s.messages)
-export const isOpenSelector = select(s => s.logIsOpen)
-export const startTimeSelector = select(s => s.startTime)
-export const isSolvedSelector = select(s => s.isSolved)
-export const gridModelSelector = select(s => s.grid)
-export const isRotatingSelector = select(s => s.isRotating)
-export const fingersOnSelector = select(s => s.fingersOn)
-export const themeNameSelector = select(s => s.themeName)
-// export const gameStateSelector = select(({ startTime }) => {
-//   if(startTime) && ! return 'inPlay'
-//   else return 'casual'
-// })
-// export const controlsSelector = select(s => s.controls)
+const selectProp = <TK extends keyof AppStore>(prop: TK) => {
+  return (store: AppStore) => store[prop]
+}
 
-export const actionsSelector = select(
-  ({ log, toggleLog, startTimer, stopTimer, setGrid, setFingersOn, setThemeName }) => 
-  ({ log, toggleLog, startTimer, stopTimer, setGrid, setFingersOn, setThemeName })
-)
+export const useMessages = () => useAppStore(selectProp('messages'))
+export const useIsLogOpen = () => useAppStore(selectProp('logIsOpen'))
+export const useStartTime = () => useAppStore(selectProp('startTime'))
+export const useIsSolved = () => useAppStore(selectProp('isSolved'))
+export const useGridModel = () => useAppStore(selectProp('grid'))
+export const useIsRotating = () => useAppStore(selectProp('isRotating'))
+export const useFingersOn = () => useAppStore(selectProp('fingersOn'))
+export const useThemeName = () => useAppStore(selectProp('themeName'))
 
-export const setGridSelector = select(s => s.setGrid)
+export const usePlayMode = () => {
+  return useAppStore(({ startTime, completionTime }) => {
+    return startTime && completionTime 
+      ? 'complete' 
+      : startTime ? 'in-play' : 'casual'
+  })
+}
+
+export const useActions = () => {
+  return useAppStore(select(
+    ({ log, toggleLog, startTimer, stopTimer, setGrid, setFingersOn, setThemeName }) => 
+    ({ log, toggleLog, startTimer, stopTimer, setGrid, setFingersOn, setThemeName })
+  ))
+}

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
-import useAppStore, { startTimeSelector } from "@/app/store/useAppStore"
 import styles from '@/app/page.module.css'
+import { useStartTime } from "../store/useAppStore"
 
 const { floor, pow, min } = Math
 const ps = ['','0','00','000']
@@ -25,7 +25,7 @@ const Timer = () => {
   const timerRef = useRef<NodeJS.Timeout>()
 
   const [ellapsedTime, setEllapsedTime] = useState<number>()
-  const startTime = useAppStore(startTimeSelector)
+  const startTime = useStartTime()
   
   useEffect(() => {
 

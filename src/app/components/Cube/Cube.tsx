@@ -1,16 +1,16 @@
+import useTheme from '@/app/themes/useTheme';
 import { ThreeEvent } from '@react-three/fiber';
-import { useRef, useEffect, MutableRefObject, createRef } from 'react'
-import { 
-  Mesh, 
+import { MutableRefObject, createRef, useEffect, useRef } from 'react';
+import {
   BufferAttribute,
   BufferGeometry,
-  NormalBufferAttributes,
   Material,
-  Object3DEventMap,
+  Mesh,
   MeshPhongMaterial,
   MeshStandardMaterial,
-} from 'three'
-import useTheme from '@/app/themes/useTheme';
+  NormalBufferAttributes,
+  Object3DEventMap,
+} from 'three';
 
 const facePolygonIndices = new Set([72, 73, 74, 75, 76, 77])
 

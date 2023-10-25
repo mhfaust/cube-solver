@@ -1,13 +1,13 @@
+import styles from '@/app/page.module.css';
+import useAppStore, { usePlayMode, useStartTime } from '@/app/store/useAppStore';
 import useScramble from '@/app/utils/useScramble';
-import useAppStore, { startTimeSelector } from '@/app/store/useAppStore';
-import styles from '@/app/page.module.css'
 
 const Scramble = () => {
-  const startTime = useAppStore(startTimeSelector)
-  const isInPlay = startTime !== null
+  const startTime = useStartTime()
+  const mode = usePlayMode()
   const scramble = useScramble()
 
-  if(isInPlay) {
+  if(mode === 'in-play') {
     return null
   }
   return (

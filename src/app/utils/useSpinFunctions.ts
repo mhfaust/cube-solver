@@ -1,17 +1,14 @@
 import { useMemo } from "react"
-import useAppStore, { 
-  gridModelSelector, 
-  isRotatingSelector, 
-  setGridSelector 
-} from "@/app/store/useAppStore"
+
 import { MoveCode } from "./moveCodes"
 import { cubeRotator, layerRotator } from "./rotator"
+import { useActions, useGridModel, useIsRotating } from "../store/useAppStore"
 
 const useSpinFunctions = () => {
 
-  const grid = useAppStore(gridModelSelector)
-  const setGrid = useAppStore(setGridSelector)
-  const isRotating = useAppStore(isRotatingSelector)
+  const grid = useGridModel()
+  const { setGrid } = useActions()
+  const isRotating = useIsRotating()
 
   const spinFunctions: Record<MoveCode, (time: number) => void> = useMemo(() => ({
 		'U': layerRotator('y', 2, '-', grid, setGrid, isRotating ),
