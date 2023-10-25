@@ -1,4 +1,4 @@
-import { CubesGrid } from "../store/cubeSlice"
+import { CubesGrid } from "@/app/store/cubeSlice"
 
 const isSolved = (grid: CubesGrid) => solvedStates.has(serialize(grid))
 

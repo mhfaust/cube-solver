@@ -1,6 +1,6 @@
 import { StateCreator } from "zustand";
 import storeSetters from "./storeHelpers";
-import { ThemeName } from "../themes/useTheme";
+import { ThemeName } from "@/app/themes/useTheme";
 
 
 export type ThemeSlice = {
@@ -12,7 +12,7 @@ export const createThemeSlice: StateCreator<ThemeSlice> = (set) =>{
   const { setValueOf } = storeSetters(set)
 
   return {
-    themeName: 'dark',
+    themeName: 'neon',
     setThemeName: setValueOf('themeName')
   }
 }

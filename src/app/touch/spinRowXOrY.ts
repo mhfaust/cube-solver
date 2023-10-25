@@ -1,8 +1,8 @@
-import { getCubePosition } from "../utils/grid"
+import { getCubePosition } from "@/app/utils/grid"
 import { ThreeEvent } from "@react-three/fiber"
 import { AxisDirection, swipeInfo } from "./pointers"
-import { MoveCode } from "../utils/moveCodes"
-import { CubesGrid } from "../store/cubeSlice"
+import { MoveCode } from "@/app/utils/moveCodes"
+import { CubesGrid } from "@/app/store/cubeSlice"
 
 const spinRowXOrY = (
     grid: CubesGrid, 

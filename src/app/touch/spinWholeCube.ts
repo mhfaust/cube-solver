@@ -1,4 +1,4 @@
-import { MoveCode } from "../utils/moveCodes"
+import { MoveCode } from "@/app/utils/moveCodes"
 import { AxisDirection, swipeInfo } from "./pointers"
 
 const map: Record<AxisDirection, MoveCode> = {

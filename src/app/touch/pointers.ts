@@ -1,11 +1,16 @@
 import { ThreeEvent } from "@react-three/fiber"
-import { MutableRefObject } from "react"
-import { MovePointer, Pointers } from "../components/Cubes"
-import { displacement, interval } from "../utils/vectors"
-import { MIN_SPEED_ASSESS_TIME } from "../utils/constants"
+import { displacement, interval } from "@/app/utils/vectors"
+import { MIN_SPEED_ASSESS_TIME } from "@/app/utils/constants"
 
 const { PI, abs, sqrt, pow, atan } = Math
-// type  PointersRef = MutableRefObject<Record<number, ThreeEvent<PointerEvent>>>
+
+
+export type MovePointer = ThreeEvent<PointerEvent & { displacement: number} >
+
+export type Pointers = Record<number, {
+	down: ThreeEvent<PointerEvent>
+	moves: MovePointer[]
+}>
 
 export function addDownPointer(pointers: Pointers, downPointer: ThreeEvent<PointerEvent>) {
   pointers[downPointer.pointerId] = {
@@ -102,3 +107,5 @@ export const swipeInfo = (
 
   return { dx, dy, distance, time, isVertical, theta, axisDirection, quadrantDirection }
 }
+
+

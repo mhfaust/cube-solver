@@ -1,4 +1,4 @@
-import { V } from "../utils/vectors";
+import { V } from "@/app/utils/vectors";
 
 
 /**

@@ -1,5 +1,5 @@
-import useAppStore, { fingersOnSelector } from "../store/useAppStore"
-import styles from '../page.module.css'
+import useAppStore, { fingersOnSelector } from "@/app/store/useAppStore"
+import styles from '@/app/page.module.css'
 
 const DebugFingers = () => {
 

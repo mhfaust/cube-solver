@@ -29,6 +29,10 @@ export const gridModelSelector = select(s => s.grid)
 export const isRotatingSelector = select(s => s.isRotating)
 export const fingersOnSelector = select(s => s.fingersOn)
 export const themeNameSelector = select(s => s.themeName)
+// export const gameStateSelector = select(({ startTime }) => {
+//   if(startTime) && ! return 'inPlay'
+//   else return 'casual'
+// })
 // export const controlsSelector = select(s => s.controls)
 
 export const actionsSelector = select(

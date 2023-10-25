@@ -1,5 +1,5 @@
 import { Object3D } from "three";
-import { CubesGrid } from "../store/cubeSlice";
+import { CubesGrid } from "@/app/store/cubeSlice";
 
 export const _012 = [0,1,2] as const
 

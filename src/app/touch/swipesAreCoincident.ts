@@ -1,7 +1,7 @@
 import { ThreeEvent } from "@react-three/fiber"
 import { swipeInfo } from "./pointers"
-import { getCubePosition } from "../utils/grid"
-import { CubesGrid } from "../store/cubeSlice"
+import { getCubePosition } from "@/app/utils/grid"
+import { CubesGrid } from "@/app/store/cubeSlice"
 
 const swipesAreCoincident = (
   grid: CubesGrid,

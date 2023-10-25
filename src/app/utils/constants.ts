@@ -18,5 +18,8 @@ export const MIN_SPEED_ASSESS_TIME = 100
   // Same, but put headlights to the left:
   // R-U-Ri-Ui-R-F-R2-Ui-Ri-Ui-R-U-Ri-Fi
 
+  // Ri F Ri B2 R Fi Ri B2 R2
 
+  // NOPE
   // F-F-U-M'-U-U-M-U-F-F
+

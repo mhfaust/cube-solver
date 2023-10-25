@@ -1,6 +1,6 @@
 'use client'
 
-import Cube from "./Cube"
+import Cube from "@/app/components/Cube"
 import { OrbitControls } from '@react-three/drei'
 import { Canvas, ThreeEvent, useFrame, useThree } from "@react-three/fiber"
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react'
@@ -8,31 +8,24 @@ import { Color, PlaneGeometry, Vector3 } from "three"
 import { OrbitControls as ThreeOrbitControls } from 'three-stdlib';
 import { MoveCode, asKeyCode, inverse, keyMoves } from "@/app/utils/moveCodes"
 import { addDownPointer, addMovePointer, getLatestMove, getOtherPointer, isOnCube, removePointer, swipeInfo } from "@/app/touch/pointers"
-import { _012, getCubePosition } from "../utils/grid"
-import spinFrontOrBack from "../touch/spinFrontOrBack"
-import spinRowXOrY from "../touch/spinRowXOrY"
-import twoFingerSpinDirection from "../touch/twoFingerSpinDirection"
-import useAppStore, { actionsSelector, gridModelSelector, isRotatingSelector } from "../store/useAppStore"
-import SpinScheduler from "../touch/spinScheduler"
-import spinWholeCube from "../touch/spinWholeCube"
-import swipesAreCoincident from "../touch/swipesAreCoincident"
-import spinZ from "../touch/spinZ"
-import styles from '../page.module.css'
-import useSpinFunctions from "../utils/useSpinFunctions"
-import isSolved from "../utils/isSolved"
-import dialingAngle from "../touch/dialingAngle"
-import { FOV_ANGLE, MAX_SWIPE_TIME, MIN_DIAL_ANGLE, ANIMATION_TIME, MAX_SWIPE_ANGLE } from "../utils/constants"
-import useTheme from "../themes/useTheme"
+import { _012, getCubePosition } from "@/app/utils/grid"
+import spinFrontOrBack from "@/app/touch/spinFrontOrBack"
+import spinRowXOrY from "@/app/touch/spinRowXOrY"
+import twoFingerSpinDirection from "@/app/touch/twoFingerSpinDirection"
+import useAppStore, { actionsSelector, gridModelSelector, isRotatingSelector } from "@/app/store/useAppStore"
+import SpinScheduler from "@/app/touch/spinScheduler"
+import spinWholeCube from "@/app/touch/spinWholeCube"
+import swipesAreCoincident from "@/app/touch/swipesAreCoincident"
+import spinZ from "@/app/touch/spinZ"
+import styles from '@/app/page.module.css'
+import useSpinFunctions from "@/app/utils/useSpinFunctions"
+import dialingAngle from "@/app/touch/dialingAngle"
+import { FOV_ANGLE, MAX_SWIPE_TIME, MIN_DIAL_ANGLE, ANIMATION_TIME, MAX_SWIPE_ANGLE } from "@/app/utils/constants"
+import useTheme from "@/app/themes/useTheme"
+import { Pointers } from "@/app/touch/pointers"
 
 const { PI, abs, floor, max } = Math
 const bgGeometry = new PlaneGeometry(50, 50)
-
-export type MovePointer = ThreeEvent<PointerEvent & { displacement: number }>
-export type Pointers = Record<number, {
-	down: ThreeEvent<PointerEvent>,
-	moves: MovePointer[],
-}>
-
 
 const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => {
 	const { camera } = useThree();
@@ -44,18 +37,6 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 	const grid = useAppStore(gridModelSelector)
 	const swipeTimeout = useRef<NodeJS.Timeout | null>(null)
 	const { bgMaterial, pointLightIntensity, ambientLightIntensity } = useTheme()
-  const { setThemeName } = useAppStore(actionsSelector)
-
-
-	useEffect(() => {
-    setTimeout(() => {
-      setThemeName('neon')
-    }, 4000)
-  }, [setThemeName])
-
-	if(isSolved(grid)){
-		console.log('SOLVED')
-	}
 
 	useFrame(({ clock }) => {
 		controls.current?.update()

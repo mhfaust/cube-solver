@@ -1,6 +1,6 @@
 import { ThreeEvent } from "@react-three/fiber";
 import { swipeInfo } from "./pointers";
-import { MoveCode } from "../utils/moveCodes";
+import { MoveCode } from "@/app/utils/moveCodes";
 import { InfoMessage } from "./spinScheduler";
 
 const spinZ = (

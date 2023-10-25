@@ -68,3 +68,31 @@
   width: 20px;
   border-radius: 10px;
 }
+
+.startButton, .stopButton {
+  position: absolute;
+  bottom: 30px; 
+  right: 30px;
+  width: 30px;
+  height: 30px;
+}
+
+.startButton {
+  background: blue;
+}
+.stopButton {
+  background: red;
+}
+
+.scrambleButton {
+
+}
+
+.timer {
+  height: 1.5em;
+  width: 300px;
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  outline: 1px solid white;
+}

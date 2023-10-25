@@ -1,0 +1,52 @@
+import { useEffect, useRef, useState } from "react"
+import useAppStore, { startTimeSelector } from "@/app/store/useAppStore"
+import styles from '@/app/page.module.css'
+
+const { floor, pow, min } = Math
+const ps = ['','0','00','000']
+const pad0 = (n: number, p = 2) => {
+  const s = n.toString()
+  return `${ps[min(p - s.length)]}${s}`
+}
+
+const displayTime = (milis: number | undefined) => {
+  if(milis === undefined) {
+    return ''
+  }
+  const hun = floor(milis / 10) % 100
+  const s = floor(milis / 1000) % 60
+  const m = floor(s / 60) % 60
+  const h = floor (m / 60)
+  return `${pad0(h)}:${pad0(m)}:${pad0(s)}.${pad0(hun)}`
+}
+
+const Timer = () => {
+
+  const timerRef = useRef<NodeJS.Timeout>()
+
+  const [ellapsedTime, setEllapsedTime] = useState<number>()
+  const startTime = useAppStore(startTimeSelector)
+  
+  useEffect(() => {
+
+    console.log({startTime}, {timer: timerRef.current})
+    if( !timerRef.current && startTime !== null ) {
+      timerRef.current = setInterval(() => {
+          setEllapsedTime(Date.now() - startTime)
+      }, 10)
+    }
+
+    if (timerRef.current && startTime === null){
+      clearTimeout(timerRef.current)
+      timerRef.current = undefined
+      setEllapsedTime(undefined)
+    }
+  }, [startTime])
+
+
+  return (
+    <div className={styles.timer}>{displayTime(ellapsedTime)}</div>
+  )
+}
+
+export default Timer

@@ -1,6 +1,6 @@
 import clsx from 'clsx'
-import styles from '../page.module.css'
-import useAppStore, { actionsSelector, isOpenSelector, messagesSelector } from '../store/useAppStore'
+import styles from '@/app/page.module.css'
+import useAppStore, { actionsSelector, isOpenSelector, messagesSelector } from '@/app/store/useAppStore'
 import { useEffect, useRef } from 'react'
 
 

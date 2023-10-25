@@ -3,7 +3,7 @@ import useAppStore, {
   gridModelSelector, 
   isRotatingSelector, 
   setGridSelector 
-} from "../store/useAppStore"
+} from "@/app/store/useAppStore"
 import { MoveCode } from "./moveCodes"
 import { cubeRotator, layerRotator } from "./rotator"
 

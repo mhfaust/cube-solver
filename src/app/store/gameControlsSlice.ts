@@ -4,8 +4,9 @@ import storeSetters from "./storeHelpers";
 export type GameControlsSlice = {
   isSolved: boolean;
   startTime: number | null;
+  completionTime: number | null;
   startTimer: () => void;
-  stopTimer: () => void;
+  stopTimer: (isComplete: boolean) => void;
 }
 
 export const createGameControlsSlice: StateCreator<GameControlsSlice> = (set) =>{
@@ -13,12 +14,13 @@ export const createGameControlsSlice: StateCreator<GameControlsSlice> = (set) =>
   return  {
     isSolved: true,
     startTime: null,
+    completionTime: null,
     startTimer: setValueUsing('startTime', () => Date.now()),
-    // startTimer: () => {
-    //   set(() => ({ startTime: Date.now() }))
-    // },
-    stopTimer: () => {
-      set(() => ({ startTime: null }))
+    stopTimer: (isComplete: boolean = false) => {
+      set(() => ({ 
+        startTime: null, 
+        completionTime: isComplete ? Date.now() : null
+      }))
     }
   }
 }

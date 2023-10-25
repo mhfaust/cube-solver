@@ -1,6 +1,6 @@
 import { ThreeEvent } from "@react-three/fiber"
-import { Pointers } from "../components/Cubes"
 import { rotationDirection } from "./rotationDirection"
+import { Pointers } from "./pointers"
 
 const { sqrt, pow, min, max, acos, PI } = Math
 const square = (x:number) => pow(x, 2)

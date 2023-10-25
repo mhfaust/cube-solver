@@ -9,7 +9,7 @@ const oneLayerSpins: MoveCode[] = [
 ]
 const numSpinTypes = Object.keys(oneLayerSpins).length
 
-const SRAMBLE_ROTATION_TIME = 5 //very fast 
+const SCRAMBLE_ROTATION_TIME = 5 //very fast 
 
 const useScramble = () => {
 
@@ -17,15 +17,17 @@ const useScramble = () => {
 
   return useCallback(() => {
 
+    return spinFunctions.F(SCRAMBLE_ROTATION_TIME)
+
     const randomSequence = Array.from(
       { length: 100 }, 
       () => oneLayerSpins[Math.floor(Math.random() * numSpinTypes)]
     )
     const recurse = () => {
       const nextMove = randomSequence.pop()
-      spinFunctions[nextMove!](SRAMBLE_ROTATION_TIME)
+      spinFunctions[nextMove!](SCRAMBLE_ROTATION_TIME)
       if(randomSequence.length){
-        setTimeout(recurse, SRAMBLE_ROTATION_TIME)
+        setTimeout(recurse, SCRAMBLE_ROTATION_TIME)
       }
     }
     recurse()

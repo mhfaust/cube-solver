@@ -10,7 +10,7 @@ import {
   MeshPhongMaterial,
   MeshStandardMaterial,
 } from 'three'
-import useTheme from '../themes/useTheme';
+import useTheme from '@/app/themes/useTheme';
 
 const facePolygonIndices = new Set([72, 73, 74, 75, 76, 77])
 
@@ -45,7 +45,6 @@ const Cube = ({
 
   useEffect (() => {
     cubeRef.current.geometry = cubeGeometry
-
     cubeRef.current.material = materialRef.current
 
     let { count } = cubeGeometry.attributes.position

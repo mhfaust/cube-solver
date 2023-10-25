@@ -1,7 +1,7 @@
 import { StateCreator } from "zustand";
 import { MutableRefObject } from "react";
 import { BufferGeometry, Material, Mesh, NormalBufferAttributes, Object3DEventMap } from "three";
-import { _012 } from "../utils/grid";
+import { _012 } from "@/app/utils/grid";
 import storeSetters from "./storeHelpers";
 
 export type CubeWrapperMesh = Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>

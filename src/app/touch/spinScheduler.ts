@@ -1,4 +1,4 @@
-import { MoveCode } from "../utils/moveCodes";
+import { MoveCode } from "@/app/utils/moveCodes";
 
 export type ErrorMessage = {
   error: string
