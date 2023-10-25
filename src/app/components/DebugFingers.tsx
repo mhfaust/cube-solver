@@ -1,9 +1,9 @@
-import useAppStore, { fingersOnSelector } from "@/app/store/useAppStore"
 import styles from '@/app/page.module.css'
+import { useFingersOn } from '@/app/store/useAppStore'
 
 const DebugFingers = () => {
 
-  const fingersOn = useAppStore(fingersOnSelector)
+  const fingersOn = useFingersOn()
   const f = Array(fingersOn).fill('').map((_,i) => i)
   return (
     <div className={styles.fingers}>

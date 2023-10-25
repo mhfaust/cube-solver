@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import styles from '@/app/page.module.css'
-import { useStartTime } from "../store/useAppStore"
+import { useStartTime } from "@/app/store/useAppStore"
+import StartStop from "@/app/components/Timer/StartStop"
 
 const { floor, pow, min } = Math
 const ps = ['','0','00','000']
@@ -15,8 +16,8 @@ const displayTime = (milis: number | undefined) => {
   }
   const hun = floor(milis / 10) % 100
   const s = floor(milis / 1000) % 60
-  const m = floor(s / 60) % 60
-  const h = floor (m / 60)
+  const m = floor(milis / 60000) % 60
+  const h = floor (milis / 3600000)
   return `${pad0(h)}:${pad0(m)}:${pad0(s)}.${pad0(hun)}`
 }
 
@@ -45,7 +46,10 @@ const Timer = () => {
 
 
   return (
-    <div className={styles.timer}>{displayTime(ellapsedTime)}</div>
+    <div className={styles.timer}>
+      {displayTime(ellapsedTime)}
+      <StartStop />
+    </div>
   )
 }
 

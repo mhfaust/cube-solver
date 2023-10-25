@@ -70,9 +70,9 @@
 }
 
 .startButton, .stopButton {
-  position: absolute;
+  /* position: absolute;
   bottom: 30px; 
-  right: 30px;
+  right: 30px; */
   width: 30px;
   height: 30px;
 }
@@ -89,10 +89,13 @@
 }
 
 .timer {
-  height: 1.5em;
-  width: 300px;
   position: absolute;
   bottom: 30px;
-  left: 30px;
-  outline: 1px solid white;
+  right: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  font-family: 'Cousine, Courier New', Courier, monospace;
+  gap: 10px;
+  align-items: center;
 }

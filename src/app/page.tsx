@@ -3,7 +3,7 @@
 
 import Cubes from './components/Cubes'
 import styles from './page.module.css'
-import StartStop from './components/StartStop'
+import StartStop from './components/Timer/StartStop'
 import Timer from './components/Timer'
 import isSolved from './utils/isSolved'
 import { useEffect } from 'react'
@@ -33,9 +33,7 @@ export default function App() {
 
   return (
     <div className={styles.main}>
-      {/* <Log /> */}
       <Cubes />
-      <StartStop />
       <Timer />
     </div>
   )
