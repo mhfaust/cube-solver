@@ -1,0 +1,27 @@
+.menu {
+  background-color: black;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: .5em;
+}
+
+.doneButton {
+  margin-top: 1em;
+}
+
+.radio {
+  margin-right: 1em;
+}
+
+.icon{
+
+}
+
+.container {
+  z-index: 1;
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  /* outline: 1px dotted green; */
+}

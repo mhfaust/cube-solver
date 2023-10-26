@@ -11,6 +11,7 @@ import { useActions } from './store/useAppStore'
 import { usePlayMode } from "./store/selectors"
 import { useGridModel, useStartTime } from "./store/selectors"
 import Completed from './components/Completed'
+import Menu from './components/Menu/Menu'
 
 export default function App() {
 //   const { setThemeName } = useAppStore(actionsSelector)
@@ -39,6 +40,9 @@ export default function App() {
 
   return (
     <div className={styles.main}>
+      {playMode === 'casual' && (
+        <Menu />
+      )}
       {playMode === 'complete' && (
         <Completed />
       )}
