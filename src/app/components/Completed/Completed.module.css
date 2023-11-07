@@ -9,7 +9,7 @@
   left: 20vw;
   background-color: black;
   color: white;
-  outline: 1px solid white;
+  /* outline: 1px solid white; */
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -3,13 +3,10 @@
  */
 
 import { useMemo } from "react"
-import { BufferGeometry, Color, MeshBasicMaterial } from "three"
-import useAppStore from "@/app/store/useAppStore"
+import { Color, MeshBasicMaterial } from "three"
 import { useThemeName } from "../store/selectors"
-import { standardColors, brightColors, standardBox, curvierBox } from "./assets"
+import { standardColors, brightColors } from "./assets"
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js"
-
-
 
 const grayScale = (n: number) => new Color(n,n,n)
 

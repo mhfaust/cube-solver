@@ -74,7 +74,10 @@ const Cube = ({
   }, [cubeGeometry, faceColors, frameColor.b, frameColor.g, frameColor.r, x0, y0, z0])
 
   return (
-    <mesh ref={containerRef} >
+    <mesh 
+      ref={containerRef} 
+      position={[0,1,0]}
+    >
         <mesh
           ref={cubeRef}
           onPointerDown={onPointerDown}

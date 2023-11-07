@@ -11,7 +11,7 @@ const Completed = () => {
 
   return (
     <div className={styles.completed}>
-      <p>solved in:</p>
+      <p>Solved in</p>
       <p>{reportTime(completedTime - startTime)}</p>
       <div className={styles.completedButtons}>
         <button onClick={resetTimer} type="button">
