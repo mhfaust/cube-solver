@@ -14,7 +14,7 @@ import spinWholeCube from "@/app/touch/spinWholeCube"
 import spinZ from "@/app/touch/spinZ"
 import swipesAreCoincident from "@/app/touch/swipesAreCoincident"
 import twoFingerSpinDirection from "@/app/touch/twoFingerSpinDirection"
-import { ANIMATION_TIME, FOV_ANGLE, MAX_SWIPE_ANGLE, MAX_SWIPE_TIME, MIN_DIAL_ANGLE } from "@/app/utils/constants"
+import { ANIMATION_TIME, FIELD_OF_VIEW_ANGLE, MAX_SWIPE_ANGLE, MAX_SWIPE_TIME, MIN_DIAL_ANGLE } from "@/app/utils/constants"
 import { _012, getCubePosition } from "@/app/utils/grid"
 import { MoveCode, asKeyCode, inverse, keyMoves } from "@/app/utils/moveCodes"
 import useSpinFunctions from "@/app/utils/useSpinFunctions"
@@ -53,17 +53,17 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 				return
 		}
 		controls.current.enableRotate = true
-		controls.current.minPolarAngle = PI/2 - FOV_ANGLE;
-		controls.current.maxPolarAngle = PI/2 + FOV_ANGLE;
-		controls.current.minAzimuthAngle = - FOV_ANGLE;
-		controls.current.maxAzimuthAngle =  FOV_ANGLE;
+		controls.current.minPolarAngle = PI/2 - FIELD_OF_VIEW_ANGLE;
+		controls.current.maxPolarAngle = PI/2 + FIELD_OF_VIEW_ANGLE;
+		controls.current.minAzimuthAngle = - FIELD_OF_VIEW_ANGLE;
+		controls.current.maxAzimuthAngle =  FIELD_OF_VIEW_ANGLE;
 		controls.current.maxDistance = 16
 		controls.current.minDistance = 16
 		controls.current.enablePan = false
 
 		camera.position.set(
 			controls.current.minPolarAngle,
-			FOV_ANGLE,
+			FIELD_OF_VIEW_ANGLE,
 			0
 		);
 		camera.lookAt(new Vector3(0,0,0)); // Set look at coordinate like this
@@ -125,7 +125,7 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 		}
 		if(upPointer.eventObject.uuid === upPointer.intersections[0].eventObject.uuid) {
 
-			const spins = new SpinScheduler(
+			const spinScheduler = new SpinScheduler(
 				spinFunctions, 
 				moves => setHistory(h => [...h, ...moves]),
 				log,
@@ -147,25 +147,25 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 				if(cubePosition){
 					if(dial > MIN_DIAL_ANGLE) {
 						// Array(floor(dial + (90 - MIN_DIAL_ANGLE) / 90)).fill('').forEach(() => {
-							spins.queue('F')
+							spinScheduler.queue('F')
 						// })
 					}
 					else if (dial < - MIN_DIAL_ANGLE){
-						spins.queue('F′')
+						spinScheduler.queue('F′')
 					}
 					else if (abs(dial) < MAX_SWIPE_ANGLE) {
-						spins.queue(spinRowXOrY(grid, downPointer, upPointer))
+						spinScheduler.queue(spinRowXOrY(grid, downPointer, upPointer))
 					}
 				} 
 				else {
 					if(dial > MIN_DIAL_ANGLE) {
-						spins.queue('Z')
+						spinScheduler.queue('Z')
 					}
 					else if (dial < -MIN_DIAL_ANGLE){
-						spins.queue('Z′')
+						spinScheduler.queue('Z′')
 					}
 					else if (abs(dial) < MAX_SWIPE_ANGLE) {
-						spins.queue(spinWholeCube(swipe1))
+						spinScheduler.queue(spinWholeCube(swipe1))
 					}
 				}
 			}
@@ -179,11 +179,11 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 
 				//both fingers off:
 				if (!isUpFromCube && !isBaseOnCube){
-					spins.queue(spinZ(downPointer, upPointer, baseDownPointer))
+					spinScheduler.queue(spinZ(downPointer, upPointer, baseDownPointer))
 				}
 				//1 finger on, 1 finger off:
 				else if(isUpFromCube !== isBaseOnCube){
-					spins.queue(spinFrontOrBack(grid, downPointer, upPointer, baseDownPointer))
+					spinScheduler.queue(spinFrontOrBack(grid, downPointer, upPointer, baseDownPointer))
 				} 
 				//both fingers on:
 				else if(isUpFromCube && isBaseOnCube){
@@ -198,8 +198,8 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 							)
 							&& swipe2.distance > 10
 						) {
-							spins.queue(spinRowXOrY(grid, downPointer, upPointer))
-							spins.queue(spinRowXOrY(grid, baseDownPointer, baseMovePointer))
+							spinScheduler.queue(spinRowXOrY(grid, downPointer, upPointer))
+							spinScheduler.queue(spinRowXOrY(grid, baseDownPointer, baseMovePointer))
 						} 
 						else {
 							const rotation = twoFingerSpinDirection(
@@ -207,7 +207,7 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 								[baseMovePointer, baseMovePointer]
 							)
 
-							spins.queue(rotation === 1 ? 'F' : rotation === -1 ? 'F′': undefined)
+							spinScheduler.queue(rotation === 1 ? 'F' : rotation === -1 ? 'F′': undefined)
 						}
 					}
 				}
@@ -215,13 +215,13 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 			} 
 			
 			if(fingers > 2 && isSwipe) {
-				spins.queue(spinWholeCube(swipe1))
+				spinScheduler.queue(spinWholeCube(swipe1))
 				for(let p of Object.values(pointers.current)){
 					removePointer(pointers.current, p.down.pointerId)
 				}
 			} 
 
-			spins.execute()
+			spinScheduler.execute()
 		}
 		removePointer(pointers.current, upPointer.pointerId)
 

@@ -43,7 +43,9 @@ export default function App() {
       {playMode === 'casual' && (
         <Menu />
       )}
+      {playMode === 'complete' && ( 
         <Completed />
+      )}  
       <Cubes />
       {playMode !== 'complete' && (
         <Timer />
