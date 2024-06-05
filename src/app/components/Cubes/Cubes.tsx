@@ -117,6 +117,9 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 	}, [setFingersOn])
 
 	const handlePointerUp = useCallback((upPointer: ThreeEvent<PointerEvent>) => {
+		if(Object.entries(pointers.current).length <= 1) {
+			controls.current!.enableRotate = true
+		}
 
 		const downPointer = pointers.current[upPointer.pointerId]?.down
 		if(isRotating.current || !downPointer){
