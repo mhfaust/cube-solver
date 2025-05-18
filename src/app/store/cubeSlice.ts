@@ -6,24 +6,35 @@ import storeSetters from "./storeHelpers";
 
 export type CubeWrapperMesh = Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>
 
-export type CubeModel = {
+export type SingleBlock = {
   wrapperMesh: MutableRefObject<CubeWrapperMesh>,
   intialPosition: [0|1|2, 0|1|2, 0|1|2],
 }
 
-export type CubesGrid = CubeModel[][][]
+
+/**
+ * Represents a 3D cube structure composed of smaller blocks.
+ * 
+ * The cube is modeled as a three-dimensional array where:
+ * - The first dimension represents the columns within each row (x-axis).
+ * - The second dimension represents the rows within each layer (y-axis).
+ * - The third dimension represents the layers along the depth (z-axis).
+ * 
+ * Each element in the 3D array is a `SingleBlock`, which represents an individual block within the cube.
+ */
+export type CubeGrid = SingleBlock[][][]
 
 export type CubeSlice = {
-  grid: CubesGrid,
+  cubeGrid: CubeGrid,
   isRotating: MutableRefObject<boolean>,
-  setGrid: ((grid: CubesGrid) => void),
+  setCubeGrid: ((cubeGrid: CubeGrid) => void),
 }  
 
 export const createCubeSlice: StateCreator<CubeSlice> = (set) =>{ 
   const { setValueOf } = storeSetters(set)
 
   return {
-    grid: _012.map(
+    cubeGrid: _012.map(
       (i: 0|1|2) => _012.map(
         (j: 0|1|2) => _012.map(
           (k: 0|1|2) => ({
@@ -34,7 +45,7 @@ export const createCubeSlice: StateCreator<CubeSlice> = (set) =>{
       )
     ),
     isRotating: { current: false },
-    setGrid: setValueOf('grid'),
+    setCubeGrid: setValueOf('cubeGrid'),
   }
 }
 

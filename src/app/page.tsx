@@ -9,7 +9,7 @@ import isSolved from './utils/isSolved'
 import { useEffect } from 'react'
 import { useActions } from './store/useAppStore'
 import { usePlayMode } from "./store/selectors"
-import { useGridModel, useStartTime } from "./store/selectors"
+import { useCubeGrid, useStartTime } from "./store/selectors"
 import Completed from './components/Completed'
 import Menu from './components/Menu/Menu'
 
@@ -23,7 +23,7 @@ export default function App() {
 
   const playMode = usePlayMode()
 
-  const grid = useGridModel()
+  const grid = useCubeGrid()
   const startTime = useStartTime()
   const { startTimer, stopTimer } = useActions()
 

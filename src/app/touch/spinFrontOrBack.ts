@@ -1,11 +1,11 @@
 import { ThreeEvent } from "@react-three/fiber"
 import { isOnCube, swipeInfo } from "./pointers"
-import { getCubePosition } from "@/app/utils/grid"
+import { getBlockPosition } from "@/app/utils/grid"
 import { MoveCode } from "@/app/utils/moveCodes"
-import { CubesGrid } from "@/app/store/cubeSlice"
+import { CubeGrid } from "@/app/store/cubeSlice"
 
 const spinFrontOrBack = (
-  grid: CubesGrid,
+  grid: CubeGrid,
   downPointer: ThreeEvent<PointerEvent>,
   upPointer: ThreeEvent<PointerEvent>,
   otherDownPointer: ThreeEvent<PointerEvent>,
@@ -19,7 +19,7 @@ const spinFrontOrBack = (
     return swipedAbove === swipedRight ? 'B′' : 'B'
   }
   //FRONT face:
-  const position = getCubePosition(grid, downPointer.eventObject)!
+  const position = getBlockPosition(grid, downPointer.eventObject)!
   if(position) {
     const [i, j] = position
     // log?.(i, j)

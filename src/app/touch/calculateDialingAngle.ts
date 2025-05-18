@@ -5,11 +5,19 @@ import { Pointers } from "./pointers"
 const { sqrt, pow, min, max, acos, PI } = Math
 const square = (x:number) => pow(x, 2)
 
-const dialingAngle = (pointers: Pointers, e: ThreeEvent<PointerEvent>) => {
 
-  const { moves } = pointers[e.pointerId] || {}
+/**
+ * Calculates the cumulative dialing angle in degrees based on the movement history of a pointer.
+ *
+ * @param pointers - The current "pointers" collection representing fingers on the screen.
+ * @param upPointer - The pointer event reporesenting the finger that has been lifted.
+ * @returns The cumulative dialing angle as a number. Returns 0 if the pointer data is missing or if there are insufficient moves to calculate the angle.
+ */
+const calculateDialingAngle = (pointers: Pointers, upPointer: ThreeEvent<PointerEvent>) => {
+
+  const { moves } = pointers[upPointer.pointerId] || {}
   
-  if (!pointers[e.pointerId]) { 
+  if (!pointers[upPointer.pointerId]) { 
     // console.log('//no down-pointer found for up-pointer (unexpected)')
     return 0
   }
@@ -32,7 +40,7 @@ const dialingAngle = (pointers: Pointers, e: ThreeEvent<PointerEvent>) => {
   return cumulativeAngle
 }
 
-export default dialingAngle
+export default calculateDialingAngle
 
 const angle = (
   e1: ThreeEvent<PointerEvent>, 

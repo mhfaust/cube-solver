@@ -11,7 +11,7 @@ export const useIsLogOpen = () => useAppStore(selectProp('logIsOpen'));
 export const useStartTime = () => useAppStore(selectProp('startTime'));
 export const useCompletionTime = () => useAppStore(selectProp('completionTime'));
 export const useIsSolved = () => useAppStore(selectProp('isSolved'));
-export const useGridModel = () => useAppStore(selectProp('grid'));
+export const useCubeGrid = () => useAppStore(selectProp('cubeGrid'));
 export const useIsRotating = () => useAppStore(selectProp('isRotating'));
 export const useFingersOn = () => useAppStore(selectProp('fingersOn'));
 export const useThemeName = () => useAppStore(selectProp('themeName'));

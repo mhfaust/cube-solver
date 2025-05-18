@@ -10,7 +10,7 @@ import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeom
 
 const grayScale = (n: number) => new Color(n,n,n)
 
-export const themeNames = ['dark', 'light', 'neon']
+export const themeNames = ['dark', 'light', 'neon'] as const
 export type ThemeName = typeof themeNames[number]
 
 const themes: Record<ThemeName, Theme> = {

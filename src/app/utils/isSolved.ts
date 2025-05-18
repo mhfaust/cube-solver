@@ -1,10 +1,10 @@
-import { CubesGrid } from "@/app/store/cubeSlice"
+import { CubeGrid } from "@/app/store/cubeSlice"
 
-const isSolved = (grid: CubesGrid) => solvedStates.has(serialize(grid))
+const isSolved = (grid: CubeGrid) => solvedStates.has(serialize(grid))
 
 export default isSolved
 
-const serialize = (grid: CubesGrid) => grid.flat(3)
+const serialize = (grid: CubeGrid) => grid.flat(3)
   .map(cube => cube.intialPosition).flat()
   .join('')
 

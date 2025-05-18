@@ -30,7 +30,7 @@ export const useActions = () => {
       toggleLog, 
       startTimer, 
       stopTimer, 
-      setGrid, 
+      setCubeGrid, 
       setFingersOn, 
       setThemeName,
       resetTimer
@@ -40,7 +40,7 @@ export const useActions = () => {
       toggleLog, 
       startTimer, 
       stopTimer, 
-      setGrid, 
+      setCubeGrid, 
       setFingersOn, 
       setThemeName,
       resetTimer

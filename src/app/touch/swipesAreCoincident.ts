@@ -1,10 +1,10 @@
 import { ThreeEvent } from "@react-three/fiber"
 import { swipeInfo } from "./pointers"
-import { getCubePosition } from "@/app/utils/grid"
-import { CubesGrid } from "@/app/store/cubeSlice"
+import { getBlockPosition } from "@/app/utils/grid"
+import { CubeGrid } from "@/app/store/cubeSlice"
 
 const swipesAreCoincident = (
-  grid: CubesGrid,
+  grid: CubeGrid,
   finger1: [ThreeEvent<PointerEvent>, ThreeEvent<PointerEvent>], 
   finger2: [ThreeEvent<PointerEvent>, ThreeEvent<PointerEvent>],
 
@@ -15,8 +15,8 @@ const swipesAreCoincident = (
   if (swipe1.axisDirection !== swipe2.axisDirection) {
     return false
   }
-  const fingerPosition1 = getCubePosition(grid, finger1[0].eventObject)
-  const fingerPosition2 = getCubePosition(grid, finger2[0].eventObject)
+  const fingerPosition1 = getBlockPosition(grid, finger1[0].eventObject)
+  const fingerPosition2 = getBlockPosition(grid, finger2[0].eventObject)
   if(!fingerPosition1 || !fingerPosition2) {
     return false
   }

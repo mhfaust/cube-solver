@@ -3,26 +3,26 @@
 import Cube from "@/app/components/Cubes/Cube"
 import styles from '@/app/page.module.css'
 import { useActions } from "@/app/store/useAppStore"
-import { useGridModel, useIsRotating } from "@/app/store/selectors"
+import { useCubeGrid, useIsRotating } from "@/app/store/selectors"
 import useTheme from "@/app/themes/useTheme"
-import dialingAngle from "@/app/touch/dialingAngle"
+import calculateDialingAngle from "@/app/touch/calculateDialingAngle"
 import { Pointers, addDownPointer, addMovePointer, getLatestMove, getOtherPointer, isOnCube, removePointer, swipeInfo } from "@/app/touch/pointers"
 import spinFrontOrBack from "@/app/touch/spinFrontOrBack"
 import spinRowXOrY from "@/app/touch/spinRowXOrY"
-import SpinScheduler from "@/app/touch/spinScheduler"
 import spinWholeCube from "@/app/touch/spinWholeCube"
 import spinZ from "@/app/touch/spinZ"
 import swipesAreCoincident from "@/app/touch/swipesAreCoincident"
 import twoFingerSpinDirection from "@/app/touch/twoFingerSpinDirection"
 import { ANIMATION_TIME, FIELD_OF_VIEW_ANGLE, MAX_SWIPE_ANGLE, MAX_SWIPE_TIME, MIN_DIAL_ANGLE } from "@/app/utils/constants"
-import { _012, getCubePosition } from "@/app/utils/grid"
+import { _012, getBlockPosition } from "@/app/utils/grid"
 import { MoveCode, asKeyCode, inverse, keyMoves } from "@/app/utils/moveCodes"
-import useSpinFunctions from "@/app/utils/useSpinFunctions"
+import { modelSpinFunctions, renderingSpinFunctions } from "@/app/utils/modelSpinFunctions"
 import { OrbitControls } from '@react-three/drei'
 import { Canvas, ThreeEvent, useFrame, useThree } from "@react-three/fiber"
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react'
 import { Color, PlaneGeometry, Vector3 } from "three"
 import { OrbitControls as ThreeOrbitControls } from 'three-stdlib'
+import { use } from "chai"
 
 const { PI, abs, floor, max } = Math
 const bgGeometry = new PlaneGeometry(50, 50)
@@ -30,7 +30,7 @@ const bgGeometry = new PlaneGeometry(50, 50)
 const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => {
 	const { log, setFingersOn } = useActions()
 	const isRotating = useIsRotating()
-	const grid = useGridModel()
+	const cubeGrid = useCubeGrid()
 	const { bgMaterial, pointLightIntensity, ambientLightIntensity } = useTheme()
 
 	const { camera } = useThree();
@@ -70,7 +70,6 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 		camera.updateProjectionMatrix()
 	}, [camera])
 
-	const spinFunctions = useSpinFunctions()
 
 	const undo = useCallback(() => {
 		setHistory((h) => {
@@ -79,10 +78,11 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 			if(!last) {
 				return h
 			}
-			spinFunctions[inverse(last)](ANIMATION_TIME)
+			modelSpinFunctions[inverse(last)](cubeGrid)
+			renderingSpinFunctions[inverse(last)](cubeGrid, ANIMATION_TIME, isRotating)
 			return newHistory
 		})
-	}, [spinFunctions])
+	}, [cubeGrid, isRotating])
 	
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
@@ -94,7 +94,9 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 				undo()
 			} else {
 				const move = keyMoves[keyCode]
-				spinFunctions[move](ANIMATION_TIME)
+				modelSpinFunctions[move](cubeGrid)
+				renderingSpinFunctions[move](cubeGrid, ANIMATION_TIME, isRotating)
+
 				setHistory(h => [...h, move])
 			}
 		};
@@ -102,7 +104,7 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 		return () => {
 				document.removeEventListener('keydown', handleKeyDown);
 		};
-	}, [isRotating, spinFunctions, undo]);
+	}, [cubeGrid, isRotating, undo]);
 
 	const handlePointerDown = useCallback((e: ThreeEvent<PointerEvent>) => {
 
@@ -117,6 +119,8 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 	}, [setFingersOn])
 
 	const handlePointerUp = useCallback((upPointer: ThreeEvent<PointerEvent>) => {
+		const moveCodes: MoveCode[] = []
+
 		if(Object.entries(pointers.current).length <= 1) {
 			controls.current!.enableRotate = true
 		}
@@ -126,54 +130,69 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 			removePointer(pointers.current, upPointer.pointerId)
 			return
 		}
+		// Because the cube is 3 layers in 3D space,
+		// multiple block objects on screen will likely be intersected by the raycaster
+		// so we need to check if this event is on the foremeost one closest to the camera.
+		// The `intersections` prop on the event will provide all the objects intersected
+		// by the raycaster, in order of ascending distance from the camera,
+		// so we need to check if the first intersection is the same as the eventObject
 		if(upPointer.eventObject.uuid === upPointer.intersections[0].eventObject.uuid) {
 
-			const spinScheduler = new SpinScheduler(
-				spinFunctions, 
-				moves => setHistory(h => [...h, ...moves]),
-				log,
-				ANIMATION_TIME
-			)
+			// const spinScheduler = new SpinScheduler(
+			// 	spinFunctions, 
+			// 	moves => setHistory(h => [...h, ...moves]),
+			// 	log,
+			// 	ANIMATION_TIME
+			// )
 			const swipe1 = swipeInfo(downPointer, upPointer)
 			const fingers = Object.values(pointers.current).length
 
-			const isSwipe = swipe1.distance > 5 && swipe1.time <= MAX_SWIPE_TIME
+			const pointerIndicatesMove = swipe1.distance > 5 && swipe1.time <= MAX_SWIPE_TIME
 
-			const dial = dialingAngle(pointers.current, upPointer)
+			const dial = calculateDialingAngle(pointers.current, upPointer)
+
 			if(dial > MAX_SWIPE_ANGLE && dial < MIN_DIAL_ANGLE) {
-				//do nothing
-				 log(`no-action: ambiguous dial: ${dial.toFixed(1)}°  (fingers: ${fingers})`)
+				// this is the ambiguous zone between swipe and dial
+				// do nothing
+				 log(`no-action: ambiguous swipe/dial: ${dial.toFixed(1)}°  (fingers: ${fingers})`)
 			}
-			else if(fingers === 1 && isSwipe){
-				const cubePosition = getCubePosition(grid, downPointer.eventObject)
 
-				if(cubePosition){
+			else if(fingers === 1 && pointerIndicatesMove){
+				const blockPosition = getBlockPosition(cubeGrid, downPointer.eventObject)
+
+				if(blockPosition){
 					if(dial > MIN_DIAL_ANGLE) {
-						// Array(floor(dial + (90 - MIN_DIAL_ANGLE) / 90)).fill('').forEach(() => {
-							spinScheduler.queue('F')
-						// })
-					}
-					else if (dial < - MIN_DIAL_ANGLE){
-						spinScheduler.queue('F′')
-					}
-					else if (abs(dial) < MAX_SWIPE_ANGLE) {
-						spinScheduler.queue(spinRowXOrY(grid, downPointer, upPointer))
-					}
-				} 
-				else {
-					if(dial > MIN_DIAL_ANGLE) {
-						spinScheduler.queue('Z')
+						moveCodes.push('F')
 					}
 					else if (dial < -MIN_DIAL_ANGLE){
-						spinScheduler.queue('Z′')
+						moveCodes.push('F′')
 					}
 					else if (abs(dial) < MAX_SWIPE_ANGLE) {
-						spinScheduler.queue(spinWholeCube(swipe1))
+						const moveCode = spinRowXOrY(cubeGrid, downPointer, upPointer)
+						if(moveCode) {
+							moveCodes.push(moveCode)
+						}
+					}
+				} 
+
+				else {
+					if(dial > MIN_DIAL_ANGLE) {
+						// spinScheduler.queue('Z')
+						moveCodes.push('Z')
+					}
+					else if (dial < -MIN_DIAL_ANGLE){
+						moveCodes.push('Z′')
+					}
+					else if (abs(dial) < MAX_SWIPE_ANGLE) {
+						const moveCode = spinWholeCube(swipe1)
+						if(moveCode) {
+							moveCodes.push(moveCode)
+						}
 					}
 				}
 			}
 
-			if(fingers === 2 && isSwipe) {
+			if(fingers === 2 && pointerIndicatesMove) {
 				const {pointerId} = downPointer
 				const baseDownPointer = getOtherPointer(pointers.current, downPointer)!.down
 				const baseMovePointer = getLatestMove(pointers.current, pointerId)//getPointer(movePointers, baseDownPointer.pointerId)
@@ -182,11 +201,14 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 
 				//both fingers off:
 				if (!isUpFromCube && !isBaseOnCube){
-					spinScheduler.queue(spinZ(downPointer, upPointer, baseDownPointer))
+					moveCodes.push( spinZ(downPointer, upPointer, baseDownPointer))
 				}
 				//1 finger on, 1 finger off:
 				else if(isUpFromCube !== isBaseOnCube){
-					spinScheduler.queue(spinFrontOrBack(grid, downPointer, upPointer, baseDownPointer))
+					const moveCode = spinFrontOrBack(cubeGrid, downPointer, upPointer, baseDownPointer)
+					if(moveCode) {
+						moveCodes.push(moveCode)
+					}
 				} 
 				//both fingers on:
 				else if(isUpFromCube && isBaseOnCube){
@@ -195,42 +217,52 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 						const swipe2 = swipeInfo(baseDownPointer, baseMovePointer)
 						if(swipe2.time < MAX_SWIPE_TIME && swipe1.axisDirection === swipe2.axisDirection &&
 							!swipesAreCoincident(
-								grid, 
+								cubeGrid, 
 								[upPointer, downPointer], 
 								[baseDownPointer, baseMovePointer]
 							)
 							&& swipe2.distance > 10
 						) {
-							spinScheduler.queue(spinRowXOrY(grid, downPointer, upPointer))
-							spinScheduler.queue(spinRowXOrY(grid, baseDownPointer, baseMovePointer))
-						} 
+							const move1 = spinRowXOrY(cubeGrid, downPointer, upPointer)
+							if(move1) {
+								moveCodes.push(move1)
+							}
+							const move2 = spinRowXOrY(cubeGrid, baseDownPointer, baseMovePointer)
+							if(move2) {
+								moveCodes.push(move2)
+							}
+						}
 						else {
 							const rotation = twoFingerSpinDirection(
 								[downPointer, upPointer],
 								[baseMovePointer, baseMovePointer]
 							)
-
-							spinScheduler.queue(rotation === 1 ? 'F' : rotation === -1 ? 'F′': undefined)
+							const moveCode = rotation === 1 ? 'F' : rotation === -1 ? 'F′': undefined
+							if(moveCode) {
+								moveCodes.push(moveCode)
+							}
 						}
 					}
 				}
 
 			} 
 			
-			if(fingers > 2 && isSwipe) {
-				spinScheduler.queue(spinWholeCube(swipe1))
+			if(fingers > 2 && pointerIndicatesMove) {
+				moveCodes.push(spinWholeCube(swipe1))
 				for(let p of Object.values(pointers.current)){
 					removePointer(pointers.current, p.down.pointerId)
 				}
 			} 
-
-			spinScheduler.execute()
+			moveCodes.forEach(move => {
+				modelSpinFunctions[move](cubeGrid)
+				renderingSpinFunctions[move](cubeGrid, ANIMATION_TIME, isRotating)
+			})
 		}
 		removePointer(pointers.current, upPointer.pointerId)
 
 		setFingersOn(Object.keys(pointers.current).length)
 
-	}, [grid, isRotating, log, setFingersOn, spinFunctions])
+	}, [cubeGrid, isRotating, log, setFingersOn])
 
 	const handlePointerMove = useCallback((e: ThreeEvent<PointerEvent>) => {
 		if(e.eventObject.uuid === e.intersections[0].eventObject.uuid) {
@@ -272,7 +304,7 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 					x0={x0} 
 					y0={y0} 
 					z0={z0} 
-					containerRef={grid[x0][y0][z0].wrapperMesh}
+					containerRef={cubeGrid[x0][y0][z0].wrapperMesh}
 					onPointerDown={handlePointerDown}
 					onPointerUp={handlePointerUp}
 					onPointerMove={handlePointerMove}

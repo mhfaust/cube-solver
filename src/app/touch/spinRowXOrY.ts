@@ -1,21 +1,22 @@
-import { getCubePosition } from "@/app/utils/grid"
+import { getBlockPosition } from "@/app/utils/grid"
 import { ThreeEvent } from "@react-three/fiber"
 import { AxisDirection, swipeInfo } from "./pointers"
 import { MoveCode } from "@/app/utils/moveCodes"
-import { CubesGrid } from "@/app/store/cubeSlice"
+import { CubeGrid } from "@/app/store/cubeSlice"
 
 const spinRowXOrY = (
-    grid: CubesGrid, 
+    grid: CubeGrid, 
     downPointer: ThreeEvent<PointerEvent>, 
     upPointer: ThreeEvent<PointerEvent>
   ) => {
 
-  const position = getCubePosition(grid, downPointer.eventObject)
-  if(!position){
-    return { error: "Unexpected: downPointer not on any cube"}
+  const positionOfTouchedBlock = getBlockPosition(grid, downPointer.eventObject)
+  if(!positionOfTouchedBlock){
+    return undefined
+    // return { error: "Unexpected: downPointer not on any cube"}
   }
 
-  const [i,j] = position
+  const [i,j] = positionOfTouchedBlock
 
   const { 
     distance, 

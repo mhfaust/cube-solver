@@ -1,12 +1,12 @@
 import { MoveCode } from "@/app/utils/moveCodes"
 import { AxisDirection, swipeInfo } from "./pointers"
 
-const map: Record<AxisDirection, MoveCode> = {
+const map = {
   'down': 'X',
   'up': 'X′',
   'right': 'Y',
   'left': 'Y′',
-}
+} as const
 
 const spinWholeCube = (swipe: Pick<ReturnType<typeof swipeInfo>, 'axisDirection'>) => {
   const { axisDirection } = swipe
