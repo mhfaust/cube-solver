@@ -12,7 +12,7 @@ export type GameControlsSlice = {
 
 export type PlayMode = 'casual' | 'in-play' | 'complete'
 
-export const createGameControlsSlice: StateCreator<GameControlsSlice> = (set) =>{
+export const createGameControlsSlice: StateCreator<GameControlsSlice> = (set) => {
   const { setValueUsing } = storeSetters(set)
   return  {
     isSolved: true,

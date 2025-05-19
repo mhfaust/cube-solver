@@ -8,7 +8,7 @@ type ArrayKeys<T, V> = {
   [K in keyof T]: T[K] extends Array<V> ? K : never;
 }[keyof T];
 
-function storeSetters <T> (set: ZustandSet<T>, get: () => T) {
+function storeSetters <T> (set: ZustandSet<T>) {
 
   return ({
     setValueOf: (propName: keyof T) => {
