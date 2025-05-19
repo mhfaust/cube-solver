@@ -24,7 +24,7 @@ import { Color, PlaneGeometry, Vector3 } from "three"
 import { OrbitControls as ThreeOrbitControls } from 'three-stdlib'
 import { use } from "chai"
 
-const { PI, abs, floor, max } = Math
+const { PI, abs } = Math
 const bgGeometry = new PlaneGeometry(50, 50)
 
 const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => {
