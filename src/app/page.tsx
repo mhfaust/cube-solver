@@ -1,7 +1,7 @@
 
 'use client'
 
-import Cubes from './components/Cubes'
+import Cube from './components/Cube'
 import styles from './page.module.css'
 import Timer from './components/Timer'
 import isSolved from './utils/isSolved'
@@ -42,7 +42,7 @@ export default function App() {
       {playMode === 'complete' && ( 
         <Completed />
       )}  
-      <Cubes />
+      <Cube />
       {playMode !== 'complete' && (
         <Timer />
       )}

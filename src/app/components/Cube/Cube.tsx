@@ -32,7 +32,7 @@ import { OrbitControls as ThreeOrbitControls } from 'three-stdlib'
 const { PI, abs } = Math
 const bgGeometry = new PlaneGeometry(50, 50)
 
-const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => {
+const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => {
 	const { log, setFingersOn } = useActions()
 	const isRotating = useIsRotating()
 	const cubeGrid = useCubeGrid()
@@ -319,15 +319,15 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 	)
 }
 
-const Cubes = () => { 
+const Cube = () => { 
 	const canvas = useRef<HTMLCanvasElement>(null)
 	return (
 		<div className={styles.canvas}>
 			<Canvas ref={canvas} >
-				<CubesContainer canvas={canvas}/>
+				<BlocksContainer canvas={canvas}/>
 			</Canvas>
 		</div>
 	)
 };
 
-export default Cubes
+export default Cube
