@@ -19,7 +19,7 @@ const useScramble = () => {
   return useCallback(() => {
 
     const randomSequence = Array.from(
-      { length: 1 }, 
+      { length: 100 }, 
       () => oneLayerSpins[Math.floor(Math.random() * numSpinTypes)]
     )
     const recurse = () => {
