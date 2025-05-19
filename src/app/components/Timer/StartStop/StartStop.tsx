@@ -1,4 +1,4 @@
-import useAppStore, { useActions } from '@/app/store/useAppStore'
+import { useActions } from '@/app/store/useAppStore'
 import { useStartTime } from "@/app/store/selectors";
 import styles from './StartStop.module.css'
 import useScramble from '@/app/utils/useScramble';

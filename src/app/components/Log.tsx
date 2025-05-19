@@ -1,5 +1,5 @@
 import styles from '@/app/page.module.css'
-import useAppStore, { useActions } from '@/app/store/useAppStore'
+import { useActions } from '@/app/store/useAppStore'
 import { useIsLogOpen, useMessages } from "../store/selectors"
 import clsx from 'clsx'
 import { useEffect, useRef } from 'react'

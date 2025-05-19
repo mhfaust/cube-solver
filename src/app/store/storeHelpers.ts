@@ -1,4 +1,4 @@
-type ZSet<T> = (partial: T | Partial<T> | ((state: T) => T | Partial<T>), replace?: boolean | undefined) => void
+type ZustandSet<T> = (partial: T | Partial<T> | ((state: T) => T | Partial<T>), replace?: boolean | undefined) => void
 
 type BooleanKeys<T> = {
   [K in keyof T]: T[K] extends boolean ? K : never;
@@ -8,7 +8,7 @@ type ArrayKeys<T, V> = {
   [K in keyof T]: T[K] extends Array<V> ? K : never;
 }[keyof T];
 
-function storeSetters <T> (set: ZSet<T>) {
+function storeSetters <T> (set: ZustandSet<T>, get: () => T) {
 
   return ({
     setValueOf: (propName: keyof T) => {
