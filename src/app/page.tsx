@@ -3,7 +3,6 @@
 
 import Cubes from './components/Cubes'
 import styles from './page.module.css'
-import StartStop from './components/Timer/StartStop'
 import Timer from './components/Timer'
 import isSolved from './utils/isSolved'
 import { useEffect } from 'react'
@@ -25,10 +24,14 @@ export default function App() {
 
   const grid = useCubeGrid()
   const startTime = useStartTime()
-  const { startTimer, stopTimer } = useActions()
+  const { stopTimer } = useActions()
 
+  
   useEffect(() => {
+    console.log('useEffect')
+    console.log('isSolved inside useEffect:', isSolved(grid))
     if (startTime && isSolved(grid)) {
+      console.log('should stop timer now')
 
       stopTimer(true)
     }

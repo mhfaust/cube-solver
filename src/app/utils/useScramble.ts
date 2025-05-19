@@ -1,7 +1,7 @@
 import { useCallback } from "react"
 import { MoveCode } from "./moveCodes"
-import { modelSpinFunctions, renderingSpinFunctions } from "./modelSpinFunctions"
-import { useCubeGrid, useIsRotating } from "../store/selectors"
+import { useExecuteMove } from "./useExecuteMove"
+import { useIsRotating } from "../store/selectors"
 
 const oneLayerSpins: MoveCode[] = [
   'U' , 'U′' , 'D' , 'D′' , 'E' , 'E′' ,
@@ -14,12 +14,12 @@ const SCRAMBLE_ROTATION_TIME = 5 //very fast
 
 const useScramble = () => {
   const isRotating = useIsRotating()
-  const cubeGrid = useCubeGrid()
+  const executeMove = useExecuteMove()
 
   return useCallback(() => {
 
     const randomSequence = Array.from(
-      { length: 100 }, 
+      { length: 1 }, 
       () => oneLayerSpins[Math.floor(Math.random() * numSpinTypes)]
     )
     const recurse = () => {
@@ -27,17 +27,15 @@ const useScramble = () => {
       if(!nextMove){
         return
       }
-      modelSpinFunctions[nextMove](cubeGrid)
-      renderingSpinFunctions[nextMove](
-        cubeGrid,
-        SCRAMBLE_ROTATION_TIME,isRotating)
+      executeMove(nextMove, SCRAMBLE_ROTATION_TIME, isRotating)
+      
 
       if(randomSequence.length){
         setTimeout(recurse, SCRAMBLE_ROTATION_TIME)
       }
     }
     recurse()
-  }, [cubeGrid])
+  }, [executeMove, isRotating])
 }
 
 export default useScramble

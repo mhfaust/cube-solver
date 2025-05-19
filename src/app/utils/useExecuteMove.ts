@@ -2,9 +2,11 @@ import { MoveCode } from "./moveCodes"
 import { cubeModelRotator, layerModelRotator } from "./modelRotators"
 import { cubeRenderingRotator, layerRenderingRotator } from './threeJsRotators'
 import { CubeGrid } from "../store/cubeSlice"
-import { MutableRefObject } from "react"
+import { MutableRefObject, useCallback } from "react"
+import { useActions } from "../store/useAppStore"
+import { useCubeGrid } from "../store/selectors"
 
-export  const modelSpinFunctions: Record<MoveCode, (cubeGrid: CubeGrid) => void> = {
+const modelSpinFunctions: Record<MoveCode, (cubeGrid: CubeGrid) => CubeGrid> = {
 	'U': layerModelRotator('y', 2, '-'),
 	'U′': layerModelRotator('y', 2, '+'),
 	'D': layerModelRotator('y', 0, '+'),
@@ -30,7 +32,8 @@ export  const modelSpinFunctions: Record<MoveCode, (cubeGrid: CubeGrid) => void>
 	'S': layerModelRotator('z', 1, '-'),
 	'S′': layerModelRotator('z', 1, '+')
 }
-export  const renderingSpinFunctions: Record<
+
+const renderingSpinFunctions: Record<
 	MoveCode, (cubeGrid: CubeGrid, animationTime: number, isRotating: MutableRefObject<boolean>) => void
 > = {
 	'U': layerRenderingRotator('y', 2, '-'),
@@ -60,10 +63,20 @@ export  const renderingSpinFunctions: Record<
 }
 
 
-export const rotateCubeGrid = (cubeGrid: CubeGrid, move: MoveCode) => {
-	const rotator = modelSpinFunctions[move]
-	if(rotator){
-		return rotator(cubeGrid)
-	}
-	return undefined
+export const useExecuteMove = () => {
+	const { setCubeGrid } = useActions()
+	const cubeGrid = useCubeGrid()
+	
+	const executeMove = useCallback((move: MoveCode, animationTime: number, isRotating: MutableRefObject<boolean>) => {
+		const getUpdatedCubeGrid = modelSpinFunctions[move]
+		const updatedCubeGrid = getUpdatedCubeGrid(cubeGrid)
+		setCubeGrid(updatedCubeGrid)
+
+		const renderModel = renderingSpinFunctions[move]
+		renderModel(cubeGrid, animationTime, isRotating)
+	}, [cubeGrid, setCubeGrid])	 
+
+	return executeMove;
+
 }
+

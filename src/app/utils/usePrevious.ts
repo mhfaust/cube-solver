@@ -9,8 +9,6 @@ function usePrevious(value: any) {
   // By setting the ref's value in useEffect, we ensure what is returned is what was set  
   // before this, on the previous render, not the current render
   useEffect(() => {
-    console.log('VALUE CHANGED')
-
     ref.current = value;
   }, [value]); 
 

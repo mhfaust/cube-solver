@@ -6,23 +6,28 @@ import { useActions } from "@/app/store/useAppStore"
 import { useCubeGrid, useIsRotating } from "@/app/store/selectors"
 import useTheme from "@/app/themes/useTheme"
 import calculateDialingAngle from "@/app/touch/calculateDialingAngle"
-import { Pointers, addDownPointer, addMovePointer, getLatestMove, getOtherPointer, isOnCube, removePointer, swipeInfo } from "@/app/touch/pointers"
+import { 
+	Pointers, addDownPointer, addMovePointer, getLatestMove, 
+	getOtherPointer, isOnCube, removePointer, swipeInfo 
+} from "@/app/touch/pointers"
 import spinFrontOrBack from "@/app/touch/spinFrontOrBack"
 import spinRowXOrY from "@/app/touch/spinRowXOrY"
 import spinWholeCube from "@/app/touch/spinWholeCube"
 import spinZ from "@/app/touch/spinZ"
 import swipesAreCoincident from "@/app/touch/swipesAreCoincident"
 import twoFingerSpinDirection from "@/app/touch/twoFingerSpinDirection"
-import { ANIMATION_TIME, FIELD_OF_VIEW_ANGLE, MAX_SWIPE_ANGLE, MAX_SWIPE_TIME, MIN_DIAL_ANGLE } from "@/app/utils/constants"
+import { 
+	ANIMATION_TIME, FIELD_OF_VIEW_ANGLE, MAX_SWIPE_ANGLE, 
+	MAX_SWIPE_TIME, MIN_DIAL_ANGLE 
+} from "@/app/utils/constants"
 import { _012, getBlockPosition } from "@/app/utils/grid"
 import { MoveCode, asKeyCode, inverse, keyMoves } from "@/app/utils/moveCodes"
-import { modelSpinFunctions, renderingSpinFunctions } from "@/app/utils/modelSpinFunctions"
+import { useExecuteMove } from "@/app/utils/useExecuteMove"
 import { OrbitControls } from '@react-three/drei'
 import { Canvas, ThreeEvent, useFrame, useThree } from "@react-three/fiber"
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react'
 import { Color, PlaneGeometry, Vector3 } from "three"
 import { OrbitControls as ThreeOrbitControls } from 'three-stdlib'
-import { use } from "chai"
 
 const { PI, abs } = Math
 const bgGeometry = new PlaneGeometry(50, 50)
@@ -31,6 +36,9 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 	const { log, setFingersOn } = useActions()
 	const isRotating = useIsRotating()
 	const cubeGrid = useCubeGrid()
+	const executeMove = useExecuteMove()
+
+
 	const { bgMaterial, pointLightIntensity, ambientLightIntensity } = useTheme()
 
 	const { camera } = useThree();
@@ -78,11 +86,11 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 			if(!last) {
 				return h
 			}
-			modelSpinFunctions[inverse(last)](cubeGrid)
-			renderingSpinFunctions[inverse(last)](cubeGrid, ANIMATION_TIME, isRotating)
+			executeMove(inverse(last), ANIMATION_TIME, isRotating)
+			
 			return newHistory
 		})
-	}, [cubeGrid, isRotating])
+	}, [executeMove, isRotating])
 	
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
@@ -94,9 +102,7 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 				undo()
 			} else {
 				const move = keyMoves[keyCode]
-				modelSpinFunctions[move](cubeGrid)
-				renderingSpinFunctions[move](cubeGrid, ANIMATION_TIME, isRotating)
-
+				executeMove(move, ANIMATION_TIME, isRotating)
 				setHistory(h => [...h, move])
 			}
 		};
@@ -104,7 +110,7 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 		return () => {
 				document.removeEventListener('keydown', handleKeyDown);
 		};
-	}, [cubeGrid, isRotating, undo]);
+	}, [ executeMove, isRotating, undo]);
 
 	const handlePointerDown = useCallback((e: ThreeEvent<PointerEvent>) => {
 
@@ -254,15 +260,14 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 				}
 			} 
 			moveCodes.forEach(move => {
-				modelSpinFunctions[move](cubeGrid)
-				renderingSpinFunctions[move](cubeGrid, ANIMATION_TIME, isRotating)
+				executeMove(move, ANIMATION_TIME, isRotating)
 			})
 		}
 		removePointer(pointers.current, upPointer.pointerId)
 
 		setFingersOn(Object.keys(pointers.current).length)
 
-	}, [cubeGrid, isRotating, log, setFingersOn])
+	}, [cubeGrid, executeMove, isRotating, log, setFingersOn])
 
 	const handlePointerMove = useCallback((e: ThreeEvent<PointerEvent>) => {
 		if(e.eventObject.uuid === e.intersections[0].eventObject.uuid) {
