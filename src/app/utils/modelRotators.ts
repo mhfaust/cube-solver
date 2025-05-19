@@ -21,12 +21,12 @@ const rotateModelLayer = (cubeGrid: CubeGrid, translations: Translations): CubeG
 
   const news = translations.map(s => ({ 
     current: cubeGrid[s[3]][s[4]][s[5]].wrapperMesh.current ,
-    initialPosition: cubeGrid[s[3]][s[4]][s[5]].intialPosition
+    initialPosition: cubeGrid[s[3]][s[4]][s[5]].initialPosition
   }))
   
   translations.forEach((s, i) => {
     newGrid[s[0]][s[1]][s[2]].wrapperMesh.current = news[i].current
-    newGrid[s[0]][s[1]][s[2]].intialPosition = news[i].initialPosition
+    newGrid[s[0]][s[1]][s[2]].initialPosition = news[i].initialPosition
   })
   return newGrid
 }

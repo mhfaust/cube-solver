@@ -8,7 +8,7 @@ export type CubeWrapperMesh = Mesh<BufferGeometry<NormalBufferAttributes>, Mater
 
 export type SingleBlock = {
   wrapperMesh: MutableRefObject<CubeWrapperMesh>,
-  intialPosition: [0|1|2, 0|1|2, 0|1|2],
+  initialPosition: [0|1|2, 0|1|2, 0|1|2],
 }
 
 
@@ -39,7 +39,7 @@ export const createCubeSlice: StateCreator<CubeSlice> = (set) =>{
         (j: 0|1|2) => _012.map(
           (k: 0|1|2) => ({
             wrapperMesh: { current: {} as Mesh },
-            intialPosition: [i,j,k]
+            initialPosition: [i,j,k]
           })
         )
       )
