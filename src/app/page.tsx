@@ -28,19 +28,12 @@ export default function App() {
 
   
   useEffect(() => {
-    console.log('useEffect')
-    console.log('isSolved inside useEffect:', isSolved(grid))
     if (startTime && isSolved(grid)) {
-      console.log('should stop timer now')
 
       stopTimer(true)
     }
   }, [grid, startTime, stopTimer])
   
-  if(isSolved(grid)){
-		console.log('SOLVED')
-	}
-
   return (
     <div className={styles.main}>
       {playMode === 'casual' && (
