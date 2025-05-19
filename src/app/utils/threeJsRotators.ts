@@ -92,13 +92,10 @@ export const layerRenderingRotator = (
 }
 
 /**
- * HOF that creates a function to execute a cubeGrid full rotation (all 3 layers) given a cubeGrid, direction, 
+ * HOF that creates a function to execute a cubeGrid (model) a full (all 3 layers) 1/4 turn given a cubeGrid, direction, 
  *
  * @param axis - The axis of rotation ('x', 'y', or 'z').
  * @param direction - The direction of rotation ('+' for clockwise, '-' for counterclockwise).
- * @param cubeGrid - The current state of the cube represented as a `Cube`.
- * @param setCubeGrid - A function to update the cube's state.
- * @param isRotating - A mutable reference object indicating whether a rotation is in progress.
  * @returns A function that performs the rotation animation over a specified duration.
  *
  * The returned function takes a single parameter:
