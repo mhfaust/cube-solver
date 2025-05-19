@@ -1,6 +1,6 @@
 import { MoveCode } from "./moveCodes"
 import { cubeModelRotator, layerModelRotator } from "./modelRotators"
-import { cubeRenderingRotator, layerRenderingRotator } from './threeJsRotators'
+import { cubeRenderingRotator, layerRenderingRotator } from './renderingRotators'
 import { CubeGrid } from "../store/cubeSlice"
 import { MutableRefObject, useCallback } from "react"
 import { useActions } from "../store/useAppStore"

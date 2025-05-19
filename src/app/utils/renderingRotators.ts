@@ -3,7 +3,23 @@ import { Object3D, Vector3 } from "three";
 import { SingleBlock, CubeGrid } from "@/app/store/cubeSlice";
 
 /**
- * Rotates a cube object around a specified axis by a given angle.
+ * Returns an array of objects representing the blocks in a specified layer of a cube grid.
+ *
+ * @param cubeGrid - The 3D cube grid represented as a 3D array.
+ * @param axis - The axis along which to extract the layer ('x', 'y', or 'z').
+ * @param layer - The index of the layer to extract (0, 1, or 2).
+ * @returns An array of objects representing the blocks in the specified layer.
+ */
+function layerObjects <T>(cubeGrid: CubeGrid, axis: 'x'|'y'|'z', layer: 0|1|2) {
+  return {
+    'x': () => cubeGrid[layer].flat(),
+    'y': () => cubeGrid.map(i => i[layer]).flat(),
+    'z': () => cubeGrid.map(j => j.map(y => y[layer])).flat()
+  }[axis]()
+}
+
+/**
+ * Rotates a cube object around a specified axis (not its center) by a given angle.
  *
  * @param threeJsCube - The cube object to be rotated.
  * @param axis - The axis of rotation (x, y, or z).
@@ -33,18 +49,6 @@ function orbit(
   recurse(0)
 }
 
-function layerObjects <T>(cubeGrid: CubeGrid, axis: 'x'|'y'|'z', layer: 0|1|2) {
-return {
-  'x': () => cubeGrid[layer].flat(),
-  'y': () => cubeGrid.map(i => i[layer]).flat(),
-  'z': () => cubeGrid.map(j => j.map(y => y[layer])).flat()
-}[axis]()
-}
-
-const xAxis = new Vector3(1, 0,0 ).normalize()
-const yAxis = new Vector3(0, 1, 0).normalize()
-const zAxis = new Vector3(0, 0, 1).normalize()
-
 const makeOrbiter = (angle: number, axis: Vector3) => {
   return (
     cube: Object3D, 
@@ -52,23 +56,24 @@ const makeOrbiter = (angle: number, axis: Vector3) => {
     animattionTime: number
   ) => orbit(cube, axis, angle, callback, animattionTime)
 }
-const orbitXPositive = makeOrbiter(Math.PI/2, xAxis)
-const orbitXNegative = makeOrbiter(-Math.PI/2, xAxis)
-const orbitYPositive = makeOrbiter(Math.PI/2, yAxis)
-const orbitYNegative = makeOrbiter(-Math.PI/2, yAxis)
-const orbitZPositive = makeOrbiter(Math.PI/2, zAxis)
-const orbitZNegative = makeOrbiter(-Math.PI/2, zAxis)
+
+const xAxis = new Vector3(1, 0,0 ).normalize()
+const yAxis = new Vector3(0, 1, 0).normalize()
+const zAxis = new Vector3(0, 0, 1).normalize()
 
 const rotationFunctionsByAxisAndDirection = {
   x: {
-    '+': orbitXPositive, 
-    '-': orbitXNegative},
+    '+': makeOrbiter(Math.PI/2, xAxis), 
+    '-': makeOrbiter(-Math.PI/2, xAxis)
+  },
   y: {
-    '+': orbitYPositive, 
-    '-': orbitYNegative},
+    '+': makeOrbiter(Math.PI/2, yAxis), 
+    '-': makeOrbiter(-Math.PI/2, yAxis)
+  },
   z: {
-    '+': orbitZPositive, 
-    '-': orbitZNegative},
+    '+': makeOrbiter(Math.PI/2, zAxis), 
+    '-': makeOrbiter(-Math.PI/2, zAxis)
+  },
 } as const
 
 export const layerRenderingRotator = (
