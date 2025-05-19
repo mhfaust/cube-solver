@@ -1,6 +1,6 @@
 'use client'
 
-import Cube from "@/app/components/Cubes/Cube"
+import Block from "@/app/components/Block"
 import styles from '@/app/page.module.css'
 import { useActions } from "@/app/store/useAppStore"
 import { useCubeGrid, useIsRotating } from "@/app/store/selectors"
@@ -304,7 +304,7 @@ const CubesContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => 
 			/>
 
 			{(_012).map(x0 => (_012).map(y0 => (_012).map(z0 =>(
-				<Cube 
+				<Block 
 					key={`x0:${x0},y0:${y0},z0:${z0}`} 
 					x0={x0} 
 					y0={y0} 

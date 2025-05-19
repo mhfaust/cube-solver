@@ -6,7 +6,7 @@ import {
   BufferGeometry,
   Material,
   Mesh,
-  MeshPhongMaterial,
+  // MeshPhongMaterial,
   MeshStandardMaterial,
   NormalBufferAttributes,
   Object3DEventMap,
@@ -14,20 +14,20 @@ import {
 
 const facePolygonIndices = new Set([72, 73, 74, 75, 76, 77])
 
-export type CubeContainerRef = MutableRefObject<Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>>
+export type BlockContainerRef = MutableRefObject<Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>>
 
 const r = createRef()
 
-type CubeProps = {
+type BlockProps = {
   x0: 0|1|2; 
   y0: 0|1|2; 
   z0: 0|1|2;
-  containerRef: CubeContainerRef;
+  containerRef: BlockContainerRef;
   onPointerDown: (event: ThreeEvent<PointerEvent>) => void,
   onPointerUp: (event: ThreeEvent<PointerEvent>) => void,
   onPointerMove?: (event: ThreeEvent<PointerEvent>) => void,
 }
-const Cube = ({ 
+const Block = ({ 
   x0, 
   y0, 
   z0, 
@@ -35,26 +35,26 @@ const Cube = ({
   onPointerDown, 
   onPointerUp,
   onPointerMove
-}: CubeProps) => {
+}: BlockProps) => {
 
-  const { frameColor, faceColors, boxRoundness, cubeGeometry } = useTheme()
+  const { frameColor, faceColors, boxRoundness, blockGeometry } = useTheme()
 
-  const cubeRef = useRef<Mesh>({} as Mesh)
+  const blockRef = useRef<Mesh>({} as Mesh)
 
   const materialRef = useRef(new MeshStandardMaterial({ vertexColors: true }))
 
   useEffect (() => {
-    cubeRef.current.geometry = cubeGeometry
-    cubeRef.current.material = materialRef.current
+    blockRef.current.geometry = blockGeometry
+    blockRef.current.material = materialRef.current
 
-    let { count } = cubeGeometry.attributes.position
-    cubeGeometry
+    let { count } = blockGeometry.attributes.position
+    blockGeometry
       .setAttribute('color', new BufferAttribute(new Float32Array( count * 3 ), 3 ))
 
     for(let i = 0; i < count; i++){
       const imod = i % 150
       if(!facePolygonIndices.has(imod)) {
-        cubeGeometry
+        blockGeometry
           .attributes.color.setXYZ(i ,frameColor.r, frameColor.g, frameColor.b)
       } else {
         const faceColor = faceColors[Math.floor(i / 6) % 6]
@@ -67,11 +67,11 @@ const Cube = ({
           faceColor === faceColors[4] && z0 === 2 || 
           faceColor === faceColors[5] && z0 === 0
         ){
-          cubeGeometry.attributes.color.setXYZ(i ,faceColor.r, faceColor.g, faceColor.b)
+          blockGeometry.attributes.color.setXYZ(i ,faceColor.r, faceColor.g, faceColor.b)
         }
       }
     }
-  }, [cubeGeometry, faceColors, frameColor.b, frameColor.g, frameColor.r, x0, y0, z0])
+  }, [blockGeometry, faceColors, frameColor.b, frameColor.g, frameColor.r, x0, y0, z0])
 
   return (
     <mesh 
@@ -79,16 +79,16 @@ const Cube = ({
       position={[0,1,0]}
     >
         <mesh
-          ref={cubeRef}
+          ref={blockRef}
           onPointerDown={onPointerDown}
           onPointerUp={onPointerUp}
           onPointerMove={onPointerMove}
           position={[x0-1, y0-1, z0-1]}
-          geometry={cubeGeometry}
+          geometry={blockGeometry}
           // material={materialRef.current} 
         />
     </mesh>
   )
 }
 
-export default Cube
+export default Block

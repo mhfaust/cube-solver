@@ -69,7 +69,7 @@ const useTheme = () => {
     pointLightIntensity,
     ambientLightIntensity,
     boxRoundness,
-    cubeGeometry: new RoundedBoxGeometry(1.0, 1.0, 1.0, 2, boxRoundness)
+    blockGeometry: new RoundedBoxGeometry(1.0, 1.0, 1.0, 2, boxRoundness)
   }),[ambientLightIntensity, backgroundColor, boxRoundness, faceColors, frameColor, pointLightIntensity])
 }
 
