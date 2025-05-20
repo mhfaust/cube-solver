@@ -3,6 +3,7 @@ import { MutableRefObject } from "react";
 import { BufferGeometry, Material, Mesh, NormalBufferAttributes, Object3DEventMap } from "three";
 import { _012 } from "@/app/utils/grid";
 import storeSetters from "./storeHelpers";
+import { MoveCode } from "../utils/moveCodes";
 
 export type CubeWrapperMesh = Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>
 
@@ -10,6 +11,8 @@ export type SingleBlock = {
   wrapperMesh: MutableRefObject<CubeWrapperMesh>,
   initialPosition: [0|1|2, 0|1|2, 0|1|2],
 }
+
+const emptyHistory: MoveCode[] = []
 
 
 /**
@@ -28,10 +31,14 @@ export type CubeSlice = {
   cubeGrid: CubeGrid,
   isRotating: MutableRefObject<boolean>,
   setCubeGrid: ((cubeGrid: CubeGrid) => void),
+  history: MoveCode[],
+  pushHistory: (moveCode: MoveCode) => void,
+  popHistory: () => MoveCode | undefined,
+  clearHistory: () => void,
 }  
 
-export const createCubeSlice: StateCreator<CubeSlice> = (set) =>{ 
-  const { setValueOf } = storeSetters(set)
+export const createCubeSlice: StateCreator<CubeSlice> = (set, get) => { 
+  const { setValueOf, pushValueTo } = storeSetters(set)
 
   return {
     cubeGrid: _012.map(
@@ -46,6 +53,22 @@ export const createCubeSlice: StateCreator<CubeSlice> = (set) =>{
     ),
     isRotating: { current: false },
     setCubeGrid: setValueOf('cubeGrid'),
+    history: emptyHistory,
+    pushHistory: pushValueTo('history'),
+    popHistory: () => {
+      const { history } = get()
+      const newHistory = [...history]
+      const poppedValue = newHistory.pop()
+
+      if(poppedValue === undefined) {
+        return undefined
+      }
+      set({ history: newHistory })
+      return poppedValue
+    },
+    clearHistory: () => {
+      set({ history: emptyHistory })
+    }
   }
 }
 

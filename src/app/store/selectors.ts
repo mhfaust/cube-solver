@@ -14,6 +14,7 @@ export const useIsSolved = () => useAppStore(selectProp('isSolved'));
 export const useCubeGrid = () => useAppStore(selectProp('cubeGrid'));
 export const useIsRotating = () => useAppStore(selectProp('isRotating'));
 export const useFingersOn = () => useAppStore(selectProp('fingersOn'));
+export const useHistory = () => useAppStore(selectProp('history')); 
 export const useThemeName = () => useAppStore(selectProp('themeName'));
 
 export const usePlayMode = () => {

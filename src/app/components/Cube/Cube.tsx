@@ -3,7 +3,7 @@
 import Block from "@/app/components/Block"
 import styles from '@/app/page.module.css'
 import { useActions } from "@/app/store/useAppStore"
-import { useCubeGrid, useIsRotating } from "@/app/store/selectors"
+import { useCubeGrid, useHistory, useIsRotating } from "@/app/store/selectors"
 import useTheme from "@/app/themes/useTheme"
 import calculateDialingAngle from "@/app/touch/calculateDialingAngle"
 import { 
@@ -22,7 +22,7 @@ import {
 } from "@/app/utils/constants"
 import { _012, getBlockPosition } from "@/app/utils/grid"
 import { MoveCode, asKeyCode, inverse, keyMoves } from "@/app/utils/moveCodes"
-import { useExecuteMove } from "@/app/utils/useExecuteMove"
+import { useExecuteMove, useUndoLastMove } from "@/app/utils/useExecuteMove"
 import { OrbitControls } from '@react-three/drei'
 import { Canvas, ThreeEvent, useFrame, useThree } from "@react-three/fiber"
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react'
@@ -37,12 +37,13 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 	const isRotating = useIsRotating()
 	const cubeGrid = useCubeGrid()
 	const executeMove = useExecuteMove()
+	const {  } = useActions()
+	const history = useHistory();
 
 
 	const { bgMaterial, pointLightIntensity, ambientLightIntensity } = useTheme()
 
 	const { camera } = useThree();
-	const [_history, setHistory] = useState<MoveCode[]>([])
 	const controls = useRef<ThreeOrbitControls>(null);
 	const pointers = useRef<Pointers>({})
 	const swipeTimeout = useRef<NodeJS.Timeout | null>(null)
@@ -78,19 +79,7 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 		camera.updateProjectionMatrix()
 	}, [camera])
 
-
-	const undo = useCallback(() => {
-		setHistory((h) => {
-			const newHistory = [...h]
-			const last = newHistory.pop()
-			if(!last) {
-				return h
-			}
-			executeMove(inverse(last), ANIMATION_TIME, isRotating)
-			
-			return newHistory
-		})
-	}, [executeMove, isRotating])
+	const undoLastMove = useUndoLastMove();
 	
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
@@ -99,18 +88,19 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 				return
 			}
 			if(e.metaKey && keyCode === 'z'){
-				undo()
-			} else {
+				undoLastMove(ANIMATION_TIME, isRotating)
+			} else { 
 				const move = keyMoves[keyCode]
 				executeMove(move, ANIMATION_TIME, isRotating)
-				setHistory(h => [...h, move])
 			}
 		};
+
 		document.addEventListener('keydown', handleKeyDown);
+
 		return () => {
 				document.removeEventListener('keydown', handleKeyDown);
 		};
-	}, [ executeMove, isRotating, undo]);
+	}, [ executeMove, isRotating, undoLastMove]);
 
 	const handlePointerDown = useCallback((e: ThreeEvent<PointerEvent>) => {
 

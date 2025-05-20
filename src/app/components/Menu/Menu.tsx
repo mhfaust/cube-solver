@@ -24,7 +24,10 @@ const Menu = () => {
                 // className={clsx({[styles.selected]: selectedThemeName === name})}
                 type="radio"
                 // onChange={(isChecked) => setThemeName(name)}
-                onChange={(e) => setThemeName(e.target.value as ThemeName)}
+                onChange={(e) => {
+                  setThemeName(e.target.value as ThemeName); 
+                  setIsOpen(false);
+                }}
                 checked={selectedThemeName === name}
                 value={name}
                 id={name}
@@ -33,12 +36,6 @@ const Menu = () => {
               {name}
             </label>
           ))}
-          <button
-            onClick={() => setIsOpen(false)}
-            className={styles.doneButton}
-          >
-            Done
-          </button>
         </div>
       )}
 

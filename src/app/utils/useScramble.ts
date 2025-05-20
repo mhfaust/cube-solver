@@ -2,6 +2,7 @@ import { useCallback } from "react"
 import { MoveCode } from "./moveCodes"
 import { useExecuteMove } from "./useExecuteMove"
 import { useIsRotating } from "../store/selectors"
+import { useActions } from "../store/useAppStore"
 
 const oneLayerSpins: MoveCode[] = [
   'U' , 'U′' , 'D' , 'D′' , 'E' , 'E′' ,
@@ -15,7 +16,7 @@ const SCRAMBLE_ROTATION_TIME = 5 //very fast
 const useScramble = () => {
   const isRotating = useIsRotating()
   const executeMove = useExecuteMove()
-
+  const { clearHistory } = useActions()
   return useCallback(() => {
 
     const randomSequence = Array.from(
@@ -33,9 +34,12 @@ const useScramble = () => {
       if(randomSequence.length){
         setTimeout(recurse, SCRAMBLE_ROTATION_TIME)
       }
+      else {
+        clearHistory()
+      }
     }
     recurse()
-  }, [executeMove, isRotating])
+  }, [executeMove, isRotating, clearHistory])
 }
 
 export default useScramble

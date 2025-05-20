@@ -1,4 +1,4 @@
-import { MoveCode } from "./moveCodes"
+import { inverse, MoveCode } from "./moveCodes"
 import { cubeModelRotator, layerModelRotator } from "./modelRotators"
 import { cubeRenderingRotator, layerRenderingRotator } from './renderingRotators'
 import { CubeGrid } from "../store/cubeSlice"
@@ -64,19 +64,43 @@ const renderingSpinFunctions: Record<
 
 
 export const useExecuteMove = () => {
-	const { setCubeGrid } = useActions()
+	const { setCubeGrid, pushHistory } = useActions()
 	const cubeGrid = useCubeGrid()
 	
-	const executeMove = useCallback((move: MoveCode, animationTime: number, isRotating: MutableRefObject<boolean>) => {
-		const getUpdatedCubeGrid = modelSpinFunctions[move]
+	const executeMove = useCallback((moveCode: MoveCode, animationTime: number, isRotating: MutableRefObject<boolean>) => {
+		const getUpdatedCubeGrid = modelSpinFunctions[moveCode]
 		const updatedCubeGrid = getUpdatedCubeGrid(cubeGrid)
 		setCubeGrid(updatedCubeGrid)
 
-		const renderModel = renderingSpinFunctions[move]
+		pushHistory(moveCode)
+
+		const renderModel = renderingSpinFunctions[moveCode]
 		renderModel(cubeGrid, animationTime, isRotating)
-	}, [cubeGrid, setCubeGrid])	 
+	}, [cubeGrid, setCubeGrid, pushHistory])	 
 
 	return executeMove;
+}
 
+export const useUndoLastMove = () => {
+	const { popHistory, setCubeGrid } = useActions()
+	const cubeGrid = useCubeGrid()
+
+	const undoMove = useCallback((animationTime: number, isRotating: MutableRefObject<boolean>) => {
+
+		const lastMoveCode = popHistory()
+		
+		if (lastMoveCode) {
+			const undoMoveCode = inverse(lastMoveCode)
+
+			const getUpdatedCubeGrid = modelSpinFunctions[undoMoveCode]
+			const updatedCubeGrid = getUpdatedCubeGrid(cubeGrid)
+			setCubeGrid(updatedCubeGrid)
+
+			const renderModel = renderingSpinFunctions[undoMoveCode]
+			renderModel(cubeGrid, animationTime, isRotating)
+		}
+	}, [cubeGrid, popHistory, setCubeGrid])
+
+	return undoMove
 }
 

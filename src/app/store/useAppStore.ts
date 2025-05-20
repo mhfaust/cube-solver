@@ -33,7 +33,10 @@ export const useActions = () => {
       setCubeGrid, 
       setFingersOn, 
       setThemeName,
-      resetTimer
+      resetTimer,
+      pushHistory,
+      popHistory,
+      clearHistory
     }) => 
     ({ 
       log, 
@@ -43,7 +46,10 @@ export const useActions = () => {
       setCubeGrid, 
       setFingersOn, 
       setThemeName,
-      resetTimer
+      resetTimer,
+      pushHistory,
+      popHistory,
+      clearHistory
     })
   ))
 }

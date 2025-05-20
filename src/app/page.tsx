@@ -7,10 +7,11 @@ import Timer from './components/Timer'
 import isSolved from './utils/isSolved'
 import { useEffect } from 'react'
 import { useActions } from './store/useAppStore'
-import { usePlayMode } from "./store/selectors"
+import { useHistory, usePlayMode } from "./store/selectors"
 import { useCubeGrid, useStartTime } from "./store/selectors"
 import Completed from './components/Completed'
 import Menu from './components/Menu/Menu'
+import UndoButton from './components/UndoButton/UndoButton'
 
 export default function App() {
 //   const { setThemeName } = useAppStore(actionsSelector)
@@ -25,6 +26,7 @@ export default function App() {
   const grid = useCubeGrid()
   const startTime = useStartTime()
   const { stopTimer } = useActions()
+  const history = useHistory()
 
   
   useEffect(() => {
@@ -36,6 +38,9 @@ export default function App() {
   
   return (
     <div className={styles.main}>
+      {history.length > 0 && (
+        <UndoButton />
+      )}
       {playMode === 'casual' && (
         <Menu />
       )}
