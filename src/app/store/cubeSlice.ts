@@ -1,6 +1,6 @@
 import { StateCreator } from "zustand";
 import { MutableRefObject } from "react";
-import { BufferGeometry, Material, Mesh, NormalBufferAttributes, Object3DEventMap } from "three";
+import { BufferGeometry, Material, Mesh, NormalBufferAttributes, Object3DEventMap, Quaternion } from "three";
 import { _012 } from "@/app/utils/grid";
 import storeSetters from "./storeHelpers";
 import { MoveCode } from "../utils/moveCodes";
@@ -10,6 +10,7 @@ export type CubeWrapperMesh = Mesh<BufferGeometry<NormalBufferAttributes>, Mater
 export type SingleBlock = {
   wrapperMesh: MutableRefObject<CubeWrapperMesh>,
   initialPosition: [0|1|2, 0|1|2, 0|1|2],
+  orientation: Quaternion,
 }
 
 const emptyHistory: MoveCode[] = []
@@ -46,10 +47,11 @@ export const createCubeSlice: StateCreator<CubeSlice> = (set, get) => {
         (j: 0|1|2) => _012.map(
           (k: 0|1|2) => ({
             wrapperMesh: { current: {} as Mesh },
-            initialPosition: [i,j,k]
+            initialPosition: [i,j,k],
+            orientation: new Quaternion(0, 0, 0, 1) // Default orientation
           })
         )
-      )
+      ) 
     ),
     isRotating: { current: false },
     setCubeGrid: setValueOf('cubeGrid'),
