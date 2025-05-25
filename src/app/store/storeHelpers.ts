@@ -1,41 +1,53 @@
-type ZustandSet<T> = (partial: T | Partial<T> | ((state: T) => T | Partial<T>), replace?: boolean | undefined) => void
+type ZustandSet<StoreType> = (partial: StoreType | Partial<StoreType> | ((state: StoreType) => StoreType | Partial<StoreType>), replace?: boolean | undefined) => void
 
-type BooleanKeys<T> = {
-  [K in keyof T]: T[K] extends boolean ? K : never;
-}[keyof T];
+type BooleanKey<StoreType> = {
+  [K in keyof StoreType]: StoreType[K] extends boolean ? K : never;
+}[keyof StoreType];
 
-type ArrayKeys<T, V> = {
-  [K in keyof T]: T[K] extends Array<V> ? K : never;
-}[keyof T];
+type ArrayKeys<StoreType, V> = {
+  [K in keyof StoreType]: StoreType[K] extends Array<V> ? K : never;
+}[keyof StoreType];
 
-function storeSetters <T> (set: ZustandSet<T>) {
+function storeSetters <StoreType> (set: ZustandSet<StoreType>) {
 
   return ({
-    setValueOf: (propName: keyof T) => {
-      return (arg: T[typeof propName]) => {
-        set(() => ({ [propName]: arg }) as Partial<T>)
+    setValueOf: (propName: keyof StoreType) => {
+      return (arg: StoreType[typeof propName]) => {
+        set(() => ({ [propName]: arg }) as Partial<StoreType>)
       }
     },
-    setValueUsing: <K extends keyof T, TV>(propName: K, fn: () => T[K]) => {
+    setValueUsing: <StoreKeyName extends keyof StoreType>(propName: StoreKeyName, fn: () => StoreType[StoreKeyName]) => {
       return () => {
-        set(() => ({ [propName]: fn() }) as unknown as Partial<T>)
+        set(() => ({ [propName]: fn() }) as unknown as Partial<StoreType>)
       }
     },
-    pushValueTo: <F extends ArrayKeys<T, V>, V>(propName: F) => {
-      return (args: V) => {
-        set((store) => ({ [propName]: [...store[propName] as V[], args]}) as Partial<T>)
+    pushValueTo: <StoreKeyName extends ArrayKeys<StoreType, ValueType>, ValueType>(propName: StoreKeyName) => {
+      return (args: ValueType) => {
+        set((store) => ({ [propName]: [...store[propName] as ValueType[], args]}) as Partial<StoreType>)
       }
     },
-    pushValuesTo: <F extends ArrayKeys<T, V>, V>(propName: F) => {
-      return (...args: V[]) => {
-        set((store) => ({ [propName]: [...store[propName] as V[], ...args]}) as Partial<T>)
+    pushValuesTo: <StoreKeyName extends ArrayKeys<StoreType, ValueType>, ValueType>(propName: StoreKeyName) => {
+      return (...args: ValueType[]) => {
+        set((store) => ({ [propName]: [...store[propName] as ValueType[], ...args]}) as Partial<StoreType>)
       }
     },
-    toggleValueOf: <F extends BooleanKeys<T>>(propName: F) => {
+    popValueFrom: <StoreKeyName extends ArrayKeys<StoreType, ValueType>, ValueType>(propName: StoreKeyName) => {
       return () => {
-        set(( store ) => ({ [propName]: !store[propName] }) as Partial<T>)
+        let poppedValue: ValueType | undefined = undefined
+        set((store) =>  {
+          const newArray = [...(store[propName] as ValueType[])]
+          poppedValue = newArray.pop()
+          return { [propName]: newArray } as Partial<StoreType>
+        })
+        return poppedValue
+      }
+    },
+    toggleValueOf: (propName: BooleanKey<StoreType>) => {
+      return () => {
+        set(( store ) => ({ [propName]: !store[propName] }) as Partial<StoreType>)
       }      
     },
+
   })
 }
 

@@ -38,7 +38,7 @@ export type CubeSlice = {
 }  
 
 export const createCubeSlice: StateCreator<CubeSlice> = (set, get) => { 
-  const { setValueOf, pushValueTo } = storeSetters(set)
+  const { setValueOf, pushValueTo, popValueFrom } = storeSetters(set)
 
   return {
     cubeGrid: _012.map(
@@ -55,17 +55,7 @@ export const createCubeSlice: StateCreator<CubeSlice> = (set, get) => {
     setCubeGrid: setValueOf('cubeGrid'),
     history: emptyHistory,
     pushHistory: pushValueTo('history'),
-    popHistory: () => {
-      const { history } = get()
-      const newHistory = [...history]
-      const poppedValue = newHistory.pop()
-
-      if(poppedValue === undefined) {
-        return undefined
-      }
-      set({ history: newHistory })
-      return poppedValue
-    },
+    popHistory: popValueFrom('history'),
     clearHistory: () => {
       set({ history: emptyHistory })
     }
