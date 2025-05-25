@@ -17,11 +17,11 @@
     "chalk": "^5.3.0",
     "clsx": "^2.0.0",
     "leva": "^0.9.35",
-    "next": "13.5.4",
+    "next": "^13.5.11",
     "react": "^18",
     "react-dom": "^18",
     "save-dev": "^0.0.1-security",
-    "three": "^0.157.0",
+    "three": "^0.166.0",
     "zustand": "^4.4.3"
   },
   "devDependencies": {
@@ -34,8 +34,8 @@
     "eslint": "^8",
     "eslint-config-next": "13.5.4",
     "mocha": "^10.2.0",
-    "tsx": "^3.13.0",
     "ts-node": "^10.9.1",
+    "tsx": "^4.19.4",
     "typescript": "^5"
   },
   "mocha": {
