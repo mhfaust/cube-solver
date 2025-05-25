@@ -5,6 +5,12 @@ function copyModel (cube: CubeGrid) {
   return cube.map(dim2 => dim2.map(dim1 => dim1.slice()))
 }
 
+type BlockTransform = {
+  startPosition: 0|1|2,
+  endPosition: 0|1|2,
+  rotation: Quaternion,
+}
+
 // Represents a translation instruction for moving a single block of a cube.
 type TranslationTuple = [0|1|2, 0|1|2, 0|1|2, 0|1|2, 0|1|2, 0|1|2]
 
@@ -34,14 +40,22 @@ type LayerRotationTranslations = [
 const rotateModelLayer = (cubeGrid: CubeGrid, translations: LayerRotationTranslations, rotation: Quaternion): CubeGrid => {
   const newGrid = copyModel(cubeGrid)
 
-  const news = translations.map(s => ({ 
+  const newBlocks = translations.map(s => ({ 
     current: cubeGrid[s[3]][s[4]][s[5]].wrapperMesh.current ,
-    initialPosition: cubeGrid[s[3]][s[4]][s[5]].initialPosition
+    initialPosition: cubeGrid[s[3]][s[4]][s[5]].initialPosition,
+    orientation: cubeGrid[s[3]][s[4]][s[5]].orientation // clone to avoid mutating original orientation
   }))
-  
+
   translations.forEach((s, i) => {
-    newGrid[s[0]][s[1]][s[2]].wrapperMesh.current = news[i].current
-    newGrid[s[0]][s[1]][s[2]].initialPosition = news[i].initialPosition
+    const newBlock = newBlocks[i]
+    newGrid[s[0]][s[1]][s[2]].wrapperMesh.current = newBlock.current
+    newGrid[s[0]][s[1]][s[2]].initialPosition = newBlock.initialPosition
+    
+    // Apply the rotation and normalize to prevent accumulating precision errors
+    const newOrientation = new Quaternion().multiplyQuaternions(rotation, cubeGrid[s[3]][s[4]][s[5]].orientation)
+    newOrientation.normalize() // This corrects for accumulated floating-point errors
+    
+    newGrid[s[0]][s[1]][s[2]].orientation = newOrientation
   })
 
   return newGrid
