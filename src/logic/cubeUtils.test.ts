@@ -8,49 +8,50 @@ import {
     bottomFace
 } from './cubeUtils'
 import newCube from './newCube'
+import { BLUE, GREEN, ORANGE, RED, WHITE, YELLOW } from './constants'
 
 
 describe('face fns', () => {
     it('frontFace', () => {
         expect(frontFace(newCube())).to.deep.equal([
-            ['white', 'white', 'white'], 
-            ['white', 'white', 'white'], 
-            ['white', 'white', 'white']
+            [WHITE, WHITE, WHITE], 
+            [WHITE, WHITE, WHITE], 
+            [WHITE, WHITE, WHITE]
         ])
     })
     it('rightFace', () => {
         expect(rightFace(newCube())).to.deep.equal([
-            ['red', 'red', 'red'], 
-            ['red', 'red', 'red'], 
-            ['red', 'red', 'red']
+            [RED, RED, RED], 
+            [RED, RED, RED], 
+            [RED, RED, RED]
         ])
     })
     it('backFace', () => {
         expect(backFace(newCube())).to.deep.equal([
-            ['yellow', 'yellow', 'yellow'], 
-            ['yellow', 'yellow', 'yellow'], 
-            ['yellow', 'yellow', 'yellow']
+            [YELLOW, YELLOW, YELLOW], 
+            [YELLOW, YELLOW, YELLOW], 
+            [YELLOW, YELLOW, YELLOW]
         ])
     })
     it('leftFace', () => {
         expect(leftFace(newCube())).to.deep.equal([
-            ['orange', 'orange', 'orange'], 
-            ['orange', 'orange', 'orange'], 
-            ['orange', 'orange', 'orange']
+            [ORANGE, ORANGE, ORANGE], 
+            [ORANGE, ORANGE, ORANGE], 
+            [ORANGE, ORANGE, ORANGE]
         ])
     })
     it('topFace', () => {
         expect(topFace(newCube())).to.deep.equal([
-            ['blue', 'blue', 'blue'], 
-            ['blue', 'blue', 'blue'], 
-            ['blue', 'blue', 'blue']
+            [BLUE, BLUE, BLUE], 
+            [BLUE, BLUE, BLUE], 
+            [BLUE, BLUE, BLUE]
         ])
     })
     it('bottomFace', () => {
         expect(bottomFace(newCube())).to.deep.equal([
-            ['green', 'green', 'green'], 
-            ['green', 'green', 'green'], 
-            ['green', 'green', 'green']
+            [GREEN, GREEN, GREEN], 
+            [GREEN, GREEN, GREEN], 
+            [GREEN, GREEN, GREEN]
         ])
     })
 })
