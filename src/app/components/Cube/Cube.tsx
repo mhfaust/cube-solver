@@ -28,6 +28,7 @@ import { Canvas, ThreeEvent, useFrame, useThree } from "@react-three/fiber"
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react'
 import { Color, PlaneGeometry, Vector3 } from "three"
 import { OrbitControls as ThreeOrbitControls } from 'three-stdlib'
+import isSolved from "@/app/utils/isSolved"
 
 const { PI, abs } = Math
 const bgGeometry = new PlaneGeometry(50, 50)
@@ -37,9 +38,6 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 	const isRotating = useIsRotating()
 	const cubeGrid = useCubeGrid()
 	const executeMove = useExecuteMove()
-	const {  } = useActions()
-	const history = useHistory();
-
 
 	const { bgMaterial, pointLightIntensity, ambientLightIntensity } = useTheme()
 
