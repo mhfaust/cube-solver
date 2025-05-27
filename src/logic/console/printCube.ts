@@ -1,8 +1,6 @@
 import chalk from 'chalk';
 import { CubeFaces, Line } from '../newCube';
-import { Color, FaceName } from '../constants';
-import { I } from '../cubeUtils';
-
+import { FaceName } from '../constants';
 
 const coloredSquare = {
     red: chalk['red']('■'),
@@ -16,14 +14,14 @@ const coloredSquare = {
 const rowStr = (row: Line) => row.map(tile => coloredSquare[tile]).join(' ')
 const nthRowOfEachFace = (
         faceNames: FaceName[]
-    ) => (n: I) => (cube: CubeFaces) => faceNames.map(fn => rowStr(cube[fn][n])).join('   ')
+    ) => (n: 0|1|2) => (cube: CubeFaces) => faceNames.map(fn => rowStr(cube[fn][n])).join('   ')
 const northRow = nthRowOfEachFace(['top'])
 const equatorialRow = nthRowOfEachFace(['left', 'front', 'right', 'back'])
 const southRow = nthRowOfEachFace(['bottom'])
 
-const eyes: [I,I,I] = [0,1,2]
+const eyes: [0|1|2, 0|1|2, 0|1|2] = [0,1,2]
 
-const printCube = (cube: CubeFaces) => {
+export const printCube = (cube: CubeFaces) => {
     
     const size = cube['front'].length
 
@@ -33,5 +31,3 @@ const printCube = (cube: CubeFaces) => {
         eyes.map(southRow).map(r => '        ' + r(cube)).join('\n')
     ].join('\n\n')
 }
-
-export default printCube

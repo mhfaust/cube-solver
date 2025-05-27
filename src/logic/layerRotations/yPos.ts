@@ -1,4 +1,4 @@
-import nextCube from '../nextCube'
+import { nextCube } from '../nextCube'
 import { 
     row,
     replaceRow,
@@ -8,11 +8,10 @@ import {
     rightFace, 
     backFace, 
     leftFace, 
-    I
 } from '../cubeUtils'
 
 
-const yPos = (y: I) => {
+export const yPos = (y: 0|1|2) => {
 
     const rowY = row(y)
 
@@ -25,5 +24,3 @@ const yPos = (y: I) => {
         bottom: clockwiseIf(y === 2),
     })
 }
-
-export default yPos

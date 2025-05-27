@@ -1,16 +1,15 @@
+import { xxxNeg } from '../cubeRotations/xxxNeg'
+import { xxxPos } from '../cubeRotations/xxxPos'
+import { yyyNeg } from '../cubeRotations/yyyNeg'
+import { yyyPos } from '../cubeRotations/yyyPos'
+import { zzzNeg } from '../cubeRotations/zzzNeg'
+import { zzzPos } from '../cubeRotations/zzzPos'
 import { U, Ui, D, Di, L, Li, R, Ri, B, Bi, F, Fi } from '../layerRotations/advancedNotation'
 
-import {
-    xxxNeg,
-    xxxPos,
-    yyyPos,
-    yyyNeg,
-    zzzPos,
-    zzzNeg,
-} from '../cubeRotations'
 
 
-export default  () => ({
+
+export const keyTransforms = () => ({
     u: U,
     U: Ui,
     d: D,

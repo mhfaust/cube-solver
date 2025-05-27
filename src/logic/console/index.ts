@@ -55,7 +55,7 @@
 
 // const cubeSize = 3
 // const keyTransformsForCubeSize = keyTransforms()
-// let cube = newCube()
+// let cube = newCubeFaces()
 // render(cube)
 // startRecording()
 

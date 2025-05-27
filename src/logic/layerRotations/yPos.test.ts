@@ -1,12 +1,11 @@
 import { B, G, W, Y, R, O } from '../constants'
-import newCube, { CubeFaces, faceOf } from '../newCube'
-
-import yPos from './yPos'
+import { CubeFaces, faceOf, newCubeFaces } from '../newCube'
 import { expect } from 'chai'
+import { yPos } from './yPos'
 
 describe('yPos', () => {
     it('yPos(0)', () => {
-        const cube = newCube()
+        const cube = newCubeFaces()
         const trans = yPos(0)(cube)
         const expected: CubeFaces = {
             front: [[O,O,O],[W,W,W],[W,W,W]],
@@ -19,7 +18,7 @@ describe('yPos', () => {
         expect(trans).to.deep.equal(expected)
     })
     it('yPos(1)', () => {
-        const cube = newCube()
+        const cube = newCubeFaces()
         const trans = yPos(1)(cube)
         const expected: CubeFaces = {
             front: [[W,W,W],[O,O,O],[W,W,W]],
@@ -32,7 +31,7 @@ describe('yPos', () => {
         expect(trans).to.deep.equal(expected)
     })
     it('yPos(2)', () => {
-        const cube = newCube()
+        const cube = newCubeFaces()
         const trans = yPos(2)(cube)
         const expected: CubeFaces = {
             front: [[W,W,W],[W,W,W],[O,O,O]],

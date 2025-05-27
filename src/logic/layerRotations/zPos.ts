@@ -1,4 +1,4 @@
-import nextCube from '../nextCube'
+import { nextCube } from '../nextCube'
 import { 
     row,
     col,
@@ -11,14 +11,13 @@ import {
     leftFace, 
     topFace, 
     bottomFace,
-    I
 } from '../cubeUtils'
 
 
-const zPos = (z: I) => {
+export const zPos = (z: 0|1|2) => {
 
     const lastIndex = 2
-    const zFromEnd = 2 - z as I
+    const zFromEnd = 2 - z as 0|1|2
     const rowZ = row(z) 
     const colZ = col(z)
     const colOppositeZ = col(zFromEnd)
@@ -33,5 +32,3 @@ const zPos = (z: I) => {
         bottom: replaceRow(z, cube => invert(colZ(rightFace(cube))))
     })
 }
-
-export default zPos

@@ -1,4 +1,4 @@
-import nextCube from '../nextCube'
+import { nextCube } from '../nextCube'
 import { 
     col,
     invert,
@@ -9,12 +9,11 @@ import {
     backFace, 
     topFace, 
     bottomFace,
-    I,
 } from '../cubeUtils'
 
-const xPos = (x: I) => {
+export const xPos = (x: 0|1|2) => {
 
-    const xFromEnd = 2 - x as I
+    const xFromEnd = 2 - x as 0|1|2
     const colX = col(x)
     const colOppositeX = col(xFromEnd)
 
@@ -27,5 +26,3 @@ const xPos = (x: I) => {
         bottom: replaceCol(x, cube =>  colX(frontFace(cube))),
     })
 }
-
-export default xPos

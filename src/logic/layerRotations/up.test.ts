@@ -1,9 +1,10 @@
-import newCube from '../newCube'
-import printCube from '../console/printCube'
+import { newCubeFaces } from '../newCube'
+import { printCube } from '../console/printCube'
 import { U, Ui, U2, R, Ri, L, Li, F, Fi, B, Bi, M, Mi, S, Si } from '../layerRotations/advancedNotation'
 
-import { xxxNeg, yyyPos } from '../cubeRotations'
 import { pipe } from '../cubeUtils'
+import { xxxNeg } from '../cubeRotations/xxxNeg'
+import { yyyPos } from '../cubeRotations/yyyPos'
 const 
 
 superFlip = [
@@ -22,7 +23,7 @@ const step7 = [R, Ui, R, U, R, U, R, Ui, Ri, Ui, R, R]
 
 // describe('superflip', () => {
 //     it('rotates the front right face up correctly', () => {
-//         const cube = newCube()
+//         const cube = newCubeFaces()
 //         const transform = pipe(...superFlip, ...superFlip)
 
 //         const next = transform(cube)

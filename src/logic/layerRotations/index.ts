@@ -1,6 +1,0 @@
-export { default as zPos } from './zPos'
-export { default as zNeg } from './zNeg'
-export { default as xPos } from './xPos'
-export { default as xNeg } from './xNeg'
-export { default as yNeg } from './yNeg'
-export { default as yPos } from './yPos'

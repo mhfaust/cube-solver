@@ -1,13 +1,13 @@
 import { B, G, W, Y } from '../constants'
-import newCube, { faceOf } from '../newCube'
+import { newCubeFaces, faceOf } from '../newCube'
 
-import xNeg from './xNeg'
+import { xNeg } from './xNeg'
 import { expect } from 'chai'
 
 describe('xNeg', () => {
     it('xNeg(0)', () => {
-        const cube = newCube()
-        const trans = xNeg(0)(cube)
+        const cubeFaces = newCubeFaces()
+        const trans = xNeg(0)(cubeFaces)
         expect(trans).to.deep.equal({
             front: [[G,W,W],[G,W,W],[G,W,W]],
             right: faceOf('red'),
@@ -18,8 +18,8 @@ describe('xNeg', () => {
         })
     })
     it('xNeg(1)', () => {
-        const cube = newCube()
-        const trans = xNeg(1)(cube)
+        const cubeFaces = newCubeFaces()
+        const trans = xNeg(1)(cubeFaces)
         expect(trans).to.deep.equal({
             front: [[W,G,W],[W,G,W],[W,G,W]],
             right: faceOf('red'),
@@ -30,8 +30,8 @@ describe('xNeg', () => {
         })
     })
     it('xNeg(2)', () => {
-        const cube = newCube()
-        const trans = xNeg(2)(cube)
+        const cubeFaces = newCubeFaces()
+        const trans = xNeg(2)(cubeFaces)
         expect(trans).to.deep.equal({
             front: [[W,W,G],[W,W,G],[W,W,G]],
             right: faceOf('red'),

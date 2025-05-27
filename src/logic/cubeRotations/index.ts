@@ -1,6 +1,0 @@
-export { default as zzzPos } from './zzzPos'
-export { default as zzzNeg } from './zzzNeg'
-export { default as xxxNeg } from './xxxNeg'
-export { default as xxxPos } from './xxxPos'
-export { default as yyyPos } from './yyyPos'
-export { default as yyyNeg } from './yyyNeg'

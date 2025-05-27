@@ -1,4 +1,4 @@
-import nextCube from '../nextCube'
+import { nextCube } from '../nextCube'
 import { 
     row,
     replaceRow,
@@ -8,11 +8,10 @@ import {
     rightFace, 
     backFace, 
     leftFace,
-    I,
 } from '../cubeUtils'
 
 
-const yNeg =  (y: I) => {
+export const yNeg =  (y: 0|1|2) => {
 
     const rowY = row(y)
 
@@ -26,4 +25,3 @@ const yNeg =  (y: I) => {
     })
 }
 
-export default yNeg

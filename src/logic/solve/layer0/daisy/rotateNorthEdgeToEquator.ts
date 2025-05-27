@@ -1,5 +1,5 @@
 import { CubeFaces } from '@/logic/newCube'
-import solutionNotation, { FnName } from '../../solutionNotation'
+import { solutionNotation, FnName } from '../../solutionNotation'
 import { TileLocator } from '@/logic/cubeUtils'
 
 export const rotateNorthEdgeToEquator = (cube: CubeFaces, { faceName }: Pick<TileLocator, 'faceName'>) => {

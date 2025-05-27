@@ -1,13 +1,13 @@
-import printCube from '../console/printCube'
+import { printCube } from '../console/printCube'
 import { B, G, W, Y, R, O } from '../constants'
-import newCube, { CubeFaces, faceOf } from '../newCube'
+import { CubeFaces, faceOf, newCubeFaces } from '../newCube'
 
-import yNeg from './yNeg'
 import { expect } from 'chai'
+import { yNeg } from './yNeg'
 
 describe('yNeg', () => {
     it('yNeg(0)', () => {
-        const cube = newCube()
+        const cube = newCubeFaces()
         const trans = yNeg(0)(cube)
         const expected: CubeFaces = {
             front: [[R,R,R],[W,W,W],[W,W,W]],
@@ -20,7 +20,7 @@ describe('yNeg', () => {
         expect(trans, `\n${printCube(trans)}`).to.deep.equal(expected)
     })
     it('yNeg(1)', () => {
-        const cube = newCube()
+        const cube = newCubeFaces()
         const trans = yNeg(1)(cube)
         expect(trans).to.deep.equal({
             front: [[W,W,W],[R,R,R],[W,W,W]],
@@ -32,7 +32,7 @@ describe('yNeg', () => {
         })
     })
     it('yNeg(2)', () => {
-        const cube = newCube()
+        const cube = newCubeFaces()
         const trans = yNeg(2)(cube)
         expect(trans).to.deep.equal({
             front: [[W,W,W],[W,W,W],[R,R,R]],

@@ -1,6 +1,6 @@
 import { TileLocator } from '../cubeUtils';
 import { CubeFaces } from '../newCube'
-import solutionNotation, { FnName } from './solutionNotation'
+import { solutionNotation, FnName } from './solutionNotation'
 
 export type CubeAndSequence = {
     cube: CubeFaces;

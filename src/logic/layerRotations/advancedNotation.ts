@@ -1,12 +1,10 @@
-import {
-    zPos,
-    zNeg,
-    xPos,
-    xNeg,
-    yNeg,
-    yPos,
-} from '.'
 import { CubeFaces } from '../newCube'
+import { xNeg } from './xNeg'
+import { xPos } from './xPos'
+import { yNeg } from './yNeg'
+import { yPos } from './yPos'
+import { zNeg } from './zNeg'
+import { zPos } from './zPos'
 
 
 export const U =  yNeg(0)

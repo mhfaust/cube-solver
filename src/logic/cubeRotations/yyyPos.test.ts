@@ -1,12 +1,12 @@
 import { expect } from 'chai'
-import yyyPos from './yyyPos'
+import { yyyPos } from './yyyPos'
 import { faceClockwise, faceCounterClockwise } from '../cubeUtils'
-import newCube from '../newCube'
+import { newCubeFaces } from '../newCube'
 
 
 describe('east', () => {
     it('rotates a 3-cube right correctly', () => {
-        const initial = newCube()
+        const initial = newCubeFaces()
         const rotatedCube = yyyPos(initial)
         
         expect(rotatedCube.top).to.deep.equal(faceCounterClockwise('top', initial))

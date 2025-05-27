@@ -2,12 +2,10 @@ import { FRONT, RIGHT, BACK, LEFT, TOP, BOTTOM, FaceName } from './constants'
 import { CubeFaces, Face, Line } from './newCube'
 import { CubeTransform } from './nextCube'
 
-export type I = 0 | 1 | 2
-
 export type TileLocator = {
     faceName: FaceName,
-    row: I,
-    col: I
+    row: 0|1|2,
+    col: 0|1|2
 }
 
 export const face = (faceName: FaceName) => (cube: CubeFaces) => cube[faceName]
@@ -22,7 +20,7 @@ export const invert = ([a, b, c]: Line): Line => [b, c, a]
 
 type GetLine = (cube: CubeFaces) => Line
 
-export const replaceRow =  (destRowIndex: I, getLine: GetLine) => {
+export const replaceRow =  (destRowIndex: 0|1|2, getLine: GetLine) => {
     return (destFaceName: FaceName, cube: CubeFaces): Face => {
         return (cube[destFaceName].map(([a,b,c], i) => i == destRowIndex 
                 ? (getLine(cube))
@@ -30,7 +28,7 @@ export const replaceRow =  (destRowIndex: I, getLine: GetLine) => {
             ) as Face)
 }}
 
-export const replaceCol = (destColIndex: I, getLine: GetLine) => { 
+export const replaceCol = (destColIndex: 0|1|2, getLine: GetLine) => { 
     return (destFaceName: FaceName, cube: CubeFaces): Face => {
         const repl = getLine(cube)
         return cube[destFaceName].map((row, rowIndex) => {

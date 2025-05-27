@@ -1,12 +1,12 @@
 import { expect } from 'chai'
 import { coloredEdges } from './coloredEdges'
-import newCube from '../../../newCube'
+import { newCubeFaces } from '../../../newCube'
 import { G } from '@/logic/constants'
 
 
 describe('coloredEdges', function(){
     it('finds all the edges belonging to a specific color', function(){
-        const cube = newCube()
+        const cube = newCubeFaces()
 
         const expected = [{
             "col": 1,

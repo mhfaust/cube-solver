@@ -1,8 +1,16 @@
-import { zPos, zNeg, xPos, xNeg, yNeg, yPos,  } from '../layerRotations'
-import { xxxPos, xxxNeg, yyyNeg, yyyPos,  } from '../cubeRotations'
+import { xxxNeg } from '../cubeRotations/xxxNeg'
+import { xxxPos } from '../cubeRotations/xxxPos'
+import { yyyNeg } from '../cubeRotations/yyyNeg'
+import { yyyPos } from '../cubeRotations/yyyPos'
 import { pipe } from '../cubeUtils'
+import { xNeg } from '../layerRotations/xNeg'
+import { xPos } from '../layerRotations/xPos'
+import { yNeg } from '../layerRotations/yNeg'
+import { yPos } from '../layerRotations/yPos'
+import { zNeg } from '../layerRotations/zNeg'
+import { zPos } from '../layerRotations/zPos'
 
-const solutionNotation = {
+export const solutionNotation = {
     up : yNeg(0),
     up_inverted : yPos(0),
     right : xNeg(2),
@@ -28,5 +36,3 @@ const solutionNotation = {
 } 
 
 export type FnName = keyof typeof solutionNotation
-
-export default solutionNotation

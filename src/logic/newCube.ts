@@ -8,7 +8,7 @@ export type CubeFaces = Record<FaceName, Face>
 const lineOf = (color: Color): [Color, Color, Color] => [color, color, color]
 export const faceOf = (color: Color):Face => [lineOf(color), lineOf(color), lineOf(color)]
 
-const newCube = (): CubeFaces => ({
+export const newCubeFaces = (): CubeFaces => ({
     front: faceOf(WHITE),
     right: faceOf(RED),
     back: faceOf(YELLOW),
@@ -16,5 +16,3 @@ const newCube = (): CubeFaces => ({
     top: faceOf(BLUE),
     bottom: faceOf(GREEN),
 })
-
-export default newCube

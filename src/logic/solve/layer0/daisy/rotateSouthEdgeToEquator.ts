@@ -1,4 +1,4 @@
-import solutionNotation, { FnName } from '../../solutionNotation'
+import { solutionNotation, FnName } from '../../solutionNotation'
 import { TileLocator, tile } from '../../../cubeUtils'
 import { newSequenceBuilder } from '../../sequenceBuilder'
 import { CubeFaces } from '@/logic/newCube'
