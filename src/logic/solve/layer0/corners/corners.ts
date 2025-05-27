@@ -1,7 +1,7 @@
-import { Cube } from '@/logic/newCube'
+import { CubeFaces } from '@/logic/newCube'
 import { newSequenceBuilder } from '../../sequenceBuilder'
 
-function corners(cube: Cube){
+function corners(cube: CubeFaces){
     const builder = newSequenceBuilder(cube)
 
 

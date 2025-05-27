@@ -1,5 +1,5 @@
 import { FRONT, RIGHT, BACK, LEFT, TOP, BOTTOM, FaceName } from './constants'
-import { Cube, Face, Line } from './newCube'
+import { CubeFaces, Face, Line } from './newCube'
 import { CubeTransform } from './nextCube'
 
 export type I = 0 | 1 | 2
@@ -10,20 +10,20 @@ export type TileLocator = {
     col: I
 }
 
-export const face = (faceName: FaceName) => (cube: Cube) => cube[faceName]
+export const face = (faceName: FaceName) => (cube: CubeFaces) => cube[faceName]
 
 export const row = (rowIndex: number) => (face: Face): Line => [...face[rowIndex]]
 
 export const col = (i: number) => (face: Face): Line => [face[i][0], face[i][1], face[i][2]]
 
-export const tile = (faceName: FaceName) => (row: number, col: number) =>  (cube: Cube) => cube[faceName][row][col]
+export const tile = (faceName: FaceName) => (row: number, col: number) =>  (cube: CubeFaces) => cube[faceName][row][col]
 
 export const invert = ([a, b, c]: Line): Line => [b, c, a]
 
-type GetLine = (cube: Cube) => Line
+type GetLine = (cube: CubeFaces) => Line
 
 export const replaceRow =  (destRowIndex: I, getLine: GetLine) => {
-    return (destFaceName: FaceName, cube: Cube): Face => {
+    return (destFaceName: FaceName, cube: CubeFaces): Face => {
         return (cube[destFaceName].map(([a,b,c], i) => i == destRowIndex 
                 ? (getLine(cube))
                 : [a,b,c]
@@ -31,19 +31,19 @@ export const replaceRow =  (destRowIndex: I, getLine: GetLine) => {
 }}
 
 export const replaceCol = (destColIndex: I, getLine: GetLine) => { 
-    return (destFaceName: FaceName, cube: Cube): Face => {
+    return (destFaceName: FaceName, cube: CubeFaces): Face => {
         const repl = getLine(cube)
         return cube[destFaceName].map((row, rowIndex) => {
             return row.map((tile, i) => i === destColIndex ? repl[rowIndex] : tile) as Line
         }) as Face
 }}
 
-const cloneFace = (faceName: FaceName, cube: Cube): Face =>  {
+const cloneFace = (faceName: FaceName, cube: CubeFaces): Face =>  {
     const [[a1, b1, c1], [a2, b2, c2], [a3, b3, c3]] = cube[faceName]
     return [[a1, b1, c1], [a2, b2, c2], [a3, b3, c3]]
 }
 
-export const cloneCube = (cube: Cube): Cube => {
+export const cloneCube = (cube: CubeFaces): CubeFaces => {
     return {
         front: cloneFace('front', cube),
         right: cloneFace('right', cube),
@@ -53,7 +53,7 @@ export const cloneCube = (cube: Cube): Cube => {
         bottom: cloneFace('bottom', cube),
     }
 }
-export const faceClockwise = (faceName: FaceName, cube: Cube) => {
+export const faceClockwise = (faceName: FaceName, cube: CubeFaces) => {
     const srcFace = cube[faceName]
     return [0,1,2].map((i) => invert(col(i)(srcFace))) as Face
 }
@@ -62,7 +62,7 @@ export const clockwiseIf = (condition: Boolean) => condition
     ? faceClockwise 
     : cloneFace
     
-export const faceCounterClockwise = (faceName: FaceName, cube: Cube)  => {
+export const faceCounterClockwise = (faceName: FaceName, cube: CubeFaces)  => {
     const srcFace = cube[faceName]
     return [0,1,2].map((i) => col(2 - i)(srcFace)) as Face
 }
@@ -71,7 +71,7 @@ export const counterClockwiseIf = (condition: Boolean) => condition
     ? faceCounterClockwise 
     : cloneFace
 
-export const face180 = (faceName: FaceName, cube: Cube) => {
+export const face180 = (faceName: FaceName, cube: CubeFaces) => {
     const rotated90 = {
         ...cube,
         [faceName]: faceClockwise(faceName, cube)
@@ -116,12 +116,12 @@ export const leftFace = face(LEFT)
 export const topFace = face(TOP)
 export const bottomFace = face(BOTTOM)
 
-const recursePipe = (cube: Cube, transforms: CubeTransform[], i: number): Cube => {
+const recursePipe = (cube: CubeFaces, transforms: CubeTransform[], i: number): CubeFaces => {
     return transforms[i](i === transforms.length - 1 
         ? cube 
         : recursePipe(cube, transforms, i + 1)
 )}
 
 export const pipe = (...transforms: CubeTransform[]): CubeTransform => {
-    return (cube: Cube) => recursePipe(cube, transforms, 0)
+    return (cube: CubeFaces) => recursePipe(cube, transforms, 0)
 }

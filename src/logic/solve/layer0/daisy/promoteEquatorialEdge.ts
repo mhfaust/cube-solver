@@ -2,9 +2,9 @@ import { FRONT, BACK, LEFT, RIGHT, EquatorialEdge } from '../../../constants'
 import { tile } from '../../../cubeUtils'
 import { FnName } from '../../solutionNotation'
 import { newSequenceBuilder } from '../../sequenceBuilder'
-import { Cube } from '@/logic/newCube'
+import { CubeFaces } from '@/logic/newCube'
 
-type TopEdgeFn = Record<EquatorialEdge, { 0: (cube: Cube) => string, 2:  (cube: Cube) => string }>
+type TopEdgeFn = Record<EquatorialEdge, { 0: (cube: CubeFaces) => string, 2:  (cube: CubeFaces) => string }>
 type Promotion = Record<EquatorialEdge, { 0: FnName, 2: FnName }>
 
 const topTile = tile('top')
@@ -23,7 +23,7 @@ const promotions: Promotion = {
     [RIGHT]: { 0: 'front_inverted', 2: 'back' },
 }
 
-const canPromote = (col: 0 | 2, faceName: EquatorialEdge, cube: Cube ) => {
+const canPromote = (col: 0 | 2, faceName: EquatorialEdge, cube: CubeFaces ) => {
     const color = cube.bottom[1][1]
     if(cube[faceName][1][col] !== color){
        throw Error('Cube not valid for this algorithm.')
@@ -32,7 +32,7 @@ const canPromote = (col: 0 | 2, faceName: EquatorialEdge, cube: Cube ) => {
 }
 
 export const promoteEquatorialEdge = (
-            initialCube: Cube, 
+            initialCube: CubeFaces, 
             { faceName, col }: { faceName: EquatorialEdge, col: 0 | 2 }
         ) => {
             

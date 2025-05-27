@@ -1,5 +1,5 @@
 import { B, G, R, O } from '../constants'
-import newCube, { Cube, faceOf } from '../newCube'
+import newCube, { CubeFaces, faceOf } from '../newCube'
 
 import zPos from './zPos'
 import { expect } from 'chai'
@@ -8,7 +8,7 @@ describe('zPos', () => {
     it('zPos(0)', () => {
         const cube = newCube()
         const trans = zPos(0)(cube)
-        const expected: Cube = {
+        const expected: CubeFaces = {
             front: faceOf('white'),
             right: [[B,R,R],[B,R,R],[B,R,R]],
             back: faceOf('yellow'),
@@ -21,7 +21,7 @@ describe('zPos', () => {
     it('zPos(1)', () => {
         const cube = newCube()
         const trans = zPos(1)(cube)
-        const expected: Cube = {
+        const expected: CubeFaces = {
             front: faceOf('white'),
             right: [[R,B,R],[R,B,R],[R,B,R]],
             back: faceOf('yellow'),
@@ -34,7 +34,7 @@ describe('zPos', () => {
     it('zPos(2)', () => {
         const cube = newCube()
         const trans = zPos(2)(cube)
-        const expected: Cube = {
+        const expected: CubeFaces = {
             front: faceOf('white'),
             right: [[R,R,B],[R,R,B],[R,R,B]],
             back: faceOf('yellow'),

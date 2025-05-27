@@ -1,11 +1,11 @@
 import { I, tile } from '../../../cubeUtils'
 import { FnName } from '../../solutionNotation'
 import { newSequenceBuilder } from '../../sequenceBuilder'
-import { Cube } from '@/logic/newCube'
+import { CubeFaces } from '@/logic/newCube'
 
 const topTile = tile('top')
 
-const canPromote = (row: I, col: I, cube: Cube) => {
+const canPromote = (row: I, col: I, cube: CubeFaces) => {
     const petalColor = cube.bottom[1][1]
     const displacedTopEdge = topTile(2 - row, col)(cube)
     return displacedTopEdge !== petalColor
@@ -18,7 +18,7 @@ const promotions = [
 
 type P = { row: 0, col: 1 } | { row: 1, col: 0 } | { row: 0, col: 2 } | { row: 2, col: 1 }
 
-export const promoteBottomEdge = (cube: Cube, { row, col }: P) => {
+export const promoteBottomEdge = (cube: CubeFaces, { row, col }: P) => {
     const builder = newSequenceBuilder(cube)
     while(!canPromote(row, col, builder.getCube())){
         builder.push('up')

@@ -1,6 +1,6 @@
 import printCube from '../console/printCube'
 import { B, G, W, Y, R, O } from '../constants'
-import newCube, { Cube, faceOf } from '../newCube'
+import newCube, { CubeFaces, faceOf } from '../newCube'
 
 import yNeg from './yNeg'
 import { expect } from 'chai'
@@ -9,7 +9,7 @@ describe('yNeg', () => {
     it('yNeg(0)', () => {
         const cube = newCube()
         const trans = yNeg(0)(cube)
-        const expected: Cube = {
+        const expected: CubeFaces = {
             front: [[R,R,R],[W,W,W],[W,W,W]],
             right: [[Y,Y,Y],[R,R,R],[R,R,R]],
             back: [[O,O,O],[Y,Y,Y],[Y,Y,Y]],

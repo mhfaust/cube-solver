@@ -1,7 +1,7 @@
 import solutionNotation, { FnName } from '../../solutionNotation'
 import { TileLocator, tile } from '../../../cubeUtils'
 import { newSequenceBuilder } from '../../sequenceBuilder'
-import { Cube } from '@/logic/newCube'
+import { CubeFaces } from '@/logic/newCube'
 import { EquatorialEdge } from '@/logic/constants'
 
 const topTile = tile('top')
@@ -13,12 +13,12 @@ const displacements = {
     left: topTile(1, 0)
 }
 
-const canRotate = (faceName: EquatorialEdge, cube: Cube) => {
+const canRotate = (faceName: EquatorialEdge, cube: CubeFaces) => {
     const petalColor = cube.bottom[1][1]
     return displacements[faceName](cube) !== petalColor
 }
 
-export const rotateSouthEdgeToEquator = (cube: Cube, { faceName }: { faceName: EquatorialEdge }) => {
+export const rotateSouthEdgeToEquator = (cube: CubeFaces, { faceName }: { faceName: EquatorialEdge }) => {
     const builder = newSequenceBuilder(cube)
     while(!canRotate(faceName, builder.getCube())){
         builder.push('up')

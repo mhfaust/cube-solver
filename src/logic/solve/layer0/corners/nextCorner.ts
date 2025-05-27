@@ -1,7 +1,7 @@
-import { Cube } from '@/logic/newCube'
+import { CubeFaces } from '@/logic/newCube'
 import { equatorFaces } from '../../../constants'
 
-export function nextCorner(cube: Cube){
+export function nextCorner(cube: CubeFaces){
     const bottomColor = cube.bottom[1][1]
 
     for(let faceName of equatorFaces){

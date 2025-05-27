@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { Cube, Line } from '../newCube';
+import { CubeFaces, Line } from '../newCube';
 import { Color, FaceName } from '../constants';
 import { I } from '../cubeUtils';
 
@@ -16,14 +16,14 @@ const coloredSquare = {
 const rowStr = (row: Line) => row.map(tile => coloredSquare[tile]).join(' ')
 const nthRowOfEachFace = (
         faceNames: FaceName[]
-    ) => (n: I) => (cube: Cube) => faceNames.map(fn => rowStr(cube[fn][n])).join('   ')
+    ) => (n: I) => (cube: CubeFaces) => faceNames.map(fn => rowStr(cube[fn][n])).join('   ')
 const northRow = nthRowOfEachFace(['top'])
 const equatorialRow = nthRowOfEachFace(['left', 'front', 'right', 'back'])
 const southRow = nthRowOfEachFace(['bottom'])
 
 const eyes: [I,I,I] = [0,1,2]
 
-const printCube = (cube: Cube) => {
+const printCube = (cube: CubeFaces) => {
     
     const size = cube['front'].length
 

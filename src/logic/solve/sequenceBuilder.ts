@@ -1,18 +1,18 @@
 import { TileLocator } from '../cubeUtils';
-import { Cube } from '../newCube'
+import { CubeFaces } from '../newCube'
 import solutionNotation, { FnName } from './solutionNotation'
 
 export type CubeAndSequence = {
-    cube: Cube;
+    cube: CubeFaces;
     sequence: FnName[];
 }
-export type CaseHandler = (cube: Cube, l: Partial<TileLocator>) => CubeAndSequence
+export type CaseHandler = (cube: CubeFaces, l: Partial<TileLocator>) => CubeAndSequence
 
 
 class SequenceBuilder {
-    cube: Cube
+    cube: CubeFaces
     stack: FnName[]
-    constructor(cube: Cube){
+    constructor(cube: CubeFaces){
         this.cube = cube
         this.stack = []
     }
@@ -38,4 +38,4 @@ class SequenceBuilder {
     }
 }
 
-export const  newSequenceBuilder = (cube: Cube) => new SequenceBuilder(cube)
+export const  newSequenceBuilder = (cube: CubeFaces) => new SequenceBuilder(cube)

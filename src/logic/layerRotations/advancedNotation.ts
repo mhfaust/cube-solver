@@ -6,14 +6,14 @@ import {
     yNeg,
     yPos,
 } from '.'
-import { Cube } from '../newCube'
+import { CubeFaces } from '../newCube'
 
 
 export const U =  yNeg(0)
 export const Ui =  yPos(0)
 export const D =  yPos(2)
 export const Di =  yNeg(2)
-export const U2 =  (cube: Cube) => yNeg(0)(yNeg(0)(cube))
+export const U2 =  (cube: CubeFaces) => yNeg(0)(yNeg(0)(cube))
 export const R =  xNeg(2)
 export const Ri =  xPos(2)
 export const L =  xPos(0)

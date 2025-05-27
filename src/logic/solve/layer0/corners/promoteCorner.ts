@@ -1,5 +1,5 @@
-import { Cube } from "@/logic/newCube";
+import { CubeFaces } from "@/logic/newCube";
 
-const promoteCorner = (cube: Cube) => {
+const promoteCorner = (cube: CubeFaces) => {
 
 }

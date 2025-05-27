@@ -1,5 +1,5 @@
 import { Color, FaceName } from "../constants"
-import { Cube, Face } from "../newCube"
+import { CubeFaces, Face } from "../newCube"
 
 const colorMap: Record<string, Color> = {
     r: 'red',
@@ -20,5 +20,5 @@ export const parseFaces = (faces: Record<FaceName, string>) => {
                 .map(s => colorMap[s.toLowerCase()])
             ) as Face
         return cube
-    }, {} as Cube)
+    }, {} as CubeFaces)
 }

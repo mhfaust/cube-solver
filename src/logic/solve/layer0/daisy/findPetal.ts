@@ -1,4 +1,4 @@
-import { Cube } from '@/logic/newCube'
+import { CubeFaces } from '@/logic/newCube'
 import { equatorFaces } from '../../../constants'
 import { I, TileLocator } from '@/logic/cubeUtils'
 
@@ -11,7 +11,7 @@ const bottomEdgeCoords: Pick<TileLocator, 'col' | 'row'>[] = [
 
 const eyes: I[] = [0,1,2]
 
-export const findPetal = (cube: Cube): TileLocator | undefined => {
+export const findPetal = (cube: CubeFaces): TileLocator | undefined => {
     const petalColor = cube.bottom[1][1]
     //equatorial edges:
     for(let faceName of equatorFaces){
