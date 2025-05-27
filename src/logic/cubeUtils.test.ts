@@ -8,50 +8,50 @@ import {
     bottomFace
 } from './cubeUtils'
 import { newCubeFaces } from './newCube'
-import { BLUE, GREEN, ORANGE, RED, WHITE, YELLOW } from './constants'
+import { COLOR_A_2, COLOR_Z_2, COLOR_Z_1, COLOR_A_1, COLOR_Z_3, COLOR_A_3 } from './constants'
 
 
 describe('face fns', () => {
     it('frontFace', () => {
         expect(frontFace(newCubeFaces())).to.deep.equal([
-            [WHITE, WHITE, WHITE], 
-            [WHITE, WHITE, WHITE], 
-            [WHITE, WHITE, WHITE]
+            [COLOR_Z_3, COLOR_Z_3, COLOR_Z_3], 
+            [COLOR_Z_3, COLOR_Z_3, COLOR_Z_3], 
+            [COLOR_Z_3, COLOR_Z_3, COLOR_Z_3]
         ])
     })
     it('rightFace', () => {
         expect(rightFace(newCubeFaces())).to.deep.equal([
-            [RED, RED, RED], 
-            [RED, RED, RED], 
-            [RED, RED, RED]
+            [COLOR_A_1, COLOR_A_1, COLOR_A_1], 
+            [COLOR_A_1, COLOR_A_1, COLOR_A_1], 
+            [COLOR_A_1, COLOR_A_1, COLOR_A_1]
         ])
     })
     it('backFace', () => {
         expect(backFace(newCubeFaces())).to.deep.equal([
-            [YELLOW, YELLOW, YELLOW], 
-            [YELLOW, YELLOW, YELLOW], 
-            [YELLOW, YELLOW, YELLOW]
+            [COLOR_A_3, COLOR_A_3, COLOR_A_3], 
+            [COLOR_A_3, COLOR_A_3, COLOR_A_3], 
+            [COLOR_A_3, COLOR_A_3, COLOR_A_3]
         ])
     })
     it('leftFace', () => {
         expect(leftFace(newCubeFaces())).to.deep.equal([
-            [ORANGE, ORANGE, ORANGE], 
-            [ORANGE, ORANGE, ORANGE], 
-            [ORANGE, ORANGE, ORANGE]
+            [COLOR_Z_1, COLOR_Z_1, COLOR_Z_1], 
+            [COLOR_Z_1, COLOR_Z_1, COLOR_Z_1], 
+            [COLOR_Z_1, COLOR_Z_1, COLOR_Z_1]
         ])
     })
     it('topFace', () => {
         expect(topFace(newCubeFaces())).to.deep.equal([
-            [BLUE, BLUE, BLUE], 
-            [BLUE, BLUE, BLUE], 
-            [BLUE, BLUE, BLUE]
+            [COLOR_A_2, COLOR_A_2, COLOR_A_2], 
+            [COLOR_A_2, COLOR_A_2, COLOR_A_2], 
+            [COLOR_A_2, COLOR_A_2, COLOR_A_2]
         ])
     })
     it('bottomFace', () => {
         expect(bottomFace(newCubeFaces())).to.deep.equal([
-            [GREEN, GREEN, GREEN], 
-            [GREEN, GREEN, GREEN], 
-            [GREEN, GREEN, GREEN]
+            [COLOR_Z_2, COLOR_Z_2, COLOR_Z_2], 
+            [COLOR_Z_2, COLOR_Z_2, COLOR_Z_2], 
+            [COLOR_Z_2, COLOR_Z_2, COLOR_Z_2]
         ])
     })
 })

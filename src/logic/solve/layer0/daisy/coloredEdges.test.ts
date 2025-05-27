@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { coloredEdges } from './coloredEdges'
 import { newCubeFaces } from '../../../newCube'
-import { G } from '@/logic/constants'
+import { Z2 } from '@/logic/constants'
 
 
 describe('coloredEdges', function(){
@@ -26,6 +26,6 @@ describe('coloredEdges', function(){
             "row": 2
         }]
 // const x = coloredEdges(G, cube)
-        expect(coloredEdges(G, cube)).to.deep.equal(expected)
+        expect(coloredEdges(Z2, cube)).to.deep.equal(expected)
     })
 })

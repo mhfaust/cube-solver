@@ -1,4 +1,4 @@
-import { B, G, R, O, WHITE, YELLOW } from '../constants'
+import { A2, Z2, A1, Z1, COLOR_Z_3, COLOR_A_3 } from '../constants'
 import { CubeFaces, faceOf, newCubeFaces } from '../newCube'
 import { expect } from 'chai'
 import { zPos } from './zPos'
@@ -8,12 +8,12 @@ describe('zPos', () => {
         const cube = newCubeFaces()
         const trans = zPos(0)(cube)
         const expected: CubeFaces = {
-            front: faceOf(WHITE),
-            right: [[B,R,R],[B,R,R],[B,R,R]],
-            back: faceOf(YELLOW),
-            left: [[O,O,G],[O,O,G],[O,O,G]],
-            top: [[B,B,B],[B,B,B],[O,O,O]],
-            bottom: [[R,R,R],[G,G,G],[G,G,G]],
+            front: faceOf(COLOR_Z_3),
+            right: [[A2,A1,A1],[A2,A1,A1],[A2,A1,A1]],
+            back: faceOf(COLOR_A_3),
+            left: [[Z1,Z1,Z2],[Z1,Z1,Z2],[Z1,Z1,Z2]],
+            top: [[A2,A2,A2],[A2,A2,A2],[Z1,Z1,Z1]],
+            bottom: [[A1,A1,A1],[Z2,Z2,Z2],[Z2,Z2,Z2]],
         }
         expect(trans).to.deep.equal(expected)
     })
@@ -21,12 +21,12 @@ describe('zPos', () => {
         const cube = newCubeFaces()
         const trans = zPos(1)(cube)
         const expected: CubeFaces = {
-            front: faceOf(WHITE),
-            right: [[R,B,R],[R,B,R],[R,B,R]],
-            back: faceOf(YELLOW),
-            left: [[O,G,O],[O,G,O],[O,G,O]],
-            top: [[B,B,B],[O,O,O],[B,B,B]],
-            bottom: [[G,G,G],[R,R,R],[G,G,G]],
+            front: faceOf(COLOR_Z_3),
+            right: [[A1,A2,A1],[A1,A2,A1],[A1,A2,A1]],
+            back: faceOf(COLOR_A_3),
+            left: [[Z1,Z2,Z1],[Z1,Z2,Z1],[Z1,Z2,Z1]],
+            top: [[A2,A2,A2],[Z1,Z1,Z1],[A2,A2,A2]],
+            bottom: [[Z2,Z2,Z2],[A1,A1,A1],[Z2,Z2,Z2]],
         }
         expect(trans).to.deep.equal(expected)
     })
@@ -34,12 +34,12 @@ describe('zPos', () => {
         const cube = newCubeFaces()
         const trans = zPos(2)(cube)
         const expected: CubeFaces = {
-            front: faceOf(WHITE),
-            right: [[R,R,B],[R,R,B],[R,R,B]],
-            back: faceOf(YELLOW),
-            left: [[G,O,O],[G,O,O],[G,O,O]],
-            top: [[O,O,O],[B,B,B],[B,B,B]],
-            bottom: [[G,G,G],[G,G,G],[R,R,R]],
+            front: faceOf(COLOR_Z_3),
+            right: [[A1,A1,A2],[A1,A1,A2],[A1,A1,A2]],
+            back: faceOf(COLOR_A_3),
+            left: [[Z2,Z1,Z1],[Z2,Z1,Z1],[Z2,Z1,Z1]],
+            top: [[Z1,Z1,Z1],[A2,A2,A2],[A2,A2,A2]],
+            bottom: [[Z2,Z2,Z2],[Z2,Z2,Z2],[A1,A1,A1]],
         }
         expect(trans).to.deep.equal(expected)
     })

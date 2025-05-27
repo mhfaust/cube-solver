@@ -1,14 +1,14 @@
 import chalk from 'chalk';
 import { CubeFaces, Line } from '../newCube';
-import { FaceName } from '../constants';
+import { COLOR_A_1, COLOR_A_2, COLOR_A_3, COLOR_Z_1, COLOR_Z_2, COLOR_Z_3, FaceName } from '../constants';
 
 const coloredSquare = {
-    red: chalk['red']('■'),
-    blue: chalk['blue']('■'),
-    green: chalk['green']('■'),
-    yellow: chalk['yellow']('■'),
-    white: chalk['white']('■'),
-    orange: chalk['magenta']('■'),
+    [COLOR_A_1]: chalk['red']('■'),
+    [COLOR_A_2]: chalk['blue']('■'),
+    [COLOR_A_3]: chalk['yellow']('■'),
+    [COLOR_Z_1]: chalk['magenta']('■'),
+    [COLOR_Z_2]: chalk['green']('■'),
+    [COLOR_Z_3]: chalk['white']('■'),
 }
 
 const rowStr = (row: Line) => row.map(tile => coloredSquare[tile]).join(' ')
