@@ -20,7 +20,7 @@ const useScramble = () => {
   return useCallback(() => {
 
     const randomSequence = Array.from(
-      { length: 100 }, 
+      { length: 5 }, 
       () => oneLayerSpins[Math.floor(Math.random() * numSpinTypes)]
     )
     const recurse = () => {
@@ -35,7 +35,7 @@ const useScramble = () => {
         setTimeout(recurse, SCRAMBLE_ROTATION_TIME)
       }
       else {
-        clearHistory()
+        // clearHistory()
       }
     }
     recurse()

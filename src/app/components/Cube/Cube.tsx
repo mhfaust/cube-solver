@@ -46,6 +46,10 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 	const pointers = useRef<Pointers>({})
 	const swipeTimeout = useRef<NodeJS.Timeout | null>(null)
 
+	useEffect(() => {
+		console.log(isSolved(cubeGrid))
+	}, [cubeGrid])
+
 	useFrame(({ clock }) => {
 		controls.current?.update()
 	});

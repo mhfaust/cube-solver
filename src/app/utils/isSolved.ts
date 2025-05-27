@@ -2,9 +2,17 @@ import { CubeGrid } from "@/app/store/cubeSlice"
 import { quaternionsAreEqual } from "./quaternionsAreEqual"
 
 const isSolved = (grid: CubeGrid) => {
+  console.log('hellowwwww??')
   const flattened = grid.flat(3)
   return flattened.every((block, i) => {
-    return i === 0 || quaternionsAreEqual(block.orientation, flattened[i - 1].orientation, .001)
+    if (i === 0 ) {
+      return true
+    }
+    const { x,y,z,w  }= block.orientation;
+
+    console.log(`${x},${y},${z},${w}`)
+    const e =  quaternionsAreEqual(block.orientation, flattened[i - 1].orientation, .001)
+    return e
   })
 }
 
