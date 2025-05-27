@@ -176,10 +176,10 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 				else {
 					if(dial > MIN_DIAL_ANGLE) {
 						// spinScheduler.queue('Z')
-						moveCodes.push('Z')
+						moveCodes.push('Z′')
 					}
 					else if (dial < -MIN_DIAL_ANGLE){
-						moveCodes.push('Z′')
+						moveCodes.push('Z')
 					}
 					else if (abs(dial) < MAX_SWIPE_ANGLE) {
 						const moveCode = spinWholeCube(swipe1)
