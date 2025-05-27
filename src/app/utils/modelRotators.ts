@@ -1,5 +1,6 @@
 import { CubeGrid } from "@/app/store/cubeSlice";
 import { Quaternion, Vector3 } from "three";
+import { canonicalQuaternions } from "./canonicalQuaternions";
 
 function copyModel (cube: CubeGrid) {
   return cube.map(dim2 => dim2.map(dim1 => dim1.slice()))
@@ -8,7 +9,7 @@ function copyModel (cube: CubeGrid) {
 type BlockTransform = {
   startPosition: 0|1|2,
   endPosition: 0|1|2,
-  rotation: Quaternion,
+  quaternion: Quaternion,
 }
 
 // Represents a translation instruction for moving a single block of a cube.
@@ -152,7 +153,7 @@ const rotateModelZLayerNegative: LayerRotator = (cubeGrid: CubeGrid, z: 0|1|2) =
   ], zNegativeQuaternion)
 }
 
-type LayerRotator = (cubeGrid: CubeGrid, layer: 0 | 1 | 2, rotation: Quaternion) => CubeGrid
+type LayerRotator = (cubeGrid: CubeGrid, layer: 0 | 1 | 2, quaternion: Quaternion) => CubeGrid
 
 
 const rotationFunctionsByAxisAndDirection = {
@@ -170,15 +171,30 @@ const rotationFunctionsByAxisAndDirection = {
   },
 } as const
 
+const quaternionsByAxisAndDirection = {
+    x: {
+    '+': canonicalQuaternions.x90,
+    '-': canonicalQuaternions.x270,
+  },
+  y: {
+    '+': canonicalQuaternions.y90,
+    '-': canonicalQuaternions.y270,
+  },
+  z: {
+    '+': canonicalQuaternions.z90,
+    '-': canonicalQuaternions.y270,
+  },
+}
+
 export const layerModelRotator = (
   axis: 'x'|'y'|'z',
   layer: 0|1|2,
   direction: '+'|'-',
-  rotation: Quaternion
 ) => (cube: CubeGrid) => {
 
       const layerRotator = rotationFunctionsByAxisAndDirection[axis][direction]
-      return layerRotator(cube, layer, rotation)
+      const quaternion = quaternionsByAxisAndDirection[axis][direction]
+      return layerRotator(cube, layer, quaternion)
 }
 
 /**
@@ -194,10 +210,9 @@ export const layerModelRotator = (
 export const cubeModelRotator = (
   axis: 'x'|'y'|'z',
   direction: '+'|'-',
-  rotation: Quaternion
 ) => (cubeGrid: CubeGrid) => {
-  const r1 = layerModelRotator(axis, 0, direction, rotation) (cubeGrid)
-  const r2 = layerModelRotator(axis, 1, direction, rotation) (r1)
-  const r3 = layerModelRotator(axis, 2, direction, rotation) (r2)
+  const r1 = layerModelRotator(axis, 0, direction) (cubeGrid)
+  const r2 = layerModelRotator(axis, 1, direction) (r1)
+  const r3 = layerModelRotator(axis, 2, direction) (r2)
   return r3
 }
