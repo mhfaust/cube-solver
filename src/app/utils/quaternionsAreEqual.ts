@@ -3,7 +3,7 @@ import { Quaternion } from "three"
 export function quaternionsAreEqual(
   q1: Quaternion, 
   q2: Quaternion, 
-  tolerance: number = 1e-6
+  tolerance: number = .01
 ): boolean {
   // Calculate the distance between the quaternions directly
   const directDistance = Math.sqrt(

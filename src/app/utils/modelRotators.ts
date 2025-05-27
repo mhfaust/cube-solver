@@ -53,7 +53,7 @@ const rotateModelLayer = (cubeGrid: CubeGrid, translations: LayerRotationTransla
     newGrid[s[0]][s[1]][s[2]].initialPosition = newBlock.initialPosition
     
     // Apply the rotation and normalize to prevent accumulating precision errors
-    const newOrientation = new Quaternion().multiplyQuaternions(cubeGrid[s[0]][s[1]][s[2]].orientation, rotation)
+    const newOrientation = new Quaternion().multiplyQuaternions(rotation, cubeGrid[s[0]][s[1]][s[2]].orientation)
     newOrientation.normalize() // This corrects for accumulated floating-point errors
     
     newGrid[s[0]][s[1]][s[2]].orientation = newOrientation
@@ -182,7 +182,7 @@ const quaternionsByAxisAndDirection = {
   },
   z: {
     '+': canonicalQuaternions.z90,
-    '-': canonicalQuaternions.y270,
+    '-': canonicalQuaternions.z270,
   },
 }
 

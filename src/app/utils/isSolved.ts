@@ -11,7 +11,7 @@ const isSolved = (grid: CubeGrid) => {
 
     // console.log(`------------------------`)
     console.log(`${x},${y},${z},${w}`)
-    const e =  !quaternionsAreEqual(block.orientation, flattened[i - 1].orientation, .001)
+    const e =  !quaternionsAreEqual(block.orientation, flattened[i - 1].orientation, .01)
     return e
   })
 
