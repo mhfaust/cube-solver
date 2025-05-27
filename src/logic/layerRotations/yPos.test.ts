@@ -1,4 +1,4 @@
-import { B, G, W, Y, R, O } from '../constants'
+import { B, G, W, Y, R, O, BLUE, GREEN } from '../constants'
 import { CubeFaces, faceOf, newCubeFaces } from '../newCube'
 import { expect } from 'chai'
 import { yPos } from './yPos'
@@ -12,8 +12,8 @@ describe('yPos', () => {
             right: [[W,W,W],[R,R,R],[R,R,R]],
             back: [[R,R,R],[Y,Y,Y],[Y,Y,Y]],
             left: [[Y,Y,Y],[O,O,O],[O,O,O]],
-            top: faceOf('blue'),
-            bottom: faceOf('green'),
+            top: faceOf(BLUE),
+            bottom: faceOf(GREEN),
         }
         expect(trans).to.deep.equal(expected)
     })
@@ -25,8 +25,8 @@ describe('yPos', () => {
             right: [[R,R,R],[W,W,W],[R,R,R]],
             back: [[Y,Y,Y],[R,R,R],[Y,Y,Y]],
             left: [[O,O,O],[Y,Y,Y],[O,O,O]],
-            top: faceOf('blue'),
-            bottom: faceOf('green'),
+            top: faceOf(BLUE),
+            bottom: faceOf(GREEN),
         }
         expect(trans).to.deep.equal(expected)
     })
@@ -38,8 +38,8 @@ describe('yPos', () => {
             right: [[R,R,R],[R,R,R],[W,W,W]],
             back: [[Y,Y,Y],[Y,Y,Y],[R,R,R]],
             left: [[O,O,O],[O,O,O],[Y,Y,Y]],
-            top: faceOf('blue'),
-            bottom: faceOf('green'),
+            top: faceOf(BLUE),
+            bottom: faceOf(GREEN),
         }
         expect(trans).to.deep.equal(expected)
     })

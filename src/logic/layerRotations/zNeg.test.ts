@@ -1,4 +1,4 @@
-import { B, G, R, O, Y } from '../constants'
+import { B, G, R, O, Y, WHITE, YELLOW } from '../constants'
 import { CubeFaces, faceOf, newCubeFaces } from '../newCube'
 import { expect } from 'chai'
 import { zNeg } from './zNeg'
@@ -8,9 +8,9 @@ describe('zNeg', () => {
         const cube = newCubeFaces()
         const trans = zNeg(0)(cube)
         const expected: CubeFaces = {
-            front: faceOf('white'),
+            front: faceOf(WHITE),
             right: [[G,R,R],[G,R,R],[G,R,R]],
-            back: faceOf('yellow'),
+            back: faceOf(YELLOW),
             left: [[O,O,B],[O,O,B],[O,O,B]],
             top: [[B,B,B],[B,B,B],[R,R,R]],
             bottom: [[O,O,O],[G,G,G],[G,G,G]],
@@ -21,9 +21,9 @@ describe('zNeg', () => {
         const cube = newCubeFaces()
         const trans = zNeg(1)(cube)
         const expected: CubeFaces = {
-            front: faceOf('white'),
+            front: faceOf(WHITE),
             right: [[R,G,R],[R,G,R],[R,G,R]],
-            back: faceOf('yellow'),
+            back: faceOf(YELLOW),
             left: [[O,B,O],[O,B,O],[O,B,O]],
             top: [[B,B,B],[R,R,R],[B,B,B]],
             bottom: [[G,G,G],[O,O,O],[G,G,G]],
@@ -34,9 +34,9 @@ describe('zNeg', () => {
         const cube = newCubeFaces()
         const trans = zNeg(2)(cube)
         const expected: CubeFaces = {
-            front: faceOf('white'),
+            front: faceOf(WHITE),
             right: [[R,R,G],[R,R,G],[R,R,G]],
-            back: faceOf('yellow'),
+            back: faceOf(YELLOW),
             left: [[B,O,O],[B,O,O],[B,O,O]],
             top: [[R,R,R],[B,B,B],[B,B,B]],
             bottom: [[G,G,G],[G,G,G],[O,O,O]],

@@ -1,13 +1,13 @@
-import { Color, FaceName } from "../constants"
+import { BLUE, Color, FaceName, GREEN, ORANGE, RED, WHITE, YELLOW } from "../constants"
 import { CubeFaces, Face } from "../newCube"
 
 const colorMap: Record<string, Color> = {
-    r: 'red',
-    y: 'yellow',
-    b: 'blue',
-    g: 'green',
-    w: 'white',
-    o: 'orange'
+    r: RED,
+    y: YELLOW,
+    b: BLUE,
+    g: GREEN,
+    w: WHITE,
+    o: ORANGE
 }
 
 export const parseFaces = (faces: Record<FaceName, string>) => {

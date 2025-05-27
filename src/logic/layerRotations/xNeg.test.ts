@@ -1,4 +1,4 @@
-import { B, G, W, Y } from '../constants'
+import { B, G, ORANGE, RED, W, Y } from '../constants'
 import { newCubeFaces, faceOf } from '../newCube'
 
 import { xNeg } from './xNeg'
@@ -10,9 +10,9 @@ describe('xNeg', () => {
         const trans = xNeg(0)(cubeFaces)
         expect(trans).to.deep.equal({
             front: [[G,W,W],[G,W,W],[G,W,W]],
-            right: faceOf('red'),
+            right: faceOf(RED),
             back: [[Y,Y,B],[Y,Y,B],[Y,Y,B]],
-            left: faceOf('orange'),
+            left: faceOf(ORANGE),
             top: [[W,B,B],[W,B,B],[W,B,B],],
             bottom: [[Y,G,G],[Y,G,G],[Y,G,G]],
         })
@@ -22,9 +22,9 @@ describe('xNeg', () => {
         const trans = xNeg(1)(cubeFaces)
         expect(trans).to.deep.equal({
             front: [[W,G,W],[W,G,W],[W,G,W]],
-            right: faceOf('red'),
+            right: faceOf(RED),
             back: [[Y,B,Y],[Y,B,Y],[Y,B,Y]],
-            left: faceOf('orange'),
+            left: faceOf(ORANGE),
             top: [[B,W,B],[B,W,B],[B,W,B],],
             bottom: [[G,Y,G],[G,Y,G],[G,Y,G]],
         })
@@ -34,9 +34,9 @@ describe('xNeg', () => {
         const trans = xNeg(2)(cubeFaces)
         expect(trans).to.deep.equal({
             front: [[W,W,G],[W,W,G],[W,W,G]],
-            right: faceOf('red'),
+            right: faceOf(RED),
             back: [[B,Y,Y],[B,Y,Y],[B,Y,Y]],
-            left: faceOf('orange'),
+            left: faceOf(ORANGE),
             top: [[B,B,W],[B,B,W],[B,B,W],],
             bottom: [[G,G,Y],[G,G,Y],[G,G,Y]],
         })
