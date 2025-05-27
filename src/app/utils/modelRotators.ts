@@ -41,19 +41,19 @@ type LayerRotationTranslations = [
 const rotateModelLayer = (cubeGrid: CubeGrid, translations: LayerRotationTranslations, rotation: Quaternion): CubeGrid => {
   const newGrid = copyModel(cubeGrid)
 
-  const newBlocks = translations.map(s => ({ 
-    current: cubeGrid[s[3]][s[4]][s[5]].wrapperMesh.current ,
+  const newBlockInfos = translations.map(s => ({ 
+    wrapperMeshCurrent: cubeGrid[s[3]][s[4]][s[5]].wrapperMesh.current,
     initialPosition: cubeGrid[s[3]][s[4]][s[5]].initialPosition,
-    orientation: cubeGrid[s[3]][s[4]][s[5]].orientation // clone to avoid mutating original orientation
+    orientation: cubeGrid[s[3]][s[4]][s[5]].orientation 
   }))
 
   translations.forEach((s, i) => {
-    const newBlock = newBlocks[i]
-    newGrid[s[0]][s[1]][s[2]].wrapperMesh.current = newBlock.current
+    const newBlock = newBlockInfos[i]
+    newGrid[s[0]][s[1]][s[2]].wrapperMesh.current = newBlock.wrapperMeshCurrent
     newGrid[s[0]][s[1]][s[2]].initialPosition = newBlock.initialPosition
     
     // Apply the rotation and normalize to prevent accumulating precision errors
-    const newOrientation = new Quaternion().multiplyQuaternions(rotation, cubeGrid[s[0]][s[1]][s[2]].orientation)
+    const newOrientation = new Quaternion().multiplyQuaternions(cubeGrid[s[0]][s[1]][s[2]].orientation, rotation)
     newOrientation.normalize() // This corrects for accumulated floating-point errors
     
     newGrid[s[0]][s[1]][s[2]].orientation = newOrientation
