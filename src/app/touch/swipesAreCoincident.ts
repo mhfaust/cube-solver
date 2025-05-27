@@ -20,7 +20,7 @@ const swipesAreCoincident = (
   if(!fingerPosition1 || !fingerPosition2) {
     return false
   }
-  if(['down' || 'up'].includes(swipe1.axisDirection)) {
+  if(['down', 'up'].includes(swipe1.axisDirection)) {
     return fingerPosition1[0] === fingerPosition2[0]
   }
   else {

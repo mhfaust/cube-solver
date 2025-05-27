@@ -1,6 +1,6 @@
 import { MutableRefObject } from "react";
 import { Object3D, Vector3 } from "three";
-import { SingleBlock, CubeGrid } from "@/app/store/cubeSlice";
+import { CubeWrapperMeshRef, CubeGrid } from "@/app/store/cubeSlice";
 
 /**
  * Returns an array of objects representing the blocks in a specified layer of a cube grid.
@@ -86,9 +86,9 @@ export const layerRenderingRotator = (
 
       const objectOrbiter = rotationFunctionsByAxisAndDirection[axis][direction]
 
-      layerObjects(cube, axis, layer).forEach((block: SingleBlock) => {
+      layerObjects(cube, axis, layer).forEach((block: CubeWrapperMeshRef) => {
         objectOrbiter(
-          block.wrapperMesh.current, 
+          block.current, 
           () => isRotating.current = false, 
           animationTime
         )

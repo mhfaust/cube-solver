@@ -22,7 +22,7 @@ export const getBlockPosition = (cubeGrid: CubeGrid, blockContainer: Object3D): 
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
       for (let k = 0; k < 3; k++) {
-        if(cubeGrid[i][j][k].wrapperMesh.current?.children[0] === blockContainer) {
+        if(cubeGrid[i][j][k].current?.children[0] === blockContainer) {
           return [i as 0|1|2, j as 0|1|2 ,k as 0|1|2]
         }
       }

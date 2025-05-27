@@ -305,7 +305,7 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 					x0={x0} 
 					y0={y0} 
 					z0={z0} 
-					containerRef={cubeGrid[x0][y0][z0].wrapperMesh}
+					containerRef={cubeGrid[x0][y0][z0]}
 					onPointerDown={handlePointerDown}
 					onPointerUp={handlePointerUp}
 					onPointerMove={handlePointerMove}

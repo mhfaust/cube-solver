@@ -10,9 +10,7 @@ import { printCube } from "@/logic/console/printCube";
 
 export type CubeWrapperMesh = Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>
 
-export type SingleBlock = {
-  wrapperMesh: MutableRefObject<CubeWrapperMesh>,
-}
+export type CubeWrapperMeshRef = MutableRefObject<CubeWrapperMesh>
 
 const emptyHistory: MoveCode[] = []
 
@@ -27,7 +25,7 @@ const emptyHistory: MoveCode[] = []
  * 
  * Each element in the 3D array is a `SingleBlock`, which represents an individual block within the cube.
  */
-export type CubeGrid = SingleBlock[][][]
+export type CubeGrid = CubeWrapperMeshRef[][][]
 
 export type CubeSlice = {
   cubeGrid: CubeGrid,
@@ -50,9 +48,7 @@ export const createCubeSlice: StateCreator<CubeSlice> = (set, get) => {
     cubeGrid: _012.map(
       (i: 0|1|2) => _012.map(
         (j: 0|1|2) => _012.map(
-          (k: 0|1|2) => ({
-            wrapperMesh: { current: {} as Mesh },
-          })
+          (k: 0|1|2) => ({ current: {} as Mesh })
         )
       ) 
     ),

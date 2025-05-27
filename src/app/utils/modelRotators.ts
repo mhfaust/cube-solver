@@ -32,13 +32,11 @@ type LayerRotationTranslations = [
 const rotateModelLayer = (cubeGrid: CubeGrid, translations: LayerRotationTranslations): CubeGrid => {
   const newGrid = copyModel(cubeGrid)
 
-  const newBlockInfos = translations.map(s => ({ 
-    wrapperMeshCurrent: cubeGrid[s[3]][s[4]][s[5]].wrapperMesh.current,
-  }))
+  const newBlockWrapperMeshes = translations.map(s => (cubeGrid[s[3]][s[4]][s[5]].current))
 
   translations.forEach((s, i) => {
-    const newBlock = newBlockInfos[i]
-    newGrid[s[0]][s[1]][s[2]].wrapperMesh.current = newBlock.wrapperMeshCurrent
+    const newBlockWrapperMesh = newBlockWrapperMeshes[i]
+    newGrid[s[0]][s[1]][s[2]].current = newBlockWrapperMesh
   })
 
   return newGrid
