@@ -12,7 +12,7 @@ export const face = (faceName: FaceName) => (cube: CubeFaces) => cube[faceName]
 
 export const row = (rowIndex: number) => (face: Face): Line => [...face[rowIndex]]
 
-export const col = (i: number) => (face: Face): Line => [face[i][0], face[i][1], face[i][2]]
+export const col = (i: number) => (face: Face): Line => [face[0][i], face[1][i], face[2][i]]
 
 export const tile = (faceName: FaceName) => (row: number, col: number) =>  (cube: CubeFaces) => cube[faceName][row][col]
 
