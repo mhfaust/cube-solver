@@ -3,7 +3,7 @@
 import Block from "@/app/components/Block"
 import styles from '@/app/page.module.css'
 import { useActions } from "@/app/store/useAppStore"
-import { useCubeGrid, useHistory, useIsRotating } from "@/app/store/selectors"
+import { useCubeGrid, useFaces, useHistory, useIsRotating } from "@/app/store/selectors"
 import useTheme from "@/app/themes/useTheme"
 import calculateDialingAngle from "@/app/touch/calculateDialingAngle"
 import { 
@@ -29,6 +29,7 @@ import { RefObject, useCallback, useEffect, useRef, useState } from 'react'
 import { Color, PlaneGeometry, Vector3 } from "three"
 import { OrbitControls as ThreeOrbitControls } from 'three-stdlib'
 import isSolved from "@/app/utils/isSolved"
+import { printCube } from "@/logic/console/printCube"
 
 const { PI, abs } = Math
 const bgGeometry = new PlaneGeometry(50, 50)
@@ -37,6 +38,7 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 	const { log, setFingersOn } = useActions()
 	const isRotating = useIsRotating()
 	const cubeGrid = useCubeGrid()
+	const faces = useFaces()
 	const executeMove = useExecuteMove()
 
 	const { bgMaterial, pointLightIntensity, ambientLightIntensity } = useTheme()
@@ -49,6 +51,10 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 	useEffect(() => {
 		console.log(isSolved(cubeGrid))
 	}, [cubeGrid])
+
+	useEffect(() => {
+		console.log(printCube(faces))
+	}, [faces])
 
 	useFrame(({ clock }) => {
 		controls.current?.update()
@@ -163,7 +169,7 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 						moveCodes.push('F')
 					}
 					else if (dial < -MIN_DIAL_ANGLE){
-						moveCodes.push('F′')
+						moveCodes.push('Fi')
 					}
 					else if (abs(dial) < MAX_SWIPE_ANGLE) {
 						const moveCode = spinRowXOrY(cubeGrid, downPointer, upPointer)
@@ -176,7 +182,7 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 				else {
 					if(dial > MIN_DIAL_ANGLE) {
 						// spinScheduler.queue('Z')
-						moveCodes.push('Z′')
+						moveCodes.push('Zi')
 					}
 					else if (dial < -MIN_DIAL_ANGLE){
 						moveCodes.push('Z')
@@ -235,7 +241,7 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 								[downPointer, upPointer],
 								[baseMovePointer, baseMovePointer]
 							)
-							const moveCode = rotation === 1 ? 'F' : rotation === -1 ? 'F′': undefined
+							const moveCode = rotation === 1 ? 'F' : rotation === -1 ? 'Fi': undefined
 							if(moveCode) {
 								moveCodes.push(moveCode)
 							}

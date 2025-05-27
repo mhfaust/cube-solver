@@ -4,6 +4,7 @@ import { BufferGeometry, Material, Mesh, NormalBufferAttributes, Object3DEventMa
 import { _012 } from "@/app/utils/grid";
 import storeSetters from "./storeHelpers";
 import { MoveCode } from "../utils/moveCodes";
+import  { newCubeFaces, CubeFaces } from "@/logic/newCube";
 
 export type CubeWrapperMesh = Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>
 
@@ -30,6 +31,8 @@ export type CubeGrid = SingleBlock[][][]
 
 export type CubeSlice = {
   cubeGrid: CubeGrid,
+  faces: CubeFaces,
+  setFaces: ((faces: CubeFaces) => void),
   isRotating: MutableRefObject<boolean>,
   setCubeGrid: ((cubeGrid: CubeGrid) => void),
   history: MoveCode[],
@@ -53,6 +56,8 @@ export const createCubeSlice: StateCreator<CubeSlice> = (set, get) => {
         )
       ) 
     ),
+    faces: newCubeFaces(),
+    setFaces: setValueOf('faces'),
     isRotating: { current: false },
     setCubeGrid: setValueOf('cubeGrid'),
     history: emptyHistory,

@@ -5,9 +5,9 @@ import { useIsRotating } from "../store/selectors"
 import { useActions } from "../store/useAppStore"
 
 const oneLayerSpins: MoveCode[] = [
-  'U' , 'U′' , 'D' , 'D′' , 'E' , 'E′' ,
-  'R' , 'R′' , 'L' , 'L′' , 'M' , 'M′' ,
-  'F' , 'F′' , 'B' , 'B′' , 'S' , 'S′'
+  'U' , 'Ui' , 'D' , 'Di' , 'E' , 'Ei' ,
+  'R' , 'Ri' , 'L' , 'Li' , 'M' , 'Mi' ,
+  'F' , 'Fi' , 'B' , 'Bi' , 'S' , 'Si'
 ]
 const numSpinTypes = Object.keys(oneLayerSpins).length
 

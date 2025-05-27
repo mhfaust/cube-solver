@@ -12,7 +12,7 @@ export const createThemeSlice: StateCreator<ThemeSlice> = (set) =>{
   const { setValueOf } = storeSetters(set)
 
   return{
-    themeName: 'neon',
+    themeName: 'dark',
     setThemeName: setValueOf('themeName')
   }
 }

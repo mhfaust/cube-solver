@@ -12,6 +12,7 @@ export const useStartTime = () => useAppStore(selectProp('startTime'));
 export const useCompletionTime = () => useAppStore(selectProp('completionTime'));
 export const useIsSolved = () => useAppStore(selectProp('isSolved'));
 export const useCubeGrid = () => useAppStore(selectProp('cubeGrid'));
+export const useFaces = () => useAppStore(selectProp('faces'));
 export const useIsRotating = () => useAppStore(selectProp('isRotating'));
 export const useFingersOn = () => useAppStore(selectProp('fingersOn'));
 export const useHistory = () => useAppStore(selectProp('history')); 

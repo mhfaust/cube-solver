@@ -28,10 +28,10 @@ const spinRowXOrY = (
 
   if(distance > 10 && time < 500 ) {
     const map: Record<AxisDirection, MoveCode[]> = {
-      'down': ['L', 'M', 'R′'],
-      'up': ['L′', 'M′', 'R'],
-      'right': ['D', 'E', 'U′'],
-      'left': ['D′', 'E′', 'U'],
+      'down': ['L', 'M', 'Ri'],
+      'up': ['Li', 'Mi', 'R'],
+      'right': ['D', 'E', 'Ui'],
+      'left': ['Di', 'Ei', 'U'],
     }
     const move: MoveCode = map[direction][isVertical ? i : j]
     return move

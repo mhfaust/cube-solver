@@ -3,9 +3,9 @@ import { AxisDirection, swipeInfo } from "./pointers"
 
 const map = {
   'down': 'X',
-  'up': 'X′',
+  'up': 'Xi',
   'right': 'Y',
-  'left': 'Y′',
+  'left': 'Yi',
 } as const
 
 const spinWholeCube = (swipe: Pick<ReturnType<typeof swipeInfo>, 'axisDirection'>) => {

@@ -16,7 +16,7 @@ const spinFrontOrBack = (
 
   //BACK face:
   if(isOnCube(otherDownPointer)) {
-    return swipedAbove === swipedRight ? 'B′' : 'B'
+    return swipedAbove === swipedRight ? 'Bi' : 'B'
   }
   //FRONT face:
   const position = getBlockPosition(grid, downPointer.eventObject)!
@@ -25,23 +25,23 @@ const spinFrontOrBack = (
     // log?.(i, j)
     switch (`${i}${j}`) {
       case '00': 
-        return ['up', 'left'].includes(axisDirection) ? 'F' : 'F′'
+        return ['up', 'left'].includes(axisDirection) ? 'F' : 'Fi'
       case '01': 
-        return dy > 0 ? 'F′' : 'F'
+        return dy > 0 ? 'Fi' : 'F'
       case '02': 
-        return ['up', 'right'].includes(axisDirection) ? 'F' : 'F′'
+        return ['up', 'right'].includes(axisDirection) ? 'F' : 'Fi'
       case '10':
-        return dx > 0 ? 'F′' : 'F'
+        return dx > 0 ? 'Fi' : 'F'
       case '11': 
         return undefined  
       case '12': 
-        return dx > 0 ? 'F' : 'F′'
+        return dx > 0 ? 'F' : 'Fi'
       case '20': 
-        return ['down', 'left'].includes(axisDirection) ? 'F' : 'F′'
+        return ['down', 'left'].includes(axisDirection) ? 'F' : 'Fi'
       case '21': 
-        return dy > 0 ? 'F' : 'F′'
+        return dy > 0 ? 'F' : 'Fi'
       case '22': 
-        return ['down', 'right'].includes(axisDirection)  ? 'F' : 'F′'
+        return ['down', 'right'].includes(axisDirection)  ? 'F' : 'Fi'
       default:
         return undefined
     }

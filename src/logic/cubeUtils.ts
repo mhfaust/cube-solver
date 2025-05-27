@@ -1,6 +1,6 @@
 import { FRONT, RIGHT, BACK, LEFT, TOP, BOTTOM, FaceName } from './constants'
 import { CubeFaces, Face, Line } from './newCube'
-import { CubeTransform } from './nextCube'
+import { CubeFacesTransform } from './nextCube'
 
 export type TileLocator = {
     faceName: FaceName,
@@ -114,12 +114,12 @@ export const leftFace = face(LEFT)
 export const topFace = face(TOP)
 export const bottomFace = face(BOTTOM)
 
-const recursePipe = (cube: CubeFaces, transforms: CubeTransform[], i: number): CubeFaces => {
+const recursePipe = (cube: CubeFaces, transforms: CubeFacesTransform[], i: number): CubeFaces => {
     return transforms[i](i === transforms.length - 1 
         ? cube 
         : recursePipe(cube, transforms, i + 1)
 )}
 
-export const pipe = (...transforms: CubeTransform[]): CubeTransform => {
+export const pipe = (...transforms: CubeFacesTransform[]): CubeFacesTransform => {
     return (cube: CubeFaces) => recursePipe(cube, transforms, 0)
 }

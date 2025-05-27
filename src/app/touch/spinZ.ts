@@ -11,7 +11,7 @@ const spinZ = (
   const wentRight = ['upRight', 'downRight'].includes(swipe.quadrantDirection)
   const isAbove = upPointer.unprojectedPoint.y > basePointer.unprojectedPoint.y
 
-  return wentRight === isAbove ? 'Z' : 'Z′'
+  return wentRight === isAbove ? 'Z' : 'Zi'
 }
 
 export default spinZ
