@@ -3,7 +3,7 @@
 import Block from "@/app/components/Block"
 import styles from '@/app/page.module.css'
 import { useActions } from "@/app/store/useAppStore"
-import { useCubeGrid, useFaces, useHistory, useIsRotating } from "@/app/store/selectors"
+import { useCubeGrid, useFaces, useIsRotating } from "@/app/store/selectors"
 import useTheme from "@/app/themes/useTheme"
 import calculateDialingAngle from "@/app/touch/calculateDialingAngle"
 import { 
@@ -21,8 +21,7 @@ import {
 	MAX_SWIPE_TIME, MIN_DIAL_ANGLE 
 } from "@/app/utils/constants"
 import { _012, getBlockPosition } from "@/app/utils/grid"
-import { MoveCode, asKeyCode, inverse, keyMoves } from "@/app/utils/moveCodes"
-import { useExecuteMove, useUndoLastMove } from "@/app/utils/useExecuteMove"
+import { MoveCode, asKeyCode, keyMoves } from "@/app/utils/moveCodes"
 import { OrbitControls } from '@react-three/drei'
 import { Canvas, ThreeEvent, useFrame, useThree } from "@react-three/fiber"
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react'
@@ -30,16 +29,16 @@ import { Color, PlaneGeometry, Vector3 } from "three"
 import { OrbitControls as ThreeOrbitControls } from 'three-stdlib'
 import isSolved from "@/app/utils/isSolved"
 import { printCube } from "@/logic/console/printCube"
+import useEffectOnce from "@/app/utils/useEffectOnce"
 
 const { PI, abs } = Math
 const bgGeometry = new PlaneGeometry(50, 50)
 
 const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => {
-	const { log, setFingersOn } = useActions()
+	const { log, setFingersOn, executeMove, undoLastMove } = useActions()
 	const isRotating = useIsRotating()
 	const cubeGrid = useCubeGrid()
 	const faces = useFaces()
-	const executeMove = useExecuteMove()
 
 	const { bgMaterial, pointLightIntensity, ambientLightIntensity } = useTheme()
 
@@ -48,13 +47,13 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 	const pointers = useRef<Pointers>({})
 	const swipeTimeout = useRef<NodeJS.Timeout | null>(null)
 
-	useEffect(() => {
-		console.log(isSolved(cubeGrid))
-	}, [cubeGrid])
+	// useEffect(() => {
+	// 	console.log(isSolved(cubeGrid))
+	// }, [cubeGrid])
 
-	useEffect(() => {
+	useEffectOnce(() => {
 		console.log(printCube(faces))
-	}, [faces])
+	})
 
 	useFrame(({ clock }) => {
 		controls.current?.update()
@@ -87,7 +86,6 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 		camera.updateProjectionMatrix()
 	}, [camera])
 
-	const undoLastMove = useUndoLastMove();
 	
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
@@ -96,10 +94,10 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 				return
 			}
 			if(e.metaKey && keyCode === 'z'){
-				undoLastMove(ANIMATION_TIME, isRotating)
+				undoLastMove(ANIMATION_TIME)
 			} else { 
 				const move = keyMoves[keyCode]
-				executeMove(move, ANIMATION_TIME, isRotating)
+				executeMove(move, ANIMATION_TIME)
 			}
 		};
 
@@ -258,7 +256,7 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 				}
 			} 
 			moveCodes.forEach(move => {
-				executeMove(move, ANIMATION_TIME, isRotating)
+				executeMove(move, ANIMATION_TIME)
 			})
 		}
 		removePointer(pointers.current, upPointer.pointerId)

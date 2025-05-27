@@ -16,7 +16,7 @@ export const col = (i: number) => (face: Face): Line => [face[0][i], face[1][i],
 
 export const tile = (faceName: FaceName) => (row: number, col: number) =>  (cube: CubeFaces) => cube[faceName][row][col]
 
-export const invert = ([a, b, c]: Line): Line => [b, c, a]
+export const invert = ([a, b, c]: Line): Line => [c, b, a]
 
 type GetLine = (cube: CubeFaces) => Line
 

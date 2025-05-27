@@ -1,6 +1,6 @@
 import { newCubeFaces } from '../newCube'
 import { printCube } from '../console/printCube'
-import { U, Ui, U2, R, Ri, L, Li, F, Fi, B, Bi, M, Mi, S, Si } from '../layerRotations/advancedNotation'
+import { U, Ui, R, Ri, L, Li, F, Fi, B, Bi, M, Mi, S, Si } from '../layerRotations/advancedNotation'
 
 import { pipe } from '../cubeUtils'
 import { xxxNeg } from '../cubeRotations/xxxNeg'

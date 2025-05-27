@@ -1,10 +1,10 @@
 import { useHistory, useIsRotating } from "@/app/store/selectors";
 import { ANIMATION_TIME } from "@/app/utils/constants";
-import { useUndoLastMove } from "@/app/utils/useExecuteMove";
 import styles from "./UndoButton.module.css";
+import { useActions } from "@/app/store/useAppStore";
 
 const UndoButton = () => {
-  const undoLastMove  = useUndoLastMove();
+  const {undoLastMove}  = useActions();
   const isRotating = useIsRotating();
   const history = useHistory();
 
@@ -13,7 +13,7 @@ const UndoButton = () => {
       className={styles.undoButton}
       onClick={() => {
         if(!isRotating.current) {
-          undoLastMove(ANIMATION_TIME, isRotating)}}
+          undoLastMove(ANIMATION_TIME)}}
         }
       disabled={history.length === 0}
     >

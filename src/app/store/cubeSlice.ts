@@ -3,8 +3,10 @@ import { MutableRefObject } from "react";
 import { BufferGeometry, Material, Mesh, NormalBufferAttributes, Object3DEventMap, Quaternion } from "three";
 import { _012 } from "@/app/utils/grid";
 import storeSetters from "./storeHelpers";
-import { MoveCode } from "../utils/moveCodes";
+import { inverse, MoveCode } from "../utils/moveCodes";
 import  { newCubeFaces, CubeFaces } from "@/logic/newCube";
+import { modelSpinFunctions, facesSpinFunctions, renderingSpinFunctions } from "../utils/useExecuteMove";
+import { printCube } from "@/logic/console/printCube";
 
 export type CubeWrapperMesh = Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>
 
@@ -36,9 +38,11 @@ export type CubeSlice = {
   isRotating: MutableRefObject<boolean>,
   setCubeGrid: ((cubeGrid: CubeGrid) => void),
   history: MoveCode[],
-  pushHistory: (moveCode: MoveCode) => void,
+  pushHistory: (moveCode: MoveCode) => void,  
   popHistory: () => MoveCode | undefined,
   clearHistory: () => void,
+  executeMove: (moveCode: MoveCode, animationTime: number) => void,
+  undoLastMove: (animationTime: number) => void
 }  
 
 export const createCubeSlice: StateCreator<CubeSlice> = (set, get) => { 
@@ -65,9 +69,65 @@ export const createCubeSlice: StateCreator<CubeSlice> = (set, get) => {
     popHistory: popValueFrom('history'),
     clearHistory: () => {
       set({ history: emptyHistory })
+    },
+    executeMove: (moveCode: MoveCode, animationTime: number) => {
+      set(({ cubeGrid, faces, pushHistory, isRotating }) => {
+        const getUpdatedCubeGrid = modelSpinFunctions[moveCode]
+		    const updatedCubeGrid = getUpdatedCubeGrid(cubeGrid)
+
+        const getUpdatedFaces = facesSpinFunctions[moveCode]
+		    const updatedFaces = getUpdatedFaces(faces)
+
+        const renderModel = renderingSpinFunctions[moveCode]
+        renderModel(cubeGrid, animationTime, isRotating)
+
+        pushHistory(moveCode)
+
+        logFaces(faces, moveCode, updatedFaces)
+
+        return {
+          cubeGrid: updatedCubeGrid,
+          faces: updatedFaces
+        }
+      })
+    },
+    undoLastMove: (animationTime: number) => {
+      set(({ popHistory, setCubeGrid, faces, cubeGrid, isRotating }) => {
+        const lastMoveCode = popHistory();
+          if (lastMoveCode) {
+            const undoMoveCode = inverse(lastMoveCode)
+      
+            const getUpdatedCubeGrid = modelSpinFunctions[undoMoveCode]
+            const updatedCubeGrid = getUpdatedCubeGrid(cubeGrid)
+            setCubeGrid(updatedCubeGrid)
+
+            const getUpdatedFaces = facesSpinFunctions[undoMoveCode]
+            const updatedFaces = getUpdatedFaces(faces)
+      
+            const renderModel = renderingSpinFunctions[undoMoveCode]
+            renderModel(cubeGrid, animationTime, isRotating)
+
+            logFaces(faces, undoMoveCode, updatedFaces)
+
+            return {
+              cubeGrid: updatedCubeGrid,
+              faces: updatedFaces 
+            }
+          }
+
+          return {}
+      })
     }
   }
 }
 
 
-  
+const logFaces = (faces: CubeFaces, moveCode: MoveCode, updatedFaces: CubeFaces) => {
+
+    console.clear()
+  // console.log('-----------------------------------------')
+    console.log(`Previous state:`)
+    console.log(printCube(faces))
+    console.log(`Move: ${moveCode} --> Current state:`)
+    console.log(printCube(updatedFaces))
+}

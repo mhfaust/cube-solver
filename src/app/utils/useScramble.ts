@@ -1,7 +1,5 @@
 import { useCallback } from "react"
 import { MoveCode } from "./moveCodes"
-import { useExecuteMove } from "./useExecuteMove"
-import { useIsRotating } from "../store/selectors"
 import { useActions } from "../store/useAppStore"
 
 const oneLayerSpins: MoveCode[] = [
@@ -14,13 +12,11 @@ const numSpinTypes = Object.keys(oneLayerSpins).length
 const SCRAMBLE_ROTATION_TIME = 5 //very fast 
 
 const useScramble = () => {
-  const isRotating = useIsRotating()
-  const executeMove = useExecuteMove()
-  const { clearHistory } = useActions()
+  const { clearHistory, executeMove } = useActions()
   return useCallback(() => {
 
     const randomSequence = Array.from(
-      { length: 5 }, 
+      { length: 100 }, 
       () => oneLayerSpins[Math.floor(Math.random() * numSpinTypes)]
     )
     const recurse = () => {
@@ -28,18 +24,17 @@ const useScramble = () => {
       if(!nextMove){
         return
       }
-      executeMove(nextMove, SCRAMBLE_ROTATION_TIME, isRotating)
-      
+      executeMove(nextMove, SCRAMBLE_ROTATION_TIME)
 
       if(randomSequence.length){
         setTimeout(recurse, SCRAMBLE_ROTATION_TIME)
       }
       else {
-        // clearHistory()
+        clearHistory()
       }
     }
     recurse()
-  }, [executeMove, isRotating, clearHistory])
+  }, [executeMove, clearHistory])
 }
 
 export default useScramble

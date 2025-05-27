@@ -37,7 +37,9 @@ export const useActions = () => {
       resetTimer,
       pushHistory,
       popHistory,
-      clearHistory
+      clearHistory,
+      executeMove,
+      undoLastMove
     }) => 
     ({ 
       log, 
@@ -51,7 +53,9 @@ export const useActions = () => {
       resetTimer,
       pushHistory,
       popHistory,
-      clearHistory
+      clearHistory,
+      executeMove,
+      undoLastMove
     })
   ))
 }
