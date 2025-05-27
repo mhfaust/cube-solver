@@ -1,17 +1,8 @@
 import { CubeGrid } from "@/app/store/cubeSlice";
-import { Quaternion, Vector3 } from "three";
-import { canonicalQuaternions } from "./canonicalQuaternions";
 
 function copyModel (cube: CubeGrid) {
   return cube.map(dim2 => dim2.map(dim1 => dim1.slice()))
 }
-
-type BlockTransform = {
-  startPosition: 0|1|2,
-  endPosition: 0|1|2,
-  quaternion: Quaternion,
-}
-
 // Represents a translation instruction for moving a single block of a cube.
 type TranslationTuple = [0|1|2, 0|1|2, 0|1|2, 0|1|2, 0|1|2, 0|1|2]
 
@@ -38,31 +29,21 @@ type LayerRotationTranslations = [
  *                [targetX, targetY, targetZ, sourceX, sourceY, sourceZ].
  * @returns A new 3D cubeGrid (CubeGrid) with one layer's blocks rotated according to the instructions.
  */
-const rotateModelLayer = (cubeGrid: CubeGrid, translations: LayerRotationTranslations, rotation: Quaternion): CubeGrid => {
+const rotateModelLayer = (cubeGrid: CubeGrid, translations: LayerRotationTranslations): CubeGrid => {
   const newGrid = copyModel(cubeGrid)
 
   const newBlockInfos = translations.map(s => ({ 
     wrapperMeshCurrent: cubeGrid[s[3]][s[4]][s[5]].wrapperMesh.current,
-    initialPosition: cubeGrid[s[3]][s[4]][s[5]].initialPosition,
-    orientation: cubeGrid[s[3]][s[4]][s[5]].orientation 
   }))
 
   translations.forEach((s, i) => {
     const newBlock = newBlockInfos[i]
     newGrid[s[0]][s[1]][s[2]].wrapperMesh.current = newBlock.wrapperMeshCurrent
-    newGrid[s[0]][s[1]][s[2]].initialPosition = newBlock.initialPosition
-    
-    // Apply the rotation and normalize to prevent accumulating precision errors
-    const newOrientation = new Quaternion().multiplyQuaternions(rotation, cubeGrid[s[0]][s[1]][s[2]].orientation)
-    newOrientation.normalize() // This corrects for accumulated floating-point errors
-    
-    newGrid[s[0]][s[1]][s[2]].orientation = newOrientation
   })
 
   return newGrid
 }
 
-const xPositiveQuaternion = new Quaternion().setFromAxisAngle(new Vector3(1, 0, 0), Math.PI / 2 )
 const rotateModelXLayerPositive = (cubeGrid: CubeGrid, x: 0|1|2) => {
   return rotateModelLayer(cubeGrid, [
     [x,0,0, x,0,2],
@@ -74,10 +55,9 @@ const rotateModelXLayerPositive = (cubeGrid: CubeGrid, x: 0|1|2) => {
     [x,2,0, x,0,0],
     [x,2,1, x,1,0],
     [x,2,2, x,2,0],
-  ], xPositiveQuaternion)
+  ])
 }
 
-const xNegativeQuaternion = new Quaternion().setFromAxisAngle(new Vector3(1, 0, 0), -Math.PI / 2 )
 const rotateModelXLayerNegative: LayerRotator = (cubeGrid: CubeGrid, x: 0|1|2) => {
   return rotateModelLayer(cubeGrid, [
     [x,0,0, x,2,0],
@@ -89,12 +69,10 @@ const rotateModelXLayerNegative: LayerRotator = (cubeGrid: CubeGrid, x: 0|1|2) =
     [x,2,0, x,2,2],
     [x,2,1, x,1,2],
     [x,2,2, x,0,2],
-  ], xNegativeQuaternion)
+  ])
 }
 
-const yPositiveQuaternion = new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), Math.PI / 2 )
 const rotateModelYLayerPositive: LayerRotator = (cubeGrid: CubeGrid, y: 0|1|2) => {
-
   return rotateModelLayer(cubeGrid, [
     [0,y,0, 2,y,0],
     [0,y,1, 1,y,0],
@@ -105,10 +83,9 @@ const rotateModelYLayerPositive: LayerRotator = (cubeGrid: CubeGrid, y: 0|1|2) =
     [2,y,0, 2,y,2],
     [2,y,1, 1,y,2],
     [2,y,2, 0,y,2],
-  ], yPositiveQuaternion)
+  ])
 }
 
-const yNegativeQuaternion = new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), -Math.PI / 2 )
 const rotateModelYLayerNegative: LayerRotator = (cubeGrid: CubeGrid, y: 0|1|2) => {
   return rotateModelLayer(cubeGrid, [
     [0,y,0, 0,y,2],
@@ -120,10 +97,9 @@ const rotateModelYLayerNegative: LayerRotator = (cubeGrid: CubeGrid, y: 0|1|2) =
     [2,y,0, 0,y,0],
     [2,y,1, 1,y,0],
     [2,y,2, 2,y,0],
-  ], yNegativeQuaternion)
+  ])
 }
 
-const zPositiveQuaternion = new Quaternion().setFromAxisAngle(new Vector3(0, 0, 1), Math.PI / 2 )
 const rotateModelZLayerPositive: LayerRotator = (cubeGrid: CubeGrid, z: 0|1|2) => {
   return rotateModelLayer(cubeGrid, [
     [0,0,z, 0,2,z],
@@ -135,10 +111,9 @@ const rotateModelZLayerPositive: LayerRotator = (cubeGrid: CubeGrid, z: 0|1|2) =
     [2,0,z, 0,0,z],
     [2,1,z, 1,0,z],
     [2,2,z, 2,0,z],
-  ], zPositiveQuaternion)
+  ])
 }
 
-const zNegativeQuaternion = new Quaternion().setFromAxisAngle(new Vector3(0, 0, 1), -Math.PI / 2 )
 const rotateModelZLayerNegative: LayerRotator = (cubeGrid: CubeGrid, z: 0|1|2) => {
   return rotateModelLayer(cubeGrid, [
     [0,0,z, 2,0,z],
@@ -150,10 +125,10 @@ const rotateModelZLayerNegative: LayerRotator = (cubeGrid: CubeGrid, z: 0|1|2) =
     [2,0,z, 2,2,z],
     [2,1,z, 1,2,z],
     [2,2,z, 0,2,z],
-  ], zNegativeQuaternion)
+  ])
 }
 
-type LayerRotator = (cubeGrid: CubeGrid, layer: 0 | 1 | 2, quaternion: Quaternion) => CubeGrid
+type LayerRotator = (cubeGrid: CubeGrid, layer: 0 | 1 | 2) => CubeGrid
 
 
 const rotationFunctionsByAxisAndDirection = {
@@ -171,21 +146,6 @@ const rotationFunctionsByAxisAndDirection = {
   },
 } as const
 
-const quaternionsByAxisAndDirection = {
-    x: {
-    '+': canonicalQuaternions.x90,
-    '-': canonicalQuaternions.x270,
-  },
-  y: {
-    '+': canonicalQuaternions.y90,
-    '-': canonicalQuaternions.y270,
-  },
-  z: {
-    '+': canonicalQuaternions.z90,
-    '-': canonicalQuaternions.z270,
-  },
-}
-
 export const layerModelRotator = (
   axis: 'x'|'y'|'z',
   layer: 0|1|2,
@@ -193,8 +153,7 @@ export const layerModelRotator = (
 ) => (cube: CubeGrid) => {
 
       const layerRotator = rotationFunctionsByAxisAndDirection[axis][direction]
-      const quaternion = quaternionsByAxisAndDirection[axis][direction]
-      return layerRotator(cube, layer, quaternion)
+      return layerRotator(cube, layer)
 }
 
 /**
