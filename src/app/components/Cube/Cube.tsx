@@ -3,7 +3,7 @@
 import Block from "@/app/components/Block"
 import styles from '@/app/page.module.css'
 import { useActions } from "@/app/store/useAppStore"
-import { useCubeGrid, useFaces, useIsRotating } from "@/app/store/selectors"
+import { useCubeGrid, useFaces, useIsRotating, useIsSolved } from "@/app/store/selectors"
 import useTheme from "@/app/themes/useTheme"
 import calculateDialingAngle from "@/app/touch/calculateDialingAngle"
 import { 
@@ -27,7 +27,6 @@ import { Canvas, ThreeEvent, useFrame, useThree } from "@react-three/fiber"
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react'
 import { Color, PlaneGeometry, Vector3 } from "three"
 import { OrbitControls as ThreeOrbitControls } from 'three-stdlib'
-import isSolved from "@/app/utils/isSolved"
 import { printCube } from "@/logic/console/printCube"
 import useEffectOnce from "@/app/utils/useEffectOnce"
 
@@ -39,6 +38,7 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 	const isRotating = useIsRotating()
 	const cubeGrid = useCubeGrid()
 	const faces = useFaces()
+	const isSolved = useIsSolved();
 
 	const { bgMaterial, pointLightIntensity, ambientLightIntensity } = useTheme()
 
@@ -47,9 +47,9 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 	const pointers = useRef<Pointers>({})
 	const swipeTimeout = useRef<NodeJS.Timeout | null>(null)
 
-	// useEffect(() => {
-	// 	console.log(isSolved(cubeGrid))
-	// }, [cubeGrid])
+	useEffect(() => {
+		console.log(isSolved)
+	}, [isSolved, faces])
 
 	useEffectOnce(() => {
 		console.log(printCube(faces))

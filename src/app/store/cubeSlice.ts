@@ -42,7 +42,7 @@ export type CubeSlice = {
   popHistory: () => MoveCode | undefined,
   clearHistory: () => void,
   executeMove: (moveCode: MoveCode, animationTime: number) => void,
-  undoLastMove: (animationTime: number) => void
+  undoLastMove: (animationTime: number) => void,
 }  
 
 export const createCubeSlice: StateCreator<CubeSlice> = (set, get) => { 

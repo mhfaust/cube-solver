@@ -4,10 +4,9 @@
 import Cube from './components/Cube'
 import styles from './page.module.css'
 import Timer from './components/Timer'
-import isSolved from './utils/isSolved'
 import { useEffect } from 'react'
 import { useActions } from './store/useAppStore'
-import { useHistory, usePlayMode } from "./store/selectors"
+import { useHistory, useIsSolved, usePlayMode } from "./store/selectors"
 import { useCubeGrid, useStartTime } from "./store/selectors"
 import Completed from './components/Completed'
 import Menu from './components/Menu/Menu'
@@ -22,7 +21,7 @@ export default function App() {
 //   }, [setThemeName])
 
   const playMode = usePlayMode()
-
+  const isSolved = useIsSolved();
   const grid = useCubeGrid()
   const startTime = useStartTime()
   const { stopTimer } = useActions()
@@ -30,11 +29,11 @@ export default function App() {
 
   
   useEffect(() => {
-    if (startTime && isSolved(grid)) {
+    if (startTime && isSolved) {
 
       stopTimer(true)
     }
-  }, [grid, startTime, stopTimer])
+  }, [grid, isSolved, startTime, stopTimer])
   
   return (
     <div className={styles.main}>

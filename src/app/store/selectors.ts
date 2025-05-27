@@ -1,3 +1,4 @@
+import { checkFacesAreSolved } from "../utils/checkFacesAreSolved";
 import { AppStore, useAppStore } from "./useAppStore";
 
 export const select = <T>(fn: (store: AppStore) => T) => fn;
@@ -10,7 +11,6 @@ export const useMessages = () => useAppStore(selectProp('messages'));
 export const useIsLogOpen = () => useAppStore(selectProp('logIsOpen'));
 export const useStartTime = () => useAppStore(selectProp('startTime'));
 export const useCompletionTime = () => useAppStore(selectProp('completionTime'));
-export const useIsSolved = () => useAppStore(selectProp('isSolved'));
 export const useCubeGrid = () => useAppStore(selectProp('cubeGrid'));
 export const useFaces = () => useAppStore(selectProp('faces'));
 export const useIsRotating = () => useAppStore(selectProp('isRotating'));
@@ -26,3 +26,6 @@ export const usePlayMode = () => {
   });
 };
 
+export const useIsSolved = () => useAppStore(({ faces }) => {
+  return checkFacesAreSolved(faces)
+})

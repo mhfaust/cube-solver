@@ -2,7 +2,6 @@ import { StateCreator } from "zustand";
 import storeSetters from "./storeHelpers";
 
 export type GameControlsSlice = {
-  isSolved: boolean
   startTime: number | null
   completionTime: number | null
   startTimer: () => void;
@@ -15,7 +14,6 @@ export type PlayMode = 'casual' | 'in-play' | 'complete'
 export const createGameControlsSlice: StateCreator<GameControlsSlice> = (set) => {
   const { setValueUsing } = storeSetters(set)
   return  {
-    isSolved: true,
     startTime: null,
     completionTime: null,
     startTimer: setValueUsing('startTime', () => Date.now()),

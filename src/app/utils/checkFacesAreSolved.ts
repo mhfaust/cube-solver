@@ -1,26 +1,28 @@
 import { CubeGrid } from "@/app/store/cubeSlice"
 import { quaternionsAreEqual } from "./quaternionsAreEqual"
+import { CubeFaces } from "@/logic/newCube"
 
-const isSolved = (grid: CubeGrid) => {
-  const flattened = grid.flat(3)
-  const inequals = flattened.filter((block, i) => {
-    if (i === 0 ) {
-      return false
-    }
-    const { x,y,z,w  } = block.orientation;
+export const checkFacesAreSolved = (faces: CubeFaces) => {
+  return Object.values(faces).every(face => new Set(face.flat(2)).size === 1)
+  // const flattened = grid.flat(3)
+  // const inequals = flattened.filter((block, i) => {
+  //   if (i === 0 ) {
+  //     return false
+  //   }
+  //   const { x,y,z,w  } = block.orientation;
 
-    // console.log(`------------------------`)
-    // console.log(`${x},${y},${z},${w}`)
-    const e =  !quaternionsAreEqual(block.orientation, flattened[i - 1].orientation, .01)
-    return e
-  })
+  //   // console.log(`------------------------`)
+  //   // console.log(`${x},${y},${z},${w}`)
+  //   const e =  !quaternionsAreEqual(block.orientation, flattened[i - 1].orientation, .01)
+  //   return e
+  // })
 
-  // console.log('unequal consecutive pairs: ', inequals.length)
+  // // console.log('unequal consecutive pairs: ', inequals.length)
 
-  return inequals.length === 0
+  // return inequals.length === 0
 }
 
-export default isSolved
+// export default isSolved
 
 // const isSolved = (grid: CubeGrid) => solvedStates.has(serialize(grid))
 
