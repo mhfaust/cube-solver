@@ -7,6 +7,7 @@ import { Color, MeshBasicMaterial } from "three"
 import { useThemeName } from "../store/selectors"
 import { standardColors, brightColors } from "./assets"
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js"
+import { COLOR_A_1, COLOR_A_2, COLOR_A_3, COLOR_Z_1, COLOR_Z_2, COLOR_Z_3 } from "@/logic/constants"
 
 const grayScale = (n: number) => new Color(n,n,n)
 
@@ -44,11 +45,25 @@ const themes: Record<ThemeName, Theme> = {
 export type Theme = {
   frameColor: Color,
   backgroundColor: Color,
-  faceColors: [Color, Color, Color, Color, Color, Color],
+  faceColors: {
+    [COLOR_A_1]: Color,
+    [COLOR_A_2]: Color,
+    [COLOR_A_3]: Color,
+    [COLOR_Z_1]: Color,
+    [COLOR_Z_2]: Color,
+    [COLOR_Z_3]: Color,
+  },
   pointLightIntensity: number,
   ambientLightIntensity: number,
   boxRoundness: number,
 }
+
+export const colorSequence = [COLOR_A_1,
+COLOR_A_2,
+COLOR_A_3,
+COLOR_Z_1,
+COLOR_Z_2,
+COLOR_Z_3]
 
 const useTheme = () => {
   const themeName = useThemeName()

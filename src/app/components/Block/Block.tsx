@@ -1,4 +1,5 @@
 import useTheme from '@/app/themes/useTheme';
+import { Color } from '@/logic/constants';
 import { ThreeEvent } from '@react-three/fiber';
 import { MutableRefObject, createRef, useEffect, useRef } from 'react';
 import {
@@ -46,26 +47,28 @@ const Block = ({
   useEffect (() => {
     blockRef.current.geometry = blockGeometry
     blockRef.current.material = materialRef.current
-
+    
     let { count } = blockGeometry.attributes.position
     blockGeometry
       .setAttribute('color', new BufferAttribute(new Float32Array( count * 3 ), 3 ))
-
+    
     for(let i = 0; i < count; i++){
       const imod = i % 150
       if(!facePolygonIndices.has(imod)) {
         blockGeometry
           .attributes.color.setXYZ(i ,frameColor.r, frameColor.g, frameColor.b)
       } else {
-        const faceColor = faceColors[Math.floor(i / 6) % 6]
+        const colorIndex = Math.floor(i / 6) % 6 
+        const colorName = Object.keys(faceColors)[colorIndex]
+        const faceColor = faceColors[colorName as Color]
         if(
           //only color exposed sides:
-          faceColor === faceColors[0] && x0 === 2 ||
-          faceColor === faceColors[1] && x0 === 0 ||
-          faceColor === faceColors[2] && y0 === 2 ||
-          faceColor === faceColors[3] && y0 === 0 ||
-          faceColor === faceColors[4] && z0 === 2 || 
-          faceColor === faceColors[5] && z0 === 0
+          faceColor === faceColors.COLOR_A_1 && x0 === 2 ||
+          faceColor === faceColors.COLOR_Z_1 && x0 === 0 ||
+          faceColor === faceColors.COLOR_A_2 && y0 === 2 ||
+          faceColor === faceColors.COLOR_Z_2 && y0 === 0 ||
+          faceColor === faceColors.COLOR_A_3 && z0 === 2 || 
+          faceColor === faceColors.COLOR_Z_3 && z0 === 0
         ){
           blockGeometry.attributes.color.setXYZ(i ,faceColor.r, faceColor.g, faceColor.b)
         }
