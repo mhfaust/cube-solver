@@ -7,7 +7,7 @@ import { Color } from "three";
 //standard colors:
 const red = new Color(0.5, 0, 0)
 // const orange = new Color(0.6, 0.13, 0)
-const orange = new Color(0.25, 0, 0.4)
+const purple = new Color(0.25, 0, 0.4)
 const blue = new Color(0, 0.02, 1)
 const green = new Color(0, 0.4, 0)
 const white = new Color(1, 1, 1)
@@ -15,7 +15,7 @@ const yellow = new Color(0.7, 0.7, 0)
 
 export const standardColors = { 
     COLOR_A_1: red, 
-    COLOR_Z_1: orange, 
+    COLOR_Z_1: purple, 
     COLOR_A_2: blue, 
     COLOR_Z_2: green, 
     COLOR_A_3: white, 

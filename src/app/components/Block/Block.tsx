@@ -45,13 +45,22 @@ const Block = ({
   const materialRef = useRef(new MeshStandardMaterial({ vertexColors: true }))
 
   useEffect (() => {
+    console.log('coloring a block')
     blockRef.current.geometry = blockGeometry
     blockRef.current.material = materialRef.current
     
     let { count } = blockGeometry.attributes.position
     blockGeometry
       .setAttribute('color', new BufferAttribute(new Float32Array( count * 3 ), 3 ))
-    
+
+    /* color the faces  
+     *   0 <= i < 150  -- COLOR_A_1 -- RIGHT side of initial cube
+     * 150 <= i < 300  -- COLOR_Z_1 -- LEFT side of initial cube
+     * 300 <= i < 450  -- COLOR_A_2 -- TOP side of initial cube
+     * 450 <= i < 600  -- COLOR_Z_2 -- BOTTOM side of initial cube
+     * 600 <= i < 750  -- COLOR_A_3 -- FRONT side of initial cube
+     * 750 <= i < 900  -- COLOR_Z_3 -- BACK side of initial cube
+     */
     for(let i = 0; i < count; i++){
       const imod = i % 150
       if(!facePolygonIndices.has(imod)) {
