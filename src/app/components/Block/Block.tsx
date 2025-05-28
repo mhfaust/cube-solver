@@ -79,46 +79,33 @@ const Block = ({
       throw Error(`Assumptions about RoundedBoxGeometry are invalid. Check for recent updates to that geometry`)
     }
 
-    blockGeometry
-      .setAttribute('color', new BufferAttribute(new Float32Array( polygonCount * 3 ), 3 ))
-
-    /* color the faces  
-     *   0 <= i < 150  -- COLOR_A_1 -- RIGHT side of initial cube
-     * 150 <= i < 300  -- COLOR_Z_1 -- LEFT side of initial cube
-     * 300 <= i < 450  -- COLOR_A_2 -- TOP side of initial cube
-     * 450 <= i < 600  -- COLOR_Z_2 -- BOTTOM side of initial cube
-     * 600 <= i < 750  -- COLOR_A_3 -- FRONT side of initial cube
-     * 750 <= i < 900  -- COLOR_Z_3 -- BACK side of initial cube
-     */
-
+    const buffer = new BufferAttribute(new Float32Array( polygonCount * 3 ), 3 )
+    blockGeometry.setAttribute('color', buffer)
+      
     Object.entries(initialFaceColors).forEach(([faceName, faceColorCode]) => {
+  
+      /* color the faces  
+        *   0 <= i < 150  -- RIGHT side of RoundedBoxGeometry
+        * 150 <= i < 300  -- LEFT side of RoundedBoxGeometry
+        * 300 <= i < 450  -- TOP side of RoundedBoxGeometry
+        * 450 <= i < 600  -- BOTTOM side of RoundedBoxGeometry
+        * 600 <= i < 750  -- FRONT side of RoundedBoxGeometry
+        * 750 <= i < 900  -- BACK side of RoundedBoxGeometry
+        */
 
       const startIndex = faceColorPolygonStartIndex[faceName as FaceName];
       const nextSideStart = startIndex + 150
 
       for(let i = startIndex; i < nextSideStart; i++){
 
-        // if(!facePolygonIndices.has(i % 150)) {
-        //   blockGeometry
-        //     .attributes.color.setXYZ(i ,frameColor.r, frameColor.g, frameColor.b)
-        // } else {
-          // const colorIndex = Math.floor(i / 6) % 6 
-          // const colorName = faceColors[faceColorCode]
-          const paintColor = faceColorCode === null 
-            ? frameColor
-            : faceColors[faceColorCode]
-          // if(
-          //   //only color exposed sides:
-          //   faceColor === faceColors.COLOR_A_1 && x0 === 2 ||
-          //   faceColor === faceColors.COLOR_Z_1 && x0 === 0 ||
-          //   faceColor === faceColors.COLOR_A_2 && y0 === 2 ||
-          //   faceColor === faceColors.COLOR_Z_2 && y0 === 0 ||
-          //   faceColor === faceColors.COLOR_A_3 && z0 === 2 || 
-          //   faceColor === faceColors.COLOR_Z_3 && z0 === 0
-          // ){
+        if(!facePolygonIndices.has(i % 150) || faceColorCode === null) {
+          blockGeometry
+            .attributes.color.setXYZ(i ,frameColor.r, frameColor.g, frameColor.b)
+        } 
+        else {
+          const paintColor = faceColors[faceColorCode]
             blockGeometry.attributes.color.setXYZ(i ,paintColor.r, paintColor.g, paintColor.b)
-          // }
-        // }
+        }
       }
     })
 
@@ -137,7 +124,6 @@ const Block = ({
           onPointerMove={onPointerMove}
           position={[x0-1, y0-1, z0-1]}
           geometry={blockGeometry}
-          // material={materialRef.current} 
         />
     </mesh>
   )
