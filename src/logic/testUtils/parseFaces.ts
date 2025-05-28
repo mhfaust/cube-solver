@@ -1,7 +1,7 @@
-import { COLOR_A_2, Color, FaceName, COLOR_Z_2, COLOR_Z_1, COLOR_A_1, COLOR_Z_3, COLOR_A_3 } from "../constants"
+import { COLOR_A_2, FaceColorCode, FaceName, COLOR_Z_2, COLOR_Z_1, COLOR_A_1, COLOR_Z_3, COLOR_A_3 } from "../constants"
 import { CubeFaces, Face } from "../newCube"
 
-const colorMap: Record<string, Color> = {
+const colorMap: Record<string, FaceColorCode> = {
     r: COLOR_A_1,
     y: COLOR_A_3,
     b: COLOR_A_2,

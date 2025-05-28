@@ -24,11 +24,13 @@ import { _012, getBlockPosition } from "@/app/utils/grid"
 import { MoveCode, asKeyCode, keyMoves } from "@/app/utils/moveCodes"
 import { OrbitControls } from '@react-three/drei'
 import { Canvas, ThreeEvent, useFrame, useThree } from "@react-three/fiber"
-import { RefObject, useCallback, useEffect, useRef, useState } from 'react'
+import { RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Color, PlaneGeometry, Vector3 } from "three"
 import { OrbitControls as ThreeOrbitControls } from 'three-stdlib'
 import { printCube } from "@/logic/console/printCube"
 import useEffectOnce from "@/app/utils/useEffectOnce"
+import { newCubeFaces } from "@/logic/newCube"
+import { mapAllBlockColors } from "@/app/utils/mapAllBlockColors"
 
 const { PI, abs } = Math
 const bgGeometry = new PlaneGeometry(50, 50)
@@ -276,6 +278,11 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 		}
 	}, [])
 
+	const allInitialBlockColors = useMemo(() => {
+		const initialCubeFaces = newCubeFaces();
+		return mapAllBlockColors(initialCubeFaces)
+	}, [])
+
 	return (
 		<>
 			<pointLight 
@@ -305,6 +312,7 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 					x0={x0} 
 					y0={y0} 
 					z0={z0} 
+					initialFaceColors={allInitialBlockColors[x0][y0][z0]}
 					containerRef={cubeGrid[x0][y0][z0]}
 					onPointerDown={handlePointerDown}
 					onPointerUp={handlePointerUp}

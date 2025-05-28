@@ -21,7 +21,7 @@ export const COLOR_Z_2 = 'COLOR_Z_2' as const
 export const COLOR_Z_3 = 'COLOR_Z_3' as const
 
 export const colors = [COLOR_A_1, COLOR_A_2, COLOR_A_3, COLOR_Z_1, COLOR_Z_2, COLOR_Z_3];
-export type Color = typeof colors[number];
+export type FaceColorCode = typeof colors[number];
 
 // These short-hand names are just for the convenience of arranging tight arrays of test mocks
 export const A1 = COLOR_A_1

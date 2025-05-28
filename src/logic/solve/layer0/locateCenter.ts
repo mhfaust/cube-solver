@@ -1,6 +1,6 @@
 import { CubeFaces } from '@/logic/newCube'
-import { Color, faceNames } from '../../constants'
+import { FaceColorCode, faceNames } from '../../constants'
 
-export const locateCenter = (color: Color, cube: CubeFaces) => {
+export const locateCenter = (color: FaceColorCode, cube: CubeFaces) => {
     return faceNames.find(faceName => cube[faceName][1][1] === color)
 }

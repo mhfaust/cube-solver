@@ -5,10 +5,10 @@ import { COLOR_A_1, COLOR_A_2, COLOR_A_3, COLOR_Z_1, COLOR_Z_2, COLOR_Z_3, FaceN
 const coloredSquare = {
     [COLOR_A_1]: chalk['red']('■'),
     [COLOR_A_2]: chalk['blue']('■'),
-    [COLOR_A_3]: chalk['yellow']('■'),
+    [COLOR_A_3]: chalk['white']('■'),
     [COLOR_Z_1]: chalk['magenta']('■'),
     [COLOR_Z_2]: chalk['green']('■'),
-    [COLOR_Z_3]: chalk['white']('■'),
+    [COLOR_Z_3]: chalk['yellow']('■'),
 }
 
 const rowStr = (row: Line) => row.map(tile => coloredSquare[tile]).join(' ')

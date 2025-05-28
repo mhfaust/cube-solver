@@ -1,5 +1,5 @@
 import useTheme from '@/app/themes/useTheme';
-import { Color } from '@/logic/constants';
+import { BACK, BOTTOM, FaceColorCode, FaceName, FRONT, LEFT, RIGHT, TOP } from '@/logic/constants';
 import { ThreeEvent } from '@react-three/fiber';
 import { MutableRefObject, createRef, useEffect, useRef } from 'react';
 import {
@@ -13,13 +13,37 @@ import {
   Object3DEventMap,
 } from 'three';
 
+// There are 6 polygons (out of 150) that represent the flat part of 1 side of the RoundedBoxGeometry
+// These occur in a regular position within the set of 150 for that side:
 const facePolygonIndices = new Set([72, 73, 74, 75, 76, 77])
+
+// RoundedBoxGeometry has 900 polygons, 150 x 6 = 1 set of 150 for each side
+// This maps the start position within the object's blockGeometry
+const faceColorPolygonStartIndex = {
+  [RIGHT]: 0,
+  [LEFT]: 150,
+  [TOP]: 300,
+  [BOTTOM]: 450,
+  [FRONT]: 600,
+  [BACK]: 750,
+}
+// const faceColorPolygonStartIndex = {
+//   COLOR_A_1: 0,
+//   COLOR_Z_1: 150,
+//   COLOR_A_2: 300,
+//   COLOR_Z_2: 450,
+//   COLOR_A_3: 600,
+//   COLOR_Z_3: 750,
+// }
+
+const RoundedBoxGeometryPolygonCount = 900;
 
 export type BlockContainerRef = MutableRefObject<Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>>
 
 const r = createRef()
 
-type BlockProps = {
+export type BlockProps = {
+  initialFaceColors: Record<FaceName, FaceColorCode | null>,
   x0: 0|1|2; 
   y0: 0|1|2; 
   z0: 0|1|2;
@@ -32,26 +56,31 @@ const Block = ({
   x0, 
   y0, 
   z0, 
+  initialFaceColors, 
   containerRef, 
   onPointerDown, 
   onPointerUp,
   onPointerMove
 }: BlockProps) => {
 
-  const { frameColor, faceColors, boxRoundness, blockGeometry } = useTheme()
+  const { frameColor, faceColors, blockGeometry } = useTheme()
 
   const blockRef = useRef<Mesh>({} as Mesh)
 
   const materialRef = useRef(new MeshStandardMaterial({ vertexColors: true }))
 
   useEffect (() => {
-    console.log('coloring a block')
     blockRef.current.geometry = blockGeometry
     blockRef.current.material = materialRef.current
     
-    let { count } = blockGeometry.attributes.position
+    let { count: polygonCount } = blockGeometry.attributes.position
+
+    if(polygonCount !== RoundedBoxGeometryPolygonCount){
+      throw Error(`Assumptions about RoundedBoxGeometry are invalid. Check for recent updates to that geometry`)
+    }
+
     blockGeometry
-      .setAttribute('color', new BufferAttribute(new Float32Array( count * 3 ), 3 ))
+      .setAttribute('color', new BufferAttribute(new Float32Array( polygonCount * 3 ), 3 ))
 
     /* color the faces  
      *   0 <= i < 150  -- COLOR_A_1 -- RIGHT side of initial cube
@@ -61,29 +90,40 @@ const Block = ({
      * 600 <= i < 750  -- COLOR_A_3 -- FRONT side of initial cube
      * 750 <= i < 900  -- COLOR_Z_3 -- BACK side of initial cube
      */
-    for(let i = 0; i < count; i++){
-      const imod = i % 150
-      if(!facePolygonIndices.has(imod)) {
-        blockGeometry
-          .attributes.color.setXYZ(i ,frameColor.r, frameColor.g, frameColor.b)
-      } else {
-        const colorIndex = Math.floor(i / 6) % 6 
-        const colorName = Object.keys(faceColors)[colorIndex]
-        const faceColor = faceColors[colorName as Color]
-        if(
-          //only color exposed sides:
-          faceColor === faceColors.COLOR_A_1 && x0 === 2 ||
-          faceColor === faceColors.COLOR_Z_1 && x0 === 0 ||
-          faceColor === faceColors.COLOR_A_2 && y0 === 2 ||
-          faceColor === faceColors.COLOR_Z_2 && y0 === 0 ||
-          faceColor === faceColors.COLOR_A_3 && z0 === 2 || 
-          faceColor === faceColors.COLOR_Z_3 && z0 === 0
-        ){
-          blockGeometry.attributes.color.setXYZ(i ,faceColor.r, faceColor.g, faceColor.b)
-        }
+
+    Object.entries(initialFaceColors).forEach(([faceName, faceColorCode]) => {
+
+      const startIndex = faceColorPolygonStartIndex[faceName as FaceName];
+      const nextSideStart = startIndex + 150
+
+      for(let i = startIndex; i < nextSideStart; i++){
+
+        // if(!facePolygonIndices.has(i % 150)) {
+        //   blockGeometry
+        //     .attributes.color.setXYZ(i ,frameColor.r, frameColor.g, frameColor.b)
+        // } else {
+          // const colorIndex = Math.floor(i / 6) % 6 
+          // const colorName = faceColors[faceColorCode]
+          const paintColor = faceColorCode === null 
+            ? frameColor
+            : faceColors[faceColorCode]
+          // if(
+          //   //only color exposed sides:
+          //   faceColor === faceColors.COLOR_A_1 && x0 === 2 ||
+          //   faceColor === faceColors.COLOR_Z_1 && x0 === 0 ||
+          //   faceColor === faceColors.COLOR_A_2 && y0 === 2 ||
+          //   faceColor === faceColors.COLOR_Z_2 && y0 === 0 ||
+          //   faceColor === faceColors.COLOR_A_3 && z0 === 2 || 
+          //   faceColor === faceColors.COLOR_Z_3 && z0 === 0
+          // ){
+            blockGeometry.attributes.color.setXYZ(i ,paintColor.r, paintColor.g, paintColor.b)
+          // }
+        // }
       }
-    }
-  }, [blockGeometry, faceColors, frameColor.b, frameColor.g, frameColor.r, x0, y0, z0])
+    })
+
+
+  }, [blockGeometry, initialFaceColors, faceColors, frameColor.b, frameColor.g, frameColor.r, frameColor])
 
   return (
     <mesh 
