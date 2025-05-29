@@ -12,10 +12,15 @@ export type CubeWrapperMesh = Mesh<BufferGeometry<NormalBufferAttributes>, Mater
 
 export type CubeWrapperMeshRef = MutableRefObject<CubeWrapperMesh>
 
+const solvedCubeFaces = newCubeFaces()
+export const scrambledCubeFaces = {"front":[["COLOR_Z_3","COLOR_Z_1","COLOR_A_2"],["COLOR_A_1","COLOR_Z_1","COLOR_A_2"],["COLOR_A_1","COLOR_A_1","COLOR_A_3"]],"back":[["COLOR_A_3","COLOR_A_3","COLOR_A_1"],["COLOR_A_2","COLOR_A_1","COLOR_Z_3"],["COLOR_A_1","COLOR_Z_1","COLOR_Z_2"]],"right":[["COLOR_A_1","COLOR_Z_2","COLOR_Z_1"],["COLOR_A_3","COLOR_Z_3","COLOR_Z_1"],["COLOR_Z_2","COLOR_A_2","COLOR_A_3"]],"left":[["COLOR_A_2","COLOR_Z_3","COLOR_A_2"],["COLOR_A_2","COLOR_A_3","COLOR_Z_2"],["COLOR_Z_3","COLOR_Z_3","COLOR_Z_2"]],"top":[["COLOR_A_3","COLOR_Z_1","COLOR_A_2"],["COLOR_Z_2","COLOR_Z_2","COLOR_A_3"],["COLOR_Z_1","COLOR_Z_3","COLOR_Z_3"]],"bottom":[["COLOR_Z_3","COLOR_A_3","COLOR_Z_1"],["COLOR_A_1","COLOR_A_2","COLOR_A_1"],["COLOR_Z_1","COLOR_Z_2","COLOR_Z_2"]]} as CubeFaces;
+
+const initialFaces = solvedCubeFaces
+// const initialFaces = scrambledCubeFaces
+
+
 const emptyHistory: MoveCode[] = []
 
-  // const initialCubeFaces = {"front":[["COLOR_Z_3","COLOR_Z_1","COLOR_A_2"],["COLOR_A_1","COLOR_Z_1","COLOR_A_2"],["COLOR_A_1","COLOR_A_1","COLOR_A_3"]],"back":[["COLOR_A_3","COLOR_A_3","COLOR_A_1"],["COLOR_A_2","COLOR_A_1","COLOR_Z_3"],["COLOR_A_1","COLOR_Z_1","COLOR_Z_2"]],"right":[["COLOR_A_1","COLOR_Z_2","COLOR_Z_1"],["COLOR_A_3","COLOR_Z_3","COLOR_Z_1"],["COLOR_Z_2","COLOR_A_2","COLOR_A_3"]],"left":[["COLOR_A_2","COLOR_Z_3","COLOR_A_2"],["COLOR_A_2","COLOR_A_3","COLOR_Z_2"],["COLOR_Z_3","COLOR_Z_3","COLOR_Z_2"]],"top":[["COLOR_A_3","COLOR_Z_1","COLOR_A_2"],["COLOR_Z_2","COLOR_Z_2","COLOR_A_3"],["COLOR_Z_1","COLOR_Z_3","COLOR_Z_3"]],"bottom":[["COLOR_Z_3","COLOR_A_3","COLOR_Z_1"],["COLOR_A_1","COLOR_A_2","COLOR_A_1"],["COLOR_Z_1","COLOR_Z_2","COLOR_Z_2"]]} as CubeFaces;
-  const initialCubeFaces = newCubeFaces()
 
 /**
  * Represents a 3D cube structure composed of smaller blocks.
@@ -48,6 +53,7 @@ export type CubeSlice = {
 export const createCubeSlice: StateCreator<CubeSlice> = (set, get) => { 
   const { setValueOf, pushValueTo, popValueFrom } = storeSetters(set)
 
+
   return {
     cubeGrid: _012.map(
       () => _012.map(
@@ -56,17 +62,17 @@ export const createCubeSlice: StateCreator<CubeSlice> = (set, get) => {
         )
       ) 
     ),
-    faces: initialCubeFaces,
+    faces: initialFaces,
+    initialFaces,
+    isRotating: { current: false },
+    history: emptyHistory,
     setInitialFaces: (faces: CubeFaces) => {
       set({ 
         faces: faces, 
         initialFaces: faces 
       })
     },
-    initialFaces: initialCubeFaces,
-    isRotating: { current: false },
     setCubeGrid: setValueOf('cubeGrid'),
-    history: emptyHistory,
     pushHistory: pushValueTo('history'),
     popHistory: popValueFrom('history'),
     clearHistory: () => {
@@ -127,11 +133,11 @@ export const createCubeSlice: StateCreator<CubeSlice> = (set, get) => {
 const logFaces = (faces: CubeFaces, moveCode: MoveCode, updatedFaces: CubeFaces) => {
 
     // console.clear()
-  // console.log('-----------------------------------------')
+  // console.log('-------------')
     // console.log(`Previous state:`)
     // console.log(printCube(faces))
-    console.log(`Move: ${moveCode} --> Current state:`)
-    console.log(printCube(updatedFaces))
+    // console.log(`Move: ${moveCode} --> Current state:`)
+    // console.log(printCube(updatedFaces))
         // console.log(JSON.stringify(updatedFaces))
     
 }

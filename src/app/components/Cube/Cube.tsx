@@ -3,8 +3,8 @@
 import Block from "@/app/components/Block"
 import styles from '@/app/page.module.css'
 import { useActions } from "@/app/store/useAppStore"
-import { useCubeGrid, useFaces, useIsRotating, useIsSolved } from "@/app/store/selectors"
-import useTheme from "@/app/themes/useTheme"
+import { useCubeGrid, useFaces, useInitiaFaces, useIsRotating, useIsSolved } from "@/app/store/selectors"
+import useTheme from "@/app/themes/useThemeAssets"
 import calculateDialingAngle from "@/app/touch/calculateDialingAngle"
 import { 
 	Pointers, addDownPointer, addMovePointer, getLatestMove, 
@@ -39,6 +39,7 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 	const isRotating = useIsRotating()
 	const cubeGrid = useCubeGrid()
 	const faces = useFaces()
+	const initialFaces = useInitiaFaces()
 	const isSolved = useIsSolved();
 
 	const { bgMaterial, pointLightIntensity, ambientLightIntensity } = useTheme()
@@ -278,10 +279,8 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 	}, [])
 
 	const allInitialBlockColors = useMemo(() => {
-//		const initialCubeFaces = newCubeFaces();
-console.log('doing blocks')
-		return mapAllBlockColors(faces)
-	}, [])
+		return mapAllBlockColors(initialFaces)
+	}, [initialFaces])
 
 	return (
 		<>

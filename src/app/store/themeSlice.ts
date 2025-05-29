@@ -1,21 +1,19 @@
-import { StateCreator } from "zustand";
+import { create, StateCreator } from "zustand";
 import storeSetters from "./storeHelpers";
-import { ThemeName } from "@/app/themes/useTheme";
-
+import { ThemeName } from "@/app/themes/useThemeAssets";
+import { persist } from "zustand/middleware";
 
 export type ThemeSlice = {
-  themeName: ThemeName,
-  setThemeName: (name: ThemeName) => void,
-}  
+  themeName: ThemeName;
+  setThemeName: (name: ThemeName) => void;
+};
 
-export const createThemeSlice: StateCreator<ThemeSlice> = (set) =>{ 
-  const { setValueOf } = storeSetters(set)
-
-  return{
-    themeName: 'dark',
-    setThemeName: setValueOf('themeName')
-  }
-}
-
-
-  
+export const useThemeStore = create<ThemeSlice>()(
+  persist(
+    (set, get) => ({
+      themeName: "dark",
+      setThemeName: (name) => set({ themeName: name }),
+    }),
+    { name: "cubism-theme" }
+  )
+);

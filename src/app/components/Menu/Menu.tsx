@@ -1,15 +1,15 @@
-import { ThemeName, themeNames } from "@/app/themes/useTheme";
+import { ThemeName, themeNames } from "@/app/themes/useThemeAssets";
 import styles from "./Menu.module.css";
-import { useThemeName } from "@/app/store/selectors";
+import {  } from "@/app/store/selectors";
 import { useActions } from "@/app/store/useAppStore";
 import { useState } from "react";
 import clsx from "clsx";
+import { useThemeStore } from "@/app/store/themeSlice";
 
 const Menu = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const selectedThemeName = useThemeName();
-  const { setThemeName } = useActions();
+  const { setThemeName, themeName } = useThemeStore();
 
   return (
     <div className={styles.container}>
@@ -25,7 +25,7 @@ const Menu = () => {
                 type="radio"
                 // onChange={(isChecked) => setThemeName(name)}
                 onChange={(e) => {
-                  setThemeName(e.target.value as ThemeName); 
+                  setThemeName(e.target.value as ThemeName);
                   setIsOpen(false);
                 }}
                 checked={selectedThemeName === name}

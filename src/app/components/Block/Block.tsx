@@ -1,4 +1,4 @@
-import useTheme from '@/app/themes/useTheme';
+import useTheme from '@/app/themes/useThemeAssets';
 import { BACK, BOTTOM, FaceColorCode, FaceName, FRONT, LEFT, RIGHT, TOP } from '@/logic/constants';
 import { ThreeEvent } from '@react-three/fiber';
 import { MutableRefObject, createRef, useEffect, useRef } from 'react';

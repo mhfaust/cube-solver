@@ -1,5 +1,5 @@
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
-import { Theme } from "./useTheme";
+import { Theme } from "./useThemeAssets";
 
 import { Color } from "three";
 

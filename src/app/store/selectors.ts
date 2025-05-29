@@ -13,10 +13,10 @@ export const useStartTime = () => useAppStore(selectProp('startTime'));
 export const useCompletionTime = () => useAppStore(selectProp('completionTime'));
 export const useCubeGrid = () => useAppStore(selectProp('cubeGrid'));
 export const useFaces = () => useAppStore(selectProp('faces'));
+export const useInitiaFaces = () => useAppStore(selectProp('initialFaces'));
 export const useIsRotating = () => useAppStore(selectProp('isRotating'));
 export const useFingersOn = () => useAppStore(selectProp('fingersOn'));
 export const useHistory = () => useAppStore(selectProp('history')); 
-export const useThemeName = () => useAppStore(selectProp('themeName'));
 
 export const usePlayMode = () => {
   return useAppStore(({ startTime, completionTime }) => {
