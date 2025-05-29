@@ -1,13 +1,9 @@
+import { useGameControlsStore } from "@/app/store/gameControlsSlice"
 import styles from "./Completed.module.css"
-import { useStartTime } from "@/app/store/selectors"
-import { useCompletionTime } from "@/app/store/selectors"
-import { useActions } from "@/app/store/useAppStore"
 import { reportTime } from "@/app/utils/displayTime"
 
 const Completed = () => {
-  const { resetTimer } = useActions()
-  const startTime = useStartTime()
-  const completedTime = useCompletionTime()
+  const { resetTimer, startTime, completedTime } = useGameControlsStore()
 
   return (
     <div className={styles.completed}>

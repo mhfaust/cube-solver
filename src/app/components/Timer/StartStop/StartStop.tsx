@@ -1,12 +1,10 @@
-import { useActions } from '@/app/store/useAppStore'
-import { useStartTime } from "@/app/store/selectors";
 import styles from './StartStop.module.css'
 import useScramble from '@/app/utils/useScramble';
 import clsx from 'clsx'
+import { useGameControlsStore } from '@/app/store/gameControlsSlice';
 
 const StartStop = () => {
-  const startTime = useStartTime()
-  const { startTimer, stopTimer } = useActions()
+  const { startTime, startTimer, stopTimer } = useGameControlsStore()
   const isInPlay = startTime !== null
 
   const handleClick = isInPlay  

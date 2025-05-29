@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState } from "react"
 import styles from './Timer.module.css'
-import { usePlayMode, useStartTime } from "@/app/store/selectors"
+import { usePlayMode } from "@/app/store/selectors"
 import StartStop from "@/app/components/Timer/StartStop"
 import { stopWatchTime } from "@/app/utils/displayTime"
+import { useGameControlsStore } from "@/app/store/gameControlsSlice"
 
 const Timer = () => {
 
   const timerRef = useRef<NodeJS.Timeout>()
 
   const [ellapsedTime, setEllapsedTime] = useState<number>()
-  const startTime = useStartTime()
+  const { startTime } = useGameControlsStore()
   const mode = usePlayMode()
   
   useEffect(() => {

@@ -7,29 +7,23 @@ import Timer from './components/Timer'
 import { useEffect } from 'react'
 import { useActions } from './store/useAppStore'
 import { useHistory, useIsSolved, usePlayMode } from "./store/selectors"
-import { useCubeGrid, useStartTime } from "./store/selectors"
+import { useCubeGrid } from "./store/selectors"
 import Completed from './components/Completed'
 import Menu from './components/Menu/Menu'
 import UndoButton from './components/UndoButton/UndoButton'
 import Log from './components/Log'
 import NoSsr from './components/NoSsr/NoSsr'
+import { useGameControlsStore } from './store/gameControlsSlice'
 
 export default function App() {
-//   const { setThemeName } = useAppStore(actionsSelector)
-// 	useEffect(() => {
-//     setTimeout(() => {
-//       setThemeName('neon')
-//     }, 4000)
-//   }, [setThemeName])
 
-  const playMode = usePlayMode()
+  const {  startTime, stopTimer } = useGameControlsStore()
+  const playMode  = usePlayMode()
   const isSolved = useIsSolved();
   const grid = useCubeGrid()
-  const startTime = useStartTime()
-  const { stopTimer } = useActions()
+  const {  } = useActions()
   const history = useHistory()
 
-  
   useEffect(() => {
     if (startTime && isSolved) {
 
