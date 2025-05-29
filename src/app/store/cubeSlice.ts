@@ -14,6 +14,8 @@ export type CubeWrapperMeshRef = MutableRefObject<CubeWrapperMesh>
 
 const emptyHistory: MoveCode[] = []
 
+  // const initialCubeFaces = {"front":[["COLOR_Z_3","COLOR_Z_1","COLOR_A_2"],["COLOR_A_1","COLOR_Z_1","COLOR_A_2"],["COLOR_A_1","COLOR_A_1","COLOR_A_3"]],"back":[["COLOR_A_3","COLOR_A_3","COLOR_A_1"],["COLOR_A_2","COLOR_A_1","COLOR_Z_3"],["COLOR_A_1","COLOR_Z_1","COLOR_Z_2"]],"right":[["COLOR_A_1","COLOR_Z_2","COLOR_Z_1"],["COLOR_A_3","COLOR_Z_3","COLOR_Z_1"],["COLOR_Z_2","COLOR_A_2","COLOR_A_3"]],"left":[["COLOR_A_2","COLOR_Z_3","COLOR_A_2"],["COLOR_A_2","COLOR_A_3","COLOR_Z_2"],["COLOR_Z_3","COLOR_Z_3","COLOR_Z_2"]],"top":[["COLOR_A_3","COLOR_Z_1","COLOR_A_2"],["COLOR_Z_2","COLOR_Z_2","COLOR_A_3"],["COLOR_Z_1","COLOR_Z_3","COLOR_Z_3"]],"bottom":[["COLOR_Z_3","COLOR_A_3","COLOR_Z_1"],["COLOR_A_1","COLOR_A_2","COLOR_A_1"],["COLOR_Z_1","COLOR_Z_2","COLOR_Z_2"]]} as CubeFaces;
+  const initialCubeFaces = newCubeFaces()
 
 /**
  * Represents a 3D cube structure composed of smaller blocks.
@@ -30,15 +32,17 @@ export type CubeGrid = CubeWrapperMeshRef[][][]
 export type CubeSlice = {
   cubeGrid: CubeGrid,
   faces: CubeFaces,
-  setFaces: ((faces: CubeFaces) => void),
+  initialFaces: CubeFaces,
   isRotating: MutableRefObject<boolean>,
-  setCubeGrid: ((cubeGrid: CubeGrid) => void),
   history: MoveCode[],
+  setInitialFaces: ((faces: CubeFaces) => void),
+  setCubeGrid: ((cubeGrid: CubeGrid) => void),
   pushHistory: (moveCode: MoveCode) => void,  
   popHistory: () => MoveCode | undefined,
   clearHistory: () => void,
   executeMove: (moveCode: MoveCode, animationTime: number) => void,
   undoLastMove: (animationTime: number) => void,
+
 }  
 
 export const createCubeSlice: StateCreator<CubeSlice> = (set, get) => { 
@@ -46,14 +50,20 @@ export const createCubeSlice: StateCreator<CubeSlice> = (set, get) => {
 
   return {
     cubeGrid: _012.map(
-      (i: 0|1|2) => _012.map(
-        (j: 0|1|2) => _012.map(
-          (k: 0|1|2) => ({ current: {} as Mesh })
+      () => _012.map(
+        () => _012.map(
+          () => ({ current: {} as Mesh })
         )
       ) 
     ),
-    faces: newCubeFaces(),
-    setFaces: setValueOf('faces'),
+    faces: initialCubeFaces,
+    setInitialFaces: (faces: CubeFaces) => {
+      set({ 
+        faces: faces, 
+        initialFaces: faces 
+      })
+    },
+    initialFaces: initialCubeFaces,
     isRotating: { current: false },
     setCubeGrid: setValueOf('cubeGrid'),
     history: emptyHistory,
@@ -116,10 +126,12 @@ export const createCubeSlice: StateCreator<CubeSlice> = (set, get) => {
 
 const logFaces = (faces: CubeFaces, moveCode: MoveCode, updatedFaces: CubeFaces) => {
 
-    console.clear()
+    // console.clear()
   // console.log('-----------------------------------------')
-    console.log(`Previous state:`)
-    console.log(printCube(faces))
+    // console.log(`Previous state:`)
+    // console.log(printCube(faces))
     console.log(`Move: ${moveCode} --> Current state:`)
     console.log(printCube(updatedFaces))
+        // console.log(JSON.stringify(updatedFaces))
+    
 }

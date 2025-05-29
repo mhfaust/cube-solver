@@ -29,7 +29,6 @@ import { Color, PlaneGeometry, Vector3 } from "three"
 import { OrbitControls as ThreeOrbitControls } from 'three-stdlib'
 import { printCube } from "@/logic/console/printCube"
 import useEffectOnce from "@/app/utils/useEffectOnce"
-import { newCubeFaces } from "@/logic/newCube"
 import { mapAllBlockColors } from "@/app/utils/mapAllBlockColors"
 
 const { PI, abs } = Math
@@ -279,8 +278,9 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 	}, [])
 
 	const allInitialBlockColors = useMemo(() => {
-		const initialCubeFaces = newCubeFaces();
-		return mapAllBlockColors(initialCubeFaces)
+//		const initialCubeFaces = newCubeFaces();
+console.log('doing blocks')
+		return mapAllBlockColors(faces)
 	}, [])
 
 	return (

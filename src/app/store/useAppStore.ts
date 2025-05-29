@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { GameControlsSlice, PlayMode, createGameControlsSlice } from "./gameControlsSlice";
+import { GameControlsSlice, createGameControlsSlice } from "./gameControlsSlice";
 import { LoggerSlice, createLoggerSlice } from "./loggerSlice";
 import { CubeSlice, createCubeSlice } from "./cubeSlice";
 import { ThemeSlice, createThemeSlice } from "./themeSlice";
@@ -19,10 +19,6 @@ export const useAppStore = create<AppStore>()(
 
 export default useAppStore
 
-const makeActionsSelector = (actions: (keyof AppStore)[]) => {
-  
-}
-
 export const useActions = () => {
   return useAppStore(select(
     ({ 
@@ -31,7 +27,7 @@ export const useActions = () => {
       startTimer, 
       stopTimer, 
       setCubeGrid,
-      setFaces,
+      setInitialFaces,
       setFingersOn, 
       setThemeName,
       resetTimer,
@@ -47,7 +43,7 @@ export const useActions = () => {
       startTimer, 
       stopTimer, 
       setCubeGrid,
-      setFaces,
+      setInitialFaces,
       setFingersOn, 
       setThemeName,
       resetTimer,
