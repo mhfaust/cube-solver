@@ -30,12 +30,14 @@ import { OrbitControls as ThreeOrbitControls } from 'three-stdlib'
 import { printCube } from "@/logic/console/printCube"
 import useEffectOnce from "@/app/utils/useEffectOnce"
 import { mapAllBlockColors } from "@/app/utils/mapAllBlockColors"
+import { useLoggerStore } from "@/app/store/loggerSlice"
 
 const { PI, abs } = Math
 const bgGeometry = new PlaneGeometry(50, 50)
 
 const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => {
-	const { log, setFingersOn, executeMove, undoLastMove } = useActions()
+	const { executeMove, undoLastMove } = useActions()
+	const { log, setFingersOn } = useLoggerStore()
 	const isRotating = useIsRotating()
 	const cubeGrid = useCubeGrid()
 	const faces = useFaces()
@@ -50,7 +52,7 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 	const swipeTimeout = useRef<NodeJS.Timeout | null>(null)
 
 	useEffect(() => {
-		console.log(isSolved)
+		console.log('Is solved: ',isSolved)
 	}, [isSolved, faces])
 
 	useEffectOnce(() => {

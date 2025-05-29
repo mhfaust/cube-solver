@@ -134,10 +134,10 @@ const logFaces = (faces: CubeFaces, moveCode: MoveCode, updatedFaces: CubeFaces)
 
     // console.clear()
   // console.log('-------------')
-    // console.log(`Previous state:`)
-    // console.log(printCube(faces))
-    // console.log(`Move: ${moveCode} --> Current state:`)
-    // console.log(printCube(updatedFaces))
-        // console.log(JSON.stringify(updatedFaces))
+  //   console.log(`Previous state:`)
+  //   console.log(printCube(faces))
+    console.log(`Move: ${moveCode} --> Current state:`)
+    console.log(printCube(updatedFaces))
+    // console.log(JSON.stringify(updatedFaces))
     
 }
