@@ -17,11 +17,9 @@ const Completed = () => {
     clearHistory()
   }
 
-  console.log(completionTime, startTime)
-
   return (
     <div className={styles.completed}>
-      <p>Solved in {reportTime(completionTime - startTime)}</p>
+      <p className={styles.completionTime}>Solved in {reportTime(completionTime - startTime)}</p>
       <div className={styles.completedButtons}>
         <button onClick={handleSaveClick} 
           type="button" 

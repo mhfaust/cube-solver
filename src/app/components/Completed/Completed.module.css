@@ -6,16 +6,18 @@
   align-items: center;
   gap: 20px;
   padding: 20px;
-
   z-index: 1;
   font-size: 1.5em;
   position: absolute;
-  right: 20vw;
-  bottom: 10vh;
-  left: 20vw;
+  width: 100%;
+  bottom: 20px;
   /* background-color: black; */
   color: #999;
   /* outline: 1px solid white; */
+}
+
+.completionTime {
+  font-size: 20px;
 }
 
 .completedButtons {
@@ -28,6 +30,7 @@
   width: 150px;
   height: 50px;
   color: #999;
+  font-size: 16px;
 }
 .save {
   background: #333;
