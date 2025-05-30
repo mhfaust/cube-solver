@@ -1,6 +1,5 @@
 import { persist } from "zustand/middleware";
 import { create } from "zustand";
-import { StateCreator } from "zustand";
 import { MutableRefObject } from "react";
 import { BufferGeometry, Material, Mesh, NormalBufferAttributes, Object3DEventMap } from "three";
 import { _012 } from "@/app/utils/grid";
@@ -20,7 +19,6 @@ const solvedCubeFaces = newCubeFaces()
 
 const initialFaces = solvedCubeFaces
 // const initialFaces = scrambledCubeFaces
-
 
 const emptyHistory: MoveCode[] = []
 
@@ -50,7 +48,6 @@ export type CubeSlice = {
   clearHistory: () => void,
   executeMove: (moveCode: MoveCode, animationTime: number, record?: boolean) => void,
   undoLastMove: (animationTime: number) => void,
-
 }  
 
 export const useCubeStore = create<CubeSlice>()(

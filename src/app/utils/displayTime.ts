@@ -38,13 +38,13 @@ export const reportTime = (milis: number | undefined) => {
   }
   const [ d, s, m, h ] = splitTime(milis)
   if (h) {
-    return `${h} hours, ${m}, minutes, and ${s}.${pad0s(d)} seconds`
+    return `${h}h ${m}m ${s}.${pad0s(d)}s`
   }
   if(m) {
-    return `${m}, minutes, and ${s}.${pad0s(d)} seconds`
+    return `${m}m ${s}.${pad0s(d)}s`
   }
   if (s) {
-    return `${s}.${pad0s(d)} seconds`
+    return `${s}.${pad0s(d)}s`
   } 
-  return `0.${pad0s(d)} seconds`
+  return `0.${pad0s(d)}s`
 }

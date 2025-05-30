@@ -2,10 +2,11 @@ import { useGameControlsStore } from "@/app/store/gameControlsSlice"
 import styles from "./Completed.module.css"
 import { reportTime } from "@/app/utils/displayTime"
 import { useCubeStore } from "@/app/store/cubeSlice"
+import { countMutations } from "@/app/utils/history"
 
 const Completed = () => {
   const { resetTimer, startTime, completionTime } = useGameControlsStore()
-  const { clearHistory } = useCubeStore()
+  const { clearHistory, history } = useCubeStore()
 
   const handleSaveClick = () => {
     resetTimer()
@@ -17,9 +18,11 @@ const Completed = () => {
     clearHistory()
   }
 
+  const mutations = countMutations(history)
+
   return (
     <div className={styles.completed}>
-      <p className={styles.completionTime}>Solved in {reportTime(completionTime - startTime)}</p>
+      <p className={styles.completionTime}>{mutations} moves, {reportTime(completionTime - startTime)}</p>
       <div className={styles.completedButtons}>
         <button onClick={handleSaveClick} 
           type="button" 
