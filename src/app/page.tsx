@@ -1,18 +1,18 @@
 
 'use client'
 
-import Cube from './components/Cube'
+import Cube from '@/components/Cube'
 import styles from './page.module.css'
-import Timer from './components/Timer'
+import Timer from '@/components/Timer'
 import { useEffect } from 'react'
-import { useIsSolved, usePlayMode } from "./store/selectors"
-import Completed from './components/Completed'
-import Menu from './components/Menu/Menu'
-import UndoButton from './components/UndoButton/UndoButton'
-import Log from './components/Log'
-import NoSsr from './components/NoSsr/NoSsr'
-import { useGameControlsStore } from './store/gameControlsSlice'
-import { useCubeStore } from './store/cubeSlice'
+import { useIsSolved, usePlayMode } from "../store/selectors"
+import Completed from '@/components/Completed'
+import Menu from '@/components/Menu/Menu'
+import UndoButton from '@/components/UndoButton/UndoButton'
+import Log from '@/components/Log'
+import NoSsr from '@/components/NoSsr/NoSsr'
+import { useGameControlsStore } from '../store/gameControlsSlice'
+import { useCubeStore } from '../store/cubeSlice'
 
 export default function App() {
 
