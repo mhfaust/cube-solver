@@ -1,7 +1,7 @@
 import { ThreeEvent } from "@react-three/fiber";
 import { swipeInfo } from "./pointers";
 
-const spinZ = (
+const spinS = (
   downPointer: ThreeEvent<PointerEvent>, 
   upPointer: ThreeEvent<PointerEvent>,
   basePointer: ThreeEvent<PointerEvent>
@@ -11,7 +11,7 @@ const spinZ = (
   const wentRight = ['upRight', 'downRight'].includes(swipe.quadrantDirection)
   const isAbove = upPointer.unprojectedPoint.y > basePointer.unprojectedPoint.y
 
-  return wentRight === isAbove ? 'Si' : 'S'
+  return wentRight === isAbove ? 'S' : 'Si'
 }
 
-export default spinZ
+export default spinS

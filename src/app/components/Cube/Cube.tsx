@@ -12,7 +12,7 @@ import {
 import spinFrontOrBack from "@/app/touch/spinFrontOrBack"
 import spinRowXOrY from "@/app/touch/spinRowXOrY"
 import spinWholeCube from "@/app/touch/spinWholeCube"
-import spinZ from "@/app/touch/spinZ"
+import spinS from "@/app/touch/spinS"
 import swipesAreCoincident from "@/app/touch/swipesAreCoincident"
 import twoFingerSpinDirection from "@/app/touch/twoFingerSpinDirection"
 import { 
@@ -178,7 +178,6 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 
 				else {
 					if(dial > MIN_DIAL_ANGLE) {
-						// spinScheduler.queue('Z')
 						moveCodes.push('Zi')
 					}
 					else if (dial < -MIN_DIAL_ANGLE){
@@ -202,7 +201,7 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 
 				//both fingers off:
 				if (!isUpFromCube && !isBaseOnCube){
-					moveCodes.push( spinZ(downPointer, upPointer, baseDownPointer))
+					moveCodes.push( spinS(downPointer, upPointer, baseDownPointer))
 				}
 				//1 finger on, 1 finger off:
 				else if(isUpFromCube !== isBaseOnCube){
