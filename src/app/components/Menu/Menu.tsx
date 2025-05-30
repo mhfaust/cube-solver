@@ -1,7 +1,7 @@
 import { ThemeName, themeNames } from "@/app/themes/useThemeAssets";
 import styles from "./Menu.module.css";
 import {  } from "@/app/store/selectors";
-import { useState } from "react";
+import { MouseEventHandler, useState } from "react";
 import clsx from "clsx";
 import { useThemeStore } from "@/app/store/themeSlice";
 
@@ -16,17 +16,16 @@ const Menu = () => {
         <div className={styles.menu}>
           {themeNames.map((name) => (
             <label
-              // for={name}
+              htmlFor={name}
               key={name}
             >
               <input
-                // className={clsx({[styles.selected]: selectedThemeName === name})}
                 type="radio"
-                // onChange={(isChecked) => setThemeName(name)}
-                onChange={(e) => {
-                  setThemeName(e.target.value as ThemeName);
+                onClick={() => {
+                  setThemeName(name);
                   setIsOpen(false);
                 }}
+                onChange={() => {}}
                 checked={themeName === name}
                 value={name}
                 id={name}

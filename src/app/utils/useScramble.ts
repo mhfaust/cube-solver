@@ -14,6 +14,7 @@ const SCRAMBLE_ROTATION_TIME = 5 //very fast
 const useScramble = () => {
   const { clearHistory, executeMove } = useCubeStore()
   return useCallback(() => {
+    clearHistory()
 
     const randomSequence = Array.from(
       { length: 100 }, 
@@ -24,13 +25,10 @@ const useScramble = () => {
       if(!nextMove){
         return
       }
-      executeMove(nextMove, SCRAMBLE_ROTATION_TIME)
+      executeMove(nextMove, SCRAMBLE_ROTATION_TIME, false)
 
       if(randomSequence.length){
         setTimeout(recurse, SCRAMBLE_ROTATION_TIME)
-      }
-      else {
-        clearHistory()
       }
     }
     recurse()

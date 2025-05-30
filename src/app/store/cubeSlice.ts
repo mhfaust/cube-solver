@@ -48,7 +48,7 @@ export type CubeSlice = {
   pushHistory: (moveCode: MoveCode) => void,  
   popHistory: () => MoveCode | undefined,
   clearHistory: () => void,
-  executeMove: (moveCode: MoveCode, animationTime: number) => void,
+  executeMove: (moveCode: MoveCode, animationTime: number, record?: boolean) => void,
   undoLastMove: (animationTime: number) => void,
 
 }  
@@ -82,7 +82,7 @@ export const useCubeStore = create<CubeSlice>()(
         clearHistory: () => {
           set({ history: emptyHistory })
         },
-        executeMove: (moveCode: MoveCode, animationTime: number) => {
+        executeMove: (moveCode: MoveCode, animationTime: number, record=true) => {
           set(({ cubeGrid, faces, pushHistory, isRotating }) => {
             const getUpdatedCubeGrid = modelSpinFunctions[moveCode]
             const updatedCubeGrid = getUpdatedCubeGrid(cubeGrid)
@@ -92,8 +92,9 @@ export const useCubeStore = create<CubeSlice>()(
 
             const renderModel = renderingSpinFunctions[moveCode]
             renderModel(cubeGrid, animationTime, isRotating)
-
-            pushHistory(moveCode)
+            if(record){
+              pushHistory(moveCode)
+            }
 
             logFaces(faces, moveCode, updatedFaces)
 
@@ -123,7 +124,7 @@ export const useCubeStore = create<CubeSlice>()(
 
                 return {
                   cubeGrid: updatedCubeGrid,
-                  faces: updatedFaces 
+                  faces: updatedFaces
                 }
               }
 

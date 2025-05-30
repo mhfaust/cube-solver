@@ -1,5 +1,4 @@
-import { MoveCode } from "@/app/utils/moveCodes"
-import { AxisDirection, swipeInfo } from "./pointers"
+import { swipeInfo } from "./pointers"
 
 const map = {
   'down': 'X',
