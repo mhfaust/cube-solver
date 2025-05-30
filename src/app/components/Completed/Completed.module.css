@@ -1,19 +1,21 @@
 
 .completed {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+
   z-index: 1;
-  font-size: 2em;
+  font-size: 1.5em;
   position: absolute;
-  height: 30vh;
   right: 20vw;
   bottom: 10vh;
   left: 20vw;
-  background-color: black;
-  color: white;
+  /* background-color: black; */
+  color: #999;
   /* outline: 1px solid white; */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
 }
 
 .completedButtons {
@@ -21,8 +23,18 @@
   flex-direction: row;
   gap: 20px;
 }
-.completedButtons button {
+.completedButtons .save, 
+.completedButtons .discard  {
   width: 150px;
   height: 50px;
-  background: blue;
+  color: #999;
+}
+.save {
+  background: #333;
+  border :1px solid #999;
+
+}
+.discard {
+  background-color: #222;
+  border: none;
 }

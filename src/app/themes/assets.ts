@@ -39,5 +39,5 @@ export const brightColors = {
     [COLOR_Z_3]: brightRed
 } as Theme['faceColors']
 
-export const standardBox = new RoundedBoxGeometry(1.0, 1.0, 1.0, 2, .1)
-export const curvierBox = new RoundedBoxGeometry(1.0, 1.0, 1.0, 2, .2)
+// export const standardBox = new RoundedBoxGeometry(1.0, 1.0, 1.0, 2, .1)
+// export const curvierBox = new RoundedBoxGeometry(1.0, 1.0, 1.0, 2, .2)

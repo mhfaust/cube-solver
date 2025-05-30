@@ -17,7 +17,7 @@ const useScramble = () => {
     clearHistory()
 
     const randomSequence = Array.from(
-      { length: 100 }, 
+      { length: 1 }, 
       () => oneLayerSpins[Math.floor(Math.random() * numSpinTypes)]
     )
     const recurse = () => {
