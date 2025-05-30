@@ -1,5 +1,6 @@
 import styles from '@/app/page.module.css'
-import { useFingersOn } from "../store/selectors"
+import {  } from "../store/selectors"
+import { useLoggerStore } from '../store/loggerSlice'
 
 /**
  * 
@@ -7,7 +8,7 @@ import { useFingersOn } from "../store/selectors"
  */
 const DebugFingers = () => {
 
-  const fingersOn = useFingersOn()
+  const { fingersOn } = useLoggerStore();
   const f = Array(fingersOn).fill('').map((_,i) => i)
   return (
     <div className={styles.fingers}>
