@@ -1,14 +1,35 @@
 .undoButton {
   position:absolute;
-  display: inline-block;
-  top: 30px;
-  left: 30px;
-  padding: 5px 10px;
+  top: 34px;
+  left: 34px;
   color: white;
   z-index: 1;
   background-color: #333;
   border: none;
   width:30px;
   height:30px;
-  border-radius: 15px;
+  /* border-radius: 15px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  font-size: 11px;
+}
+.backgroundBox {
+  content: '';
+  position:absolute;
+  top: 34px;
+  left: 34px;
+  z-index: 1;
+  background-color: #666;
+  border: none;
+  width:30px;
+  height:30px;
+  /* border-radius: 15px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 11px;
+  transform: rotate(20deg);
 }

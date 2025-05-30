@@ -10,6 +10,8 @@ const UndoButton = () => {
   const moveCount = history.filter(m => !wholeCubeSpins.has(m)).length
 
   return (
+    <>
+    <div className={styles.backgroundBox}/>
     <button
       className={styles.undoButton}
       onClick={() => {
@@ -20,7 +22,7 @@ const UndoButton = () => {
       disabled={history.length === 0}
     >
       {moveCount}
-    </button>
+    </button></>
   );
 }
 
