@@ -24,15 +24,15 @@ export type ThemeName = (typeof themeNames)[number];
 const themes: Record<ThemeName, Theme> = {
   dark: {
     frameColor: grayScale(0.05),
-    backgroundColor: grayScale(0.03),
+    backgroundColor: grayScale(0.02),
     faceColors: standardColors,
     pointLightIntensity: 7,
     ambientLightIntensity: 2,
     boxRoundness: 0.1,
   },
   light: {
-    frameColor: grayScale(0.75),
-    backgroundColor: grayScale(0.03),
+    frameColor: grayScale(0.95),
+    backgroundColor: grayScale(0.02),
     faceColors: standardColors,
     pointLightIntensity: 10,
     ambientLightIntensity: 2,
@@ -63,15 +63,6 @@ export type Theme = {
   ambientLightIntensity: number;
   boxRoundness: number;
 };
-
-export const colorSequence = [
-  COLOR_A_1,
-  COLOR_A_2,
-  COLOR_A_3,
-  COLOR_Z_1,
-  COLOR_Z_2,
-  COLOR_Z_3,
-];
 
 const useTheme = () => {
   const { themeName } = useThemeStore();

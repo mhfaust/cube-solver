@@ -27,14 +27,6 @@ const faceColorPolygonStartIndex = {
   [FRONT]: 600,
   [BACK]: 750,
 }
-// const faceColorPolygonStartIndex = {
-//   COLOR_A_1: 0,
-//   COLOR_Z_1: 150,
-//   COLOR_A_2: 300,
-//   COLOR_Z_2: 450,
-//   COLOR_A_3: 600,
-//   COLOR_Z_3: 750,
-// }
 
 const RoundedBoxGeometryPolygonCount = 900;
 
@@ -103,8 +95,8 @@ const Block = ({
             .attributes.color.setXYZ(i ,frameColor.r, frameColor.g, frameColor.b)
         } 
         else {
-          const paintColor = faceColors[faceColorCode]
-            blockGeometry.attributes.color.setXYZ(i ,paintColor.r, paintColor.g, paintColor.b)
+          const paintColor = faceColors[faceColorCode];
+          blockGeometry.attributes.color.setXYZ(i ,paintColor.r, paintColor.g, paintColor.b);
         }
       }
     })

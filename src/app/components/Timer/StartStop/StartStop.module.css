@@ -1,12 +1,41 @@
-.startButton, .stopButton {
-  right: 30px;
-  width: 30px;
-  height: 30px;
-}
 
-.startButton {
-  background: blue;
+        .startButton, .stopButton {
+          width: 34px;
+          height: 34px;
+          border: 3px solid #282828;
+          border-radius: 50%;
+          z-index: 0;
+          background-color: transparent;
+          position: relative;
+          cursor: pointer;
+        }
+        .startButton::before 
+.stopButton::before {
+  transition: all;
 }
-.stopButton {
-  background: red;
-}
+        .startButton::before {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 18px solid #666;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            top: 4px;
+            left: 8px;
+            border-right: 0;
+            background-color: transparent;
+            cursor: pointer;
+            z-index: 1;
+        }
+        .stopButton::before {
+            content: '';
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            top: 7px;
+            left: 7px;
+            background-color: #666;
+            cursor: pointer;
+            z-index: 1;
+        }

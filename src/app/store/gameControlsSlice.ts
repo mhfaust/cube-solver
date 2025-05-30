@@ -13,7 +13,7 @@ export type GameControlsSlice = {
 export type PlayMode = 'casual' | 'in-play' | 'complete'
 
 export const useGameControlsStore = create<GameControlsSlice>()(
-    // persist(
+    persist(
     (set) => {
       const { setValueUsing } = storeSetters(set)
       return {
@@ -34,6 +34,6 @@ export const useGameControlsStore = create<GameControlsSlice>()(
         },
       }
     },
-    //   { name: "cubism-game-controls" }
-    // )
+      { name: "cubism-game-controls" }
+    )
 ) 

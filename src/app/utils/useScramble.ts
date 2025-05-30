@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { MoveCode } from "./moveCodes"
-import { useActions } from "../store/useAppStore"
+import { useCubeStore } from "../store/cubeSlice"
 
 const oneLayerSpins: MoveCode[] = [
   'U' , 'Ui' , 'D' , 'Di' , 'E' , 'Ei' ,
@@ -12,7 +12,7 @@ const numSpinTypes = Object.keys(oneLayerSpins).length
 const SCRAMBLE_ROTATION_TIME = 5 //very fast 
 
 const useScramble = () => {
-  const { clearHistory, executeMove } = useActions()
+  const { clearHistory, executeMove } = useCubeStore()
   return useCallback(() => {
 
     const randomSequence = Array.from(

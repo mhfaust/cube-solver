@@ -1,7 +1,6 @@
 import { ThemeName, themeNames } from "@/app/themes/useThemeAssets";
 import styles from "./Menu.module.css";
 import {  } from "@/app/store/selectors";
-import { useActions } from "@/app/store/useAppStore";
 import { useState } from "react";
 import clsx from "clsx";
 import { useThemeStore } from "@/app/store/themeSlice";
@@ -28,7 +27,7 @@ const Menu = () => {
                   setThemeName(e.target.value as ThemeName);
                   setIsOpen(false);
                 }}
-                checked={selectedThemeName === name}
+                checked={themeName === name}
                 value={name}
                 id={name}
                 className={styles.radio}

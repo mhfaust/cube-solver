@@ -5,48 +5,49 @@ import Cube from './components/Cube'
 import styles from './page.module.css'
 import Timer from './components/Timer'
 import { useEffect } from 'react'
-import { useActions } from './store/useAppStore'
-import { useHistory, useIsSolved, usePlayMode } from "./store/selectors"
-import { useCubeGrid } from "./store/selectors"
+import { useIsSolved, usePlayMode } from "./store/selectors"
 import Completed from './components/Completed'
 import Menu from './components/Menu/Menu'
 import UndoButton from './components/UndoButton/UndoButton'
 import Log from './components/Log'
 import NoSsr from './components/NoSsr/NoSsr'
 import { useGameControlsStore } from './store/gameControlsSlice'
+import { useCubeStore } from './store/cubeSlice'
 
 export default function App() {
 
   const {  startTime, stopTimer } = useGameControlsStore()
   const playMode  = usePlayMode()
   const isSolved = useIsSolved();
-  const grid = useCubeGrid()
-  const {  } = useActions()
-  const history = useHistory()
+  const { cubeGrid, history } = useCubeStore()
 
   useEffect(() => {
     if (startTime && isSolved) {
 
       stopTimer(true)
     }
-  }, [grid, isSolved, startTime, stopTimer])
+  }, [cubeGrid, isSolved, startTime, stopTimer])
+
+  const SHOW_LOG = false;
   
   return (
-      <div className={styles.main}>
-        {history.length > 0 && (
-          <UndoButton />
-        )}
-        {playMode === 'casual' && (
-          <Menu />
-        )}
-        {playMode === 'complete' && ( 
-          <Completed />
-        )}  
-        <Cube />
-        {playMode !== 'complete' && (
-          <Timer />
-        )}
-        <Log />
-      </div>
+      <NoSsr>
+        <div className={styles.main}>
+          {history.length > 0 && (
+            <UndoButton />
+          )}
+          {playMode === 'casual' && (
+            <Menu />
+          )}
+          {playMode === 'complete' && ( 
+            <Completed />
+          )}  
+          <Cube />
+          {playMode !== 'complete' && (
+            <Timer />
+          )}
+          {SHOW_LOG && <Log />}
+        </div>
+      </NoSsr>
   )
 }

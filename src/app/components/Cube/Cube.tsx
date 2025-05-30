@@ -2,8 +2,7 @@
 
 import Block from "@/app/components/Block"
 import styles from '@/app/page.module.css'
-import { useActions } from "@/app/store/useAppStore"
-import { useCubeGrid, useFaces, useInitiaFaces, useIsRotating, useIsSolved } from "@/app/store/selectors"
+import { useIsSolved } from "@/app/store/selectors"
 import useTheme from "@/app/themes/useThemeAssets"
 import calculateDialingAngle from "@/app/touch/calculateDialingAngle"
 import { 
@@ -31,18 +30,16 @@ import { printCube } from "@/logic/console/printCube"
 import useEffectOnce from "@/app/utils/useEffectOnce"
 import { mapAllBlockColors } from "@/app/utils/mapAllBlockColors"
 import { useLoggerStore } from "@/app/store/loggerSlice"
+import { useCubeStore } from "@/app/store/cubeSlice"
 
 const { PI, abs } = Math
 const bgGeometry = new PlaneGeometry(50, 50)
 
 const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => {
-	const { executeMove, undoLastMove } = useActions()
+	const { executeMove, undoLastMove } = useCubeStore()
 	const { log, setFingersOn } = useLoggerStore()
-	const isRotating = useIsRotating()
-	const cubeGrid = useCubeGrid()
-	const faces = useFaces()
-	const initialFaces = useInitiaFaces()
-	const isSolved = useIsSolved();
+	const { cubeGrid, faces, isRotating,  } = useCubeStore()
+	const isSolved = useIsSolved()
 
 	const { bgMaterial, pointLightIntensity, ambientLightIntensity } = useTheme()
 
@@ -51,9 +48,7 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 	const pointers = useRef<Pointers>({})
 	const swipeTimeout = useRef<NodeJS.Timeout | null>(null)
 
-	useEffect(() => {
-		console.log('Is solved: ',isSolved)
-	}, [isSolved, faces])
+	const [allInitialBlockColors] = useState(mapAllBlockColors(faces));
 
 	useEffectOnce(() => {
 		console.log(printCube(faces))
@@ -110,7 +105,7 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 		return () => {
 				document.removeEventListener('keydown', handleKeyDown);
 		};
-	}, [ executeMove, isRotating, undoLastMove]);
+	}, [executeMove, isRotating, undoLastMove]);
 
 	const handlePointerDown = useCallback((e: ThreeEvent<PointerEvent>) => {
 
@@ -280,9 +275,6 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 		}
 	}, [])
 
-	const allInitialBlockColors = useMemo(() => {
-		return mapAllBlockColors(initialFaces)
-	}, [initialFaces])
 
 	return (
 		<>
