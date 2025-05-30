@@ -19,7 +19,7 @@ export default function App() {
   const {  startTime, stopTimer } = useGameControlsStore()
   const playMode  = usePlayMode()
   const isSolved = useIsSolved();
-  const { cubeGrid, history } = useCubeStore()
+  const { cubeGrid, moves } = useCubeStore()
 
   useEffect(() => {
     if (startTime && isSolved) {
@@ -33,7 +33,7 @@ export default function App() {
   return (
       <NoSsr>
         <div className={styles.main}>
-          {history.length > 0 && (
+          {moves.length > 0 && (
             <UndoButton />
           )}
           {playMode === 'casual' && (

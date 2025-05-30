@@ -4,15 +4,15 @@ import { persist } from "zustand/middleware";
 import { MoveCode } from "../utils/moveCodes";
 import { CubeFaces } from "@/logic/newCube";
 
-export type History = {
+export type CubeHistory = {
     initialState: CubeFaces;
     startTime: Date;
-    moves: MoveCode[];  
+    // moves: MoveCode[];  
     // todo: refactor moves to:
-    // moves: {
-    //     moveCode: MoveCode;
-    //     dateTime: string;
-    // }[]
+    moves: {
+        moveCode: MoveCode;
+        moveTime: number;
+    }[]
 }
 
 export type HistoriesSlice = {

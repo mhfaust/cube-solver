@@ -10,6 +10,7 @@ import { modelSpinFunctions, facesSpinFunctions, renderingSpinFunctions } from "
 import { printCube } from "@/logic/console/printCube";
 import { useIsSolved } from "./selectors";
 import { checkFacesAreSolved } from "../utils/checkFacesAreSolved";
+import { CubeHistory } from "./historiesSlices";
 
 export type CubeWrapperMesh = Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>
 
@@ -20,7 +21,7 @@ const solvedCubeFaces = newCubeFaces()
 const initialFaces = solvedCubeFaces
 // const initialFaces = scrambledCubeFaces
 
-const emptyHistory: MoveCode[] = []
+const emptyMoves: CubeHistory['moves'] = []
 
 
 /**
@@ -40,19 +41,19 @@ export type CubeSlice = {
   faces: CubeFaces,
   // initialFaces: CubeFaces,
   isRotating: MutableRefObject<boolean>,
-  history: MoveCode[],
+  moves: CubeHistory['moves'],
   // setInitialFaces: ((faces: CubeFaces) => void),
   setCubeGrid: ((cubeGrid: CubeGrid) => void),
-  pushHistory: (moveCode: MoveCode) => void,  
-  popHistory: () => MoveCode | undefined,
-  clearHistory: () => void,
+  pushMove: (moveCode: MoveCode) => void,  
+  popMove: () => CubeHistory['moves'][number] | undefined,
+  clearMoves: () => void,
   executeMove: (moveCode: MoveCode, animationTime: number, record?: boolean) => void,
   undoLastMove: (animationTime: number) => void,
 }  
 
 export const useCubeStore = create<CubeSlice>()(
   persist(
-    (set) => { 
+    (set, get) => { 
       const { setValueOf, pushValueTo, popValueFrom } = storeSetters(set)
 
       return ({
@@ -66,7 +67,7 @@ export const useCubeStore = create<CubeSlice>()(
         faces: initialFaces,
         // initialFaces,
         isRotating: { current: false },
-        history: emptyHistory,
+        moves: emptyMoves,
         // setInitialFaces: (faces: CubeFaces) => {
         //   set({ 
         //     faces: faces, 
@@ -74,13 +75,19 @@ export const useCubeStore = create<CubeSlice>()(
         //   })
         // },
         setCubeGrid: setValueOf('cubeGrid'),
-        pushHistory: pushValueTo('history'),
-        popHistory: popValueFrom('history'),
-        clearHistory: () => {
-          set({ history: emptyHistory })
+        pushMove: (moveCode: MoveCode) => {
+          const newMove = {
+            moveCode,
+            moveTime: new Date().getTime(),
+          }
+          set({ moves: [...get().moves, newMove]})
+        },
+        popMove: popValueFrom('moves'),
+        clearMoves: () => {
+          set({ moves: emptyMoves })
         },
         executeMove: (moveCode: MoveCode, animationTime: number, record=true) => {
-          set(({ cubeGrid, faces, pushHistory, isRotating }) => {
+          set(({ cubeGrid, faces, pushMove, isRotating }) => {
             const getUpdatedCubeGrid = modelSpinFunctions[moveCode]
             const updatedCubeGrid = getUpdatedCubeGrid(cubeGrid)
 
@@ -90,7 +97,7 @@ export const useCubeStore = create<CubeSlice>()(
             const renderModel = renderingSpinFunctions[moveCode]
             renderModel(cubeGrid, animationTime, isRotating)
             if(record){
-              pushHistory(moveCode)
+              pushMove(moveCode)
             }
 
             logFaces(faces, moveCode, updatedFaces)
@@ -102,9 +109,11 @@ export const useCubeStore = create<CubeSlice>()(
           })
         },
         undoLastMove: (animationTime: number) => {
-          set(({ popHistory, setCubeGrid, faces, cubeGrid, isRotating }) => {
-            const lastMoveCode = popHistory();
-              if (lastMoveCode) {
+          set(({ popMove, setCubeGrid, faces, cubeGrid, isRotating }) => {
+            const lastMove = popMove();
+            
+            if (lastMove) {
+                const lastMoveCode = lastMove.moveCode;
                 const undoMoveCode = inverse(lastMoveCode)
           
                 const getUpdatedCubeGrid = modelSpinFunctions[undoMoveCode]

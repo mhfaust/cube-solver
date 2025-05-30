@@ -12,9 +12,9 @@ const numSpinTypes = Object.keys(oneLayerSpins).length
 const SCRAMBLE_ROTATION_TIME = 5 //very fast 
 
 const useScramble = () => {
-  const { clearHistory, executeMove } = useCubeStore()
+  const { clearMoves, executeMove } = useCubeStore()
   return useCallback(() => {
-    clearHistory()
+    clearMoves()
 
     const randomSequence = Array.from(
       { length: 2 }, 
@@ -32,7 +32,7 @@ const useScramble = () => {
       }
     }
     recurse()
-  }, [executeMove, clearHistory])
+  }, [executeMove, clearMoves])
 }
 
 export default useScramble

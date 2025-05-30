@@ -6,19 +6,19 @@ import { countMutations } from "@/app/utils/history"
 
 const Completed = () => {
   const { resetTimer, startTime, completionTime } = useGameControlsStore()
-  const { clearHistory, history } = useCubeStore()
+  const { clearMoves, moves } = useCubeStore()
 
   const handleSaveClick = () => {
     resetTimer()
-    clearHistory()
+    clearMoves()
   }
 
   const handleDismissClick = () => {
     resetTimer()
-    clearHistory()
+    clearMoves()
   }
 
-  const mutations = countMutations(history)
+  const mutations = countMutations(moves)
 
   return (
     <div className={styles.completed}>
