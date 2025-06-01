@@ -22,9 +22,7 @@ export const by = <T>(selector: SortValueSelector<T>, order: 'asc' | 'desc' = 'a
   return (itemA: T, itemB: T) => {
     //type as any because TS says we can't compare things with undefined and null.
     //but JS allows it, and it works for natural sorting.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let a = selector(itemA) as any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let b = selector(itemB) as any;
 
     if (typeof a === 'string') a = a.toLowerCase();
