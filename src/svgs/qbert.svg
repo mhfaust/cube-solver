@@ -1,0 +1,68 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="38 -236 1180 1438">   
+<!-- <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000" viewBox="-500 -500 2000 2000">    -->
+    <defs>
+        <polygon id="left-tile" points="48 170 48 366.92 240 480 240 284 48 170"/>
+        <path id="right-tile" d="M272,480,464,366.92V170L272,284ZM448,357.64h0Z"/>
+        <polygon id="top-tile" points="448 144 256 32 64 144 256 256 448 144"/>
+        
+    </defs>
+
+    <g fill="yellow">
+        <g id="front_row-0">
+            <use href="#left-tile" />
+            <use href="#left-tile" transform="translate(224, 133)"/>
+            <use href="#left-tile" transform="translate(448, 266)"/>
+        </g>
+        <g  id="front_row-1" transform="translate(0, 228)">
+            <use href="#left-tile" />
+            <use href="#left-tile" transform="translate(224, 133)"/>
+            <use href="#left-tile" transform="translate(448, 266)"/>
+        </g>        
+        <g  id="front_row-2" transform="translate(0, 456)">
+            <use href="#left-tile" />
+            <use href="#left-tile" transform="translate(224, 133)"/>
+            <use href="#left-tile" transform="translate(448, 266)"/>
+        </g>
+    </g>
+
+    <g fill="cyan">
+        <g id="top_row-2">
+            <use href="#top-tile" />
+            <use href="#top-tile" transform="translate(224, 133)"/>
+            <use href="#top-tile" transform="translate(448, 266)"/>
+        </g>
+        <use href="#top-row"/>
+        <g id="top_row-1" transform="translate(224, -134)">
+            <use href="#top-tile" />
+            <use href="#top-tile" transform="translate(224, 133)"/>
+            <use href="#top-tile" transform="translate(448, 266)"/>
+        </g>
+        <use href="#top-row" transform="translate(224, -134)"/>
+        <g id="top_row-2" transform="translate(448, -268)">
+            <use href="#top-tile" />
+            <use href="#top-tile" transform="translate(224, 133)"/>
+            <use href="#top-tile" transform="translate(448, 266)"/>
+        </g>
+        <use href="#top-row" transform="translate(448, -268)"/>
+    </g>
+
+    <g fill="magenta">
+        <g id="right_row-0">
+            <use href="#right-tile" transform="translate(448,266)"/>
+            <use href="#right-tile" transform="translate(672, 132)"/>
+            <use href="#right-tile" transform="translate(896,-2)"/>
+        </g>
+        <g id="right_row-1" transform="translate(0, 228)">
+            <use href="#right-tile" transform="translate(448,266)"/>
+            <use href="#right-tile" transform="translate(672, 132)"/>
+            <use href="#right-tile" transform="translate(896,-2)"/>
+        </g>
+        <g id="right_row-2" transform="translate(0, 456)">
+            <use href="#right-tile" transform="translate(448,266)"/>
+            <use href="#right-tile" transform="translate(672, 132)"/>
+            <use href="#right-tile" transform="translate(896,-2)"/>
+        </g>
+    </g>
+
+</svg>

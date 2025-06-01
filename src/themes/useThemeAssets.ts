@@ -14,7 +14,7 @@ import {
   COLOR_Z_2,
   COLOR_Z_3,
 } from "@/logic/constants";
-import { useThemeStore } from "../store/themeSlice";
+import { ThemeSlice } from "../store/themeSlice";
 
 const grayScale = (n: number) => new Color(n, n, n);
 
@@ -64,8 +64,8 @@ export type Theme = {
   boxRoundness: number;
 };
 
-const useTheme = () => {
-  const { themeName } = useThemeStore();
+const useThemeAssets = (themeName: ThemeSlice['themeName']) => {
+  // const { themeName } = useThemeStore();
 
   const {
     frameColor,
@@ -97,4 +97,4 @@ const useTheme = () => {
   );
 };
 
-export default useTheme;
+export default useThemeAssets;

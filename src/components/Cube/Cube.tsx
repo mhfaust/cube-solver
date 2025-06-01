@@ -3,7 +3,7 @@
 import Block from "@/components/Block"
 import styles from '@/app/page.module.css'
 import { useIsSolved } from "@/store/selectors"
-import useTheme from "@/themes/useThemeAssets"
+import useThemeAssets from "@/themes/useThemeAssets"
 import calculateDialingAngle from "@/touch/calculateDialingAngle"
 import { 
 	Pointers, addDownPointer, addMovePointer, getLatestMove, 
@@ -31,6 +31,7 @@ import useEffectOnce from "@/utils/useEffectOnce"
 import { mapAllBlockColors } from "@/utils/mapAllBlockColors"
 import { useLoggerStore } from "@/store/loggerSlice"
 import { useCubeStore } from "@/store/cubeSlice"
+import { useThemeStore } from "@/store/themeSlice"
 
 const { PI, abs } = Math
 const bgGeometry = new PlaneGeometry(50, 50)
@@ -40,8 +41,9 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 	const { log, setFingersOn } = useLoggerStore()
 	const { cubeGrid, faces, isRotating,  } = useCubeStore()
 	const isSolved = useIsSolved()
+	const { themeName } = useThemeStore();
 
-	const { bgMaterial, pointLightIntensity, ambientLightIntensity } = useTheme()
+	const { bgMaterial, pointLightIntensity, ambientLightIntensity } = useThemeAssets(themeName)
 
 	const { camera } = useThree();
 	const controls = useRef<ThreeOrbitControls>(null);

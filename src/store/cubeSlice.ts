@@ -38,7 +38,7 @@ export type CubeSlice = {
   moves: CubeHistory['moves'],
   // setInitialFaces: ((faces: CubeFaces) => void),
   setCubeGrid: ((cubeGrid: CubeGrid) => void),
-  markInitialState: () => void,
+  initializeGame: () => void,
   pushMove: (moveCode: MoveCode) => void,  
   popMove: () => CubeHistory['moves'][number] | undefined,
   clearMoves: () => void,
@@ -64,8 +64,10 @@ export const useCubeStore = create<CubeSlice>()(
         isRotating: { current: false },
         moves: emptyMoves,
         setCubeGrid: setValueOf('cubeGrid'),
-        markInitialState: () => {
-          set({ initialState: JSON.parse(JSON.stringify(get().faces)) })
+        initializeGame: () => {
+          set({ 
+            initialState: JSON.parse(JSON.stringify(get().faces)),
+          })
         },
         pushMove: (moveCode: MoveCode) => {
           const newMove = {

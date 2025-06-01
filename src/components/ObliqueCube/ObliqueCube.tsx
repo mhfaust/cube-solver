@@ -1,17 +1,19 @@
 import { BOTTOM, FaceName, LEFT, RIGHT, TOP } from "@/logic/constants";
 import { CubeFaces } from "@/logic/newCube";
-import useTheme from "@/themes/useThemeAssets";
+import { ThemeSlice } from "@/store/themeSlice";
+import useThemeAssets from "@/themes/useThemeAssets";
 
 type ObliquePerspective = `${typeof TOP | typeof BOTTOM}-${typeof LEFT | typeof RIGHT}`;
 
 export type ObliqueCubeProps = {
     faces: CubeFaces;
     perspective: ObliquePerspective;
-}
+    themeName: ThemeSlice['themeName']
+};
 
-const ObliqueCube = ({ faces, perspective }: ObliqueCubeProps) => {
+const ObliqueCube = ({ faces, perspective, themeName }: ObliqueCubeProps) => {
     
-    const { faceColors, frameColor } = useTheme()
+    const { faceColors, frameColor } = useThemeAssets(themeName)
     const perspectiveParts = perspective.split('-') as [FaceName, FaceName];
     
     const aSide: FaceName = 'front';

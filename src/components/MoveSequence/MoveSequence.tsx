@@ -1,22 +1,25 @@
 import { CubeHistory } from "@/store/recordsSlice";
 import { PropsWithChildren } from "react";
-import SkewedCubeFacesSvg, { ObliqueCubeProps } from "../ObliqueCube/ObliqueCube";
+import ObliqueCube, { ObliqueCubeProps } from "../ObliqueCube/ObliqueCube";
 import { CubeFaces } from "@/logic/newCube";
 import { faceTransformsByNotation } from "@/logic/layerRotations/advancedNotation";
 import Arrow from "./Arrow";
+import { ThemeSlice } from "@/store/themeSlice";
 
 type MoveSequenceProps = PropsWithChildren<{
     initialFaces: CubeFaces;
-    sequence: CubeHistory['moves']
-    perspective: ObliqueCubeProps['perspective']
+    sequence: CubeHistory['moves'];
+    perspective: ObliqueCubeProps['perspective'];
+    themeName?: ThemeSlice['themeName']
 }>
 
-const MoveSequence = ({ initialFaces, sequence, perspective }: MoveSequenceProps) => {
+const MoveSequence = ({ initialFaces, sequence, perspective, themeName = 'dark' }: MoveSequenceProps) => {
     if(!sequence.length) {
         return (
-            <SkewedCubeFacesSvg 
+            <ObliqueCube 
                 faces={initialFaces} 
                 perspective={perspective}
+                themeName={themeName}
             />
         );
     }
@@ -31,9 +34,10 @@ const MoveSequence = ({ initialFaces, sequence, perspective }: MoveSequenceProps
                 alignItems: 'center',
                 marginBottom: '2rem'
             }}>
-                <SkewedCubeFacesSvg 
+                <ObliqueCube 
                     faces={initialFaces} 
                     perspective={perspective} 
+                    themeName={themeName}
                 />
                 <Arrow moveCode={sequence[0].moveCode} />
             </div>
@@ -41,6 +45,7 @@ const MoveSequence = ({ initialFaces, sequence, perspective }: MoveSequenceProps
                 initialFaces={nextFaces} 
                 sequence={subsequentMoves} 
                 perspective={perspective} 
+                themeName={themeName}
             />
         </>
     );

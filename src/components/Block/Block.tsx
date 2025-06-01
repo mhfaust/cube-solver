@@ -1,4 +1,4 @@
-import useTheme from '@/themes/useThemeAssets';
+import useThemeAssets from '@/themes/useThemeAssets';
 import { BACK, BOTTOM, FaceColorCode, FaceName, FRONT, LEFT, RIGHT, TOP } from '@/logic/constants';
 import { ThreeEvent } from '@react-three/fiber';
 import { MutableRefObject, createRef, useEffect, useRef } from 'react';
@@ -12,6 +12,7 @@ import {
   NormalBufferAttributes,
   Object3DEventMap,
 } from 'three';
+import { useThemeStore } from '@/store/themeSlice';
 
 // There are 6 polygons (out of 150) that represent the flat part of 1 side of the RoundedBoxGeometry
 // These occur in a regular position within the set of 150 for that side:
@@ -54,8 +55,8 @@ const Block = ({
   onPointerUp,
   onPointerMove
 }: BlockProps) => {
-
-  const { frameColor, faceColors, blockGeometry } = useTheme()
+  const { themeName } = useThemeStore();
+  const { frameColor, faceColors, blockGeometry } = useThemeAssets(themeName)
 
   const blockRef = useRef<Mesh>({} as Mesh)
 

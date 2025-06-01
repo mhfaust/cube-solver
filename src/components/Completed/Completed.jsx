@@ -5,18 +5,29 @@ import { useCubeStore } from "@/store/cubeSlice"
 import { useRecordsStore } from '@/store/recordsSlice'
 import { countMutations } from "@/utils/history"
 import { useNavigation } from '@/utils/useNavigation'
+import { useThemeStore } from "@/store/themeSlice"
+import { nanoid } from "nanoid"
 
 const Completed = () => {
   const { resetTimer, startTime, completionTime } = useGameControlsStore()
   const { clearMoves, moves, initialState } = useCubeStore()
   const { pushRecord } = useRecordsStore()
+  const { themeName } = useThemeStore();
   const { goto } = useNavigation();
 
   const handleSaveClick = () => {
 
     const duration = moves[moves.length-1].moveTime - startTime;
 
-    pushRecord({ initialState, startTime, moves, duration });
+    pushRecord({ 
+      id: nanoid(), 
+      initialState, 
+      startTime, 
+      moves, 
+      duration, 
+      themeName 
+    });
+    
     resetTimer();
     clearMoves();
     goto.gamePlays();

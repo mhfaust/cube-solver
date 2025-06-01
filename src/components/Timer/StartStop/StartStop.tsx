@@ -6,7 +6,7 @@ import { useCubeStore } from '@/store/cubeSlice';
 
 const StartStop = () => {
   const { startTime, startTimer, stopTimer } = useGameControlsStore()
-  const { markInitialState } = useCubeStore();
+  const { initializeGame } = useCubeStore();
   const isInPlay = startTime !== null
 
   const handleClick = isInPlay  
@@ -14,7 +14,7 @@ const StartStop = () => {
     : async () => {
       await scramble();
       startTimer();
-      markInitialState();
+      initializeGame();
     }
 
   const scramble = useScramble()

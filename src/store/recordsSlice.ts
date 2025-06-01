@@ -3,11 +3,14 @@ import { MoveCode } from "@/utils/moveCodes";
 import { CubeFaces } from "@/logic/newCube";
 import storeSetters from "./storeHelpers";
 import { persist } from "zustand/middleware";
+import { ThemeSlice } from "./themeSlice";
 
 export type CubeHistory = {
+    id: string;
     initialState: CubeFaces;
     startTime: number;
     duration: number;
+    themeName: ThemeSlice['themeName'];
     moves: {
         moveCode: MoveCode;
         moveTime: number;

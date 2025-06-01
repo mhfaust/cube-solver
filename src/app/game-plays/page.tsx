@@ -7,12 +7,10 @@ import { formatDate, reportTime } from '@/utils/displayTime';
 import styles from './game-plays.module.css'
 import { byAscending, byDescending } from '@/utils/sort';
 import Link from 'next/link';
-import { useCubeStore } from '@/store/cubeSlice';
 import MoveSequence from '@/components/MoveSequence';
 
 export default function App() {
 
-    const { initialState, faces, moves } = useCubeStore();
     const { records } = useRecordsStore();
     const recordsByDuration = records.toSorted(byAscending(record => record.duration))
     const recordsByStartTime = records.toSorted(byDescending(record => record.startTime))
@@ -48,18 +46,17 @@ export default function App() {
                     display: 'flex',
                     flexDirection: 'row',
                     flexWrap: 'wrap',
-                    alignItems: 'center',
                     justifyContent: 'center',
                     padding: '1rem',
                     margin: 'auto'
                 }}>
-                    <MoveSequence initialFaces={latestGame.initialState} sequence={latestGame.moves} perspective='bottom-left'/>
+                    <MoveSequence 
+                        initialFaces={latestGame.initialState} 
+                        sequence={latestGame.moves} 
+                        perspective='top-right'
+                        themeName={latestGame.themeName}
+                    />
                 </div>
-                {/* <SkewedCubeFaces faces={faces} perspective='bottom-right'/>
-                <SkewedCubeFaces faces={faces} perspective='bottom-left'/>
-                <br/>
-                <SkewedCubeFaces faces={faces} perspective='top-right'/>
-                <SkewedCubeFaces faces={faces} perspective='top-left'/> */}
             </div>
         </NoSsr>
     )
