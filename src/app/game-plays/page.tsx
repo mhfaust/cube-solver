@@ -11,8 +11,8 @@ import Link from 'next/link';
 export default function App() {
 
     const { records } = useRecordsStore();
-    const recordsByDuration = records.toSorted(byAscending(record => record.duration))
-    const recordsByStartTime = records.toSorted(byDescending(record => record.startTime))
+    const recordsByDuration = records.slice(0).sort(byAscending(record => record.duration))
+    const recordsByStartTime = records.slice(0).sort(byDescending(record => record.startTime))
     const latestGame = recordsByStartTime[0];
 
     return (
