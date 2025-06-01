@@ -30,7 +30,10 @@ export const useRecordsStore = create<RecordsSlice>()(
           records: [],
           pushRecord: pushValueTo('records')
       }},
-      { name: "cubism-records" }
+      { 
+        name: "cubism-records",
+        version: 1        
+      }
     )
 ) 
 

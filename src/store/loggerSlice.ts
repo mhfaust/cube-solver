@@ -23,7 +23,10 @@ export const useLoggerStore = create<LoggerSlice>()(
           fingersOn: 0,
           setFingersOn: setValueOf('fingersOn')
       }},
-      { name: "cubism-logger" }
+      { 
+        name: "cubism-logger",
+        version: 1      
+      }
     )
 ) 
 

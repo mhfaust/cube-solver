@@ -13,6 +13,9 @@ export const useThemeStore = create<ThemeSlice>()(
       themeName: "dark",
       setThemeName: (name) => set({ themeName: name }),
     })},
-    { name: "cubism-theme" }
+    { 
+      name: "cubism-theme",
+      version: 1      
+     }
   )
 );

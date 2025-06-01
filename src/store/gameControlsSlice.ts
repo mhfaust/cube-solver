@@ -34,6 +34,9 @@ export const useGameControlsStore = create<GameControlsSlice>()(
         },
       }
     },
-      { name: "cubism-game-controls" }
+      { 
+        name: "cubism-game-controls",
+        version: 1
+      }
     )
 ) 

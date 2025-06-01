@@ -135,10 +135,11 @@ export const useCubeStore = create<CubeSlice>()(
     )},
     { 
       name: "cubism-cube",
-      partialize: (state) => 
-        Object.fromEntries(
-          Object.entries(state).filter(([key]) => key !== 'cubeGrid' && key !== 'isRotating')
-        ),
+      partialize: (state) => Object.fromEntries(
+        Object.entries(state)
+          .filter(([key]) => key !== 'cubeGrid' && key !== 'isRotating')
+      ),
+      version: 1,
      }
   )
 )
