@@ -7,7 +7,6 @@ import { formatDate, reportTime } from '@/utils/displayTime';
 import styles from './game-plays.module.css'
 import { byAscending, byDescending } from '@/utils/sort';
 import Link from 'next/link';
-import MoveSequence from '@/components/MoveSequence';
 
 export default function App() {
 
@@ -38,24 +37,6 @@ export default function App() {
                             <span>{reportTime(duration)}</span>
                         </div>
                     ))}
-                </div>
-                <div>
-                    <span></span>
-                </div>
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    justifyContent: 'center',
-                    padding: '1rem',
-                    margin: 'auto'
-                }}>
-                    <MoveSequence 
-                        initialFaces={latestGame.initialState} 
-                        sequence={latestGame.moves} 
-                        perspective='top-right'
-                        themeName={latestGame.themeName}
-                    />
                 </div>
             </div>
         </NoSsr>

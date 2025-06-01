@@ -18,9 +18,10 @@ const Completed = () => {
   const handleSaveClick = () => {
 
     const duration = moves[moves.length-1].moveTime - startTime;
+    const id =  nanoid()
 
     pushRecord({ 
-      id: nanoid(), 
+      id, 
       initialState, 
       startTime, 
       moves, 
@@ -30,7 +31,7 @@ const Completed = () => {
     
     resetTimer();
     clearMoves();
-    goto.gamePlays();
+    goto.gamePlay(id);
   }
 
   const handleDismissClick = () => {
