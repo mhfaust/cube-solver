@@ -3,15 +3,17 @@ import { CubeFaces } from "@/logic/newCube";
 import { ThemeSlice } from "@/store/themeSlice";
 import useThemeAssets from "@/themes/useThemeAssets";
 
-type ObliquePerspective = `${typeof TOP | typeof BOTTOM}-${typeof LEFT | typeof RIGHT}`;
+export type ObliquePerspective = `${typeof TOP | typeof BOTTOM}-${typeof LEFT | typeof RIGHT}`;
 
 export type ObliqueCubeProps = {
     faces: CubeFaces;
     perspective: ObliquePerspective;
-    themeName: ThemeSlice['themeName']
+    themeName: ThemeSlice['themeName'];
+    height: number;
+    width: number;
 };
 
-const ObliqueCube = ({ faces, perspective, themeName }: ObliqueCubeProps) => {
+const ObliqueCube = ({ faces, perspective, themeName, height, width }: ObliqueCubeProps) => {
     
     const { faceColors, frameColor } = useThemeAssets(themeName)
     const perspectiveParts = perspective.split('-') as [FaceName, FaceName];
@@ -43,7 +45,7 @@ const ObliqueCube = ({ faces, perspective, themeName }: ObliqueCubeProps) => {
             version="1.1" 
             viewBox="0 0 840 828"  
             xmlns="http://www.w3.org/2000/svg" 
-            style={{height: '70px', width: '70px'}}
+            style={{height: `${height}px`, width: `${width}px`}}
             transform={`scale(${hScale}, ${vScale})`}
         >
             <path id="cube-frame" fill={frameColorHex} d="M413 16l-41 18-9 4-103-5-40-2-10-1-3-1-9 4-2 2-4 2 136 7h19v2l-9 3-43 19-5 2-79-4-74-4-7-1-4-1-9 4-2 1v2l-4 2 147 8 14 1-63 28-25-1-139-8-6-1-4-1-10 4-5 4-5 8-1 6v18l6 148 1 18 3 10 4 5 7 4 2 1-9 7-4 7-1 5v18l6 147 1 13 4 11 6 5 4 3-6 4-5 8-1 4v26l6 145 4 11 5 5 8 4 64 8 92 11h16l11-6 3-3 6 9 10 5 20 3 151 18 9-1 9-6 6-5 1 6 4 5 7 4 6 2 174 21 13-2 7-4 11-15 22-32 14-20 1-6-5 5-28 40-8 11v-25l3-131 1-16 13-16 11-14 14-17 4-5-4 153v13l6-4 11-15 13-19 14-20 3-5-1-4-13 18-22 32 1-49 3-107 2-10 12-14 11-14 13-16-5 158 5-3 8-10 7-11 12-17 10-14 1-6-4 4-16 23-12 17v2h-2l1-2 5-153 10-13 13-16 11-14-1-11-7-8 2-4 6-9 1-5-5 4-9 11-11 13-8 10v-21l4-123 1-18 8-8 8-7 17-17 1-6-2-8-8-7 6-7 4-6 1-6-8 6-14 14-8 7-5 4 1-2 5-154 1-13 19-14 15-11-1-10-4-6-6-4-9-2-11 8-19 13-4 3h-12l-140-7-14-1 23-13 14-8v-1h-5l-13 7-2-4-5-4-7-2-6 1-41 22-143-7-16-1 39-18 5-2-4-1-9 4-4-1-5-4-7-2z"/>

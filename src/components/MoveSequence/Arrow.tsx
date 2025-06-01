@@ -2,13 +2,14 @@ import { MoveCode } from "@/utils/moveCodes";
 
 type ArrowProps = {
     moveCode: MoveCode
+    width: number;
 }
-export default function Arrow ({ moveCode }: ArrowProps) {
+export default function Arrow ({ moveCode, width }: ArrowProps) {
   return (
     <svg 
       viewBox="70 28 60 44" 
-      width="40" 
-      height="20"
+      width={`${width}px`} 
+      height={`${width/2}px`}
       className="border border-gray-300"
     >
       {/* Arrow shaft */}
