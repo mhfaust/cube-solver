@@ -14,24 +14,32 @@ const SCRAMBLE_ROTATION_TIME = 5 //very fast
 const useScramble = () => {
   const { clearMoves, executeMove } = useCubeStore()
   return useCallback(() => {
-    clearMoves()
 
-    const randomSequence = Array.from(
-      { length: 2 }, 
-      () => oneLayerSpins[Math.floor(Math.random() * numSpinTypes)]
-    )
-    const recurse = () => {
-      const nextMove = randomSequence.pop()
-      if(!nextMove){
-        return
-      }
-      executeMove(nextMove, SCRAMBLE_ROTATION_TIME, false)
+    return new Promise((resolve) => {
 
-      if(randomSequence.length){
-        setTimeout(recurse, SCRAMBLE_ROTATION_TIME)
-      }
-    }
-    recurse()
+      clearMoves();
+  
+      const randomSequence = Array.from(
+        { length: 100 }, 
+        () => oneLayerSpins[Math.floor(Math.random() * numSpinTypes)]
+      );
+      const recurse = () => {
+        const nextMove = randomSequence.pop()
+        if(!nextMove){
+          return
+        }
+        executeMove(nextMove, SCRAMBLE_ROTATION_TIME, false)
+  
+        if(randomSequence.length){
+          setTimeout(recurse, SCRAMBLE_ROTATION_TIME)
+        }
+        else {
+          resolve(true);
+        }
+      };
+
+      recurse()
+    })
   }, [executeMove, clearMoves])
 }
 

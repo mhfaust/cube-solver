@@ -6,25 +6,28 @@ import { persist } from "zustand/middleware";
 
 export type CubeHistory = {
     initialState: CubeFaces;
-    startTime: Date;
-    // moves: MoveCode[];  
-    // todo: refactor moves to:
+    startTime: number;
+    duration: number;
     moves: {
         moveCode: MoveCode;
         moveTime: number;
     }[]
 }
 
-export type HistoriesSlice = {
+export type RecordsSlice = {
+  records: CubeHistory[];
+  pushRecord: (game: CubeHistory) => void;
 }
 
-export const usHistoriesStore = create<HistoriesSlice>()(
+export const useRecordsStore = create<RecordsSlice>()(
     persist(
       (set) => {
-        const { setValueOf, pushValuesTo, toggleValueOf } = storeSetters(set)
+        const { pushValueTo } = storeSetters(set)
         return {
+          records: [],
+          pushRecord: pushValueTo('records')
       }},
-      { name: "cubism-logger" }
+      { name: "cubism-records" }
     )
 ) 
 

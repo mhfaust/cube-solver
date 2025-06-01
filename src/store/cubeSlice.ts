@@ -9,16 +9,11 @@ import  { newCubeFaces, CubeFaces } from "@/logic/newCube";
 import { modelSpinFunctions, facesSpinFunctions, renderingSpinFunctions } from "@/utils/useExecuteMove";
 import { printCube } from "@/logic/console/printCube";
 import { checkFacesAreSolved } from "@/utils/checkFacesAreSolved";
-import { CubeHistory } from "./historiesSlices";
+import { CubeHistory } from "./recordsSlice";
 
 export type CubeWrapperMesh = Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>
 
 export type CubeWrapperMeshRef = MutableRefObject<CubeWrapperMesh>
-
-const solvedCubeFaces = newCubeFaces()
-
-const initialFaces = solvedCubeFaces
-// const initialFaces = scrambledCubeFaces
 
 const emptyMoves: CubeHistory['moves'] = []
 
@@ -38,11 +33,12 @@ export type CubeGrid = CubeWrapperMeshRef[][][]
 export type CubeSlice = {
   cubeGrid: CubeGrid,
   faces: CubeFaces,
-  // initialFaces: CubeFaces,
+  initialState: CubeFaces,
   isRotating: MutableRefObject<boolean>,
   moves: CubeHistory['moves'],
   // setInitialFaces: ((faces: CubeFaces) => void),
   setCubeGrid: ((cubeGrid: CubeGrid) => void),
+  markInitialState: () => void,
   pushMove: (moveCode: MoveCode) => void,  
   popMove: () => CubeHistory['moves'][number] | undefined,
   clearMoves: () => void,
@@ -53,7 +49,7 @@ export type CubeSlice = {
 export const useCubeStore = create<CubeSlice>()(
   persist(
     (set, get) => { 
-      const { setValueOf, pushValueTo, popValueFrom } = storeSetters(set)
+      const { setValueOf, popValueFrom } = storeSetters(set)
 
       return ({
         cubeGrid: _012.map(
@@ -63,17 +59,14 @@ export const useCubeStore = create<CubeSlice>()(
             )
           ) 
         ),
-        faces: initialFaces,
-        // initialFaces,
+        faces: newCubeFaces(),
+        initialState: newCubeFaces(),
         isRotating: { current: false },
         moves: emptyMoves,
-        // setInitialFaces: (faces: CubeFaces) => {
-        //   set({ 
-        //     faces: faces, 
-        //     initialFaces: faces 
-        //   })
-        // },
         setCubeGrid: setValueOf('cubeGrid'),
+        markInitialState: () => {
+          set({ initialState: JSON.parse(JSON.stringify(get().faces)) })
+        },
         pushMove: (moveCode: MoveCode) => {
           const newMove = {
             moveCode,

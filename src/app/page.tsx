@@ -2,7 +2,6 @@
 'use client'
 
 import Cube from '@/components/Cube'
-import styles from './page.module.css'
 import Timer from '@/components/Timer'
 import { useEffect } from 'react'
 import { useIsSolved, usePlayMode } from "../store/selectors"
@@ -13,6 +12,7 @@ import Log from '@/components/Log'
 import NoSsr from '@/components/NoSsr/NoSsr'
 import { useGameControlsStore } from '../store/gameControlsSlice'
 import { useCubeStore } from '../store/cubeSlice'
+import styles from './page.module.css'
 
 export default function App() {
 

@@ -2,15 +2,24 @@ import { useGameControlsStore } from "@/store/gameControlsSlice"
 import styles from "./Completed.module.css"
 import { reportTime } from "@/utils/displayTime"
 import { useCubeStore } from "@/store/cubeSlice"
+import { useRecordsStore } from '@/store/recordsSlice'
 import { countMutations } from "@/utils/history"
+import { useNavigation } from '@/utils/useNavigation'
 
 const Completed = () => {
   const { resetTimer, startTime, completionTime } = useGameControlsStore()
-  const { clearMoves, moves } = useCubeStore()
+  const { clearMoves, moves, initialState } = useCubeStore()
+  const { pushRecord } = useRecordsStore()
+  const { goto } = useNavigation();
 
   const handleSaveClick = () => {
-    resetTimer()
-    clearMoves()
+
+    const duration = moves[moves.length-1].moveTime - startTime;
+
+    pushRecord({ initialState, startTime, moves, duration });
+    resetTimer();
+    clearMoves();
+    goto.gamePlays();
   }
 
   const handleDismissClick = () => {

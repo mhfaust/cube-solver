@@ -2,16 +2,19 @@ import styles from './StartStop.module.css'
 import useScramble from '@/utils/useScramble';
 import clsx from 'clsx'
 import { useGameControlsStore } from '@/store/gameControlsSlice';
+import { useCubeStore } from '@/store/cubeSlice';
 
 const StartStop = () => {
   const { startTime, startTimer, stopTimer } = useGameControlsStore()
+  const { markInitialState } = useCubeStore();
   const isInPlay = startTime !== null
 
   const handleClick = isInPlay  
     ? () => stopTimer(false) 
-    : () => {
-      scramble()
-      startTimer()
+    : async () => {
+      await scramble();
+      startTimer();
+      markInitialState();
     }
 
   const scramble = useScramble()

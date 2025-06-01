@@ -1,5 +1,5 @@
 import { MoveCode } from "./moveCodes";
-import { CubeHistory } from '../store/historiesSlices'
+import { CubeHistory } from '../store/recordsSlice'
 
 const wholeCubeSpins = new Set<MoveCode>(['X', 'Xi', 'Y', 'Yi', 'Z', 'Zi'])
 

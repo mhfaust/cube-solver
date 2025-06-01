@@ -48,3 +48,35 @@ export const reportTime = (milis: number | undefined) => {
   } 
   return `0.${pad0s(d)}s`
 }
+
+const getDateObject = (dateInput: unknown) => {
+  if (dateInput instanceof Date) {
+    return dateInput;
+  } else if (typeof dateInput === 'string' || typeof dateInput === 'number') {
+    return new Date(dateInput);
+  } else {
+    throw new Date();
+  }
+};
+
+export function formatDate(dateInput: null | undefined | number | string | Date): string {
+  if (!dateInput) {
+    return '';
+  }
+  const date = getDateObject(dateInput);
+
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  const month = months[date.getMonth()];
+  const day = date.getDate();
+  const year = date.getFullYear().toString().slice(-2); // Get last two digits of the year
+
+  let hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, '0'); // Pad with leading zero if needed
+  const ampm = hours >= 12 ? 'pm' : 'am';
+
+  hours = hours % 12;
+  hours = hours ? hours : 12; // The hour '0' should be '12'
+
+  return `${month} ${day},  ${hours}:${minutes} ${ampm}`;
+}
