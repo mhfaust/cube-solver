@@ -10,6 +10,7 @@
   position: absolute;
   top: 30px;
   left: 30px;
+  max-width: calc(100% - 120px)
 }
 
 .moveSequence {

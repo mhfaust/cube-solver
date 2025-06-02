@@ -32,7 +32,7 @@ export default function App() {
                 <Link href="/">Back to Cube</Link>
                 <PerspectiveControl perspective={perspective} setPerspective={setPerspective}/>
                 <div className={styles.gameHeader}>
-                    {`${game.moves.length}`} moves &mdash; {reportTime(game.duration)}
+                    {`${game.moves.length}`} moves, {reportTime(game.duration)}
                 </div>
                 <div className={styles.moveSequence}>
                     <MoveSequence 
