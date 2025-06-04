@@ -1,7 +1,7 @@
 .undoButton {
   position:absolute;
-  top: 34px;
-  left: 34px;
+  top: 15px;
+  left: 15px;
   color: white;
   z-index: 1;
   background-color: #666;
@@ -17,8 +17,8 @@
 .backgroundBox {
   content: '';
   position:absolute;
-  top: 34px;
-  left: 34px;
+  top: 15px;
+  left: 15px;
   z-index: 1;
   background-color: #333;
   border: none;

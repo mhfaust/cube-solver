@@ -1,7 +1,7 @@
 .timer {
   position: absolute;
-  top: 30px;
-  right: 30px;
+  top: 15px;
+  right: 15px;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
