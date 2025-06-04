@@ -14,6 +14,7 @@ import { useGameControlsStore } from '../store/gameControlsSlice'
 import { useCubeStore } from '../store/cubeSlice'
 import styles from './page.module.css'
 import MainNav from '@/components/MainNav'
+import { countMutations } from '@/utils/history'
 
 export default function App() {
 
@@ -34,7 +35,7 @@ export default function App() {
   return (
       <NoSsr>
         <div className={styles.main}>
-          {moves.length > 0 && (
+          {countMutations(moves) > 0 && (
             <UndoButton />
           )}
           {/* {playMode === 'casual' && (

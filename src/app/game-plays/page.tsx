@@ -8,6 +8,7 @@ import styles from './game-plays.module.css'
 import { byAscending, byDescending } from '@/utils/sort';
 import Link from 'next/link';
 import MainNav from '@/components/MainNav';
+import { countMutations } from '@/utils/history';
 
 export default function App() {
 
@@ -33,7 +34,7 @@ export default function App() {
                             flexDirection:"row",
                             justifyContent:"space-between"
                         }}>
-                            <span>{formatDate(startTime)}, &mdash; {moves.length} moves</span>
+                            <span>{formatDate(startTime)}, &mdash; {countMutations(moves)} moves</span>
                             <span>{reportTime(duration)}</span>
                         </div>
                     ))}

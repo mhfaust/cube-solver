@@ -12,6 +12,7 @@ import { useState } from 'react';
 import { ObliquePerspective } from '@/components/ObliqueCube/ObliqueCube';
 import { reportTime } from '@/utils/displayTime';
 import MainNav from '@/components/MainNav';
+import { countMutations } from '@/utils/history';
 
 export default function App() {
 
@@ -32,7 +33,7 @@ export default function App() {
             <div className={styles.main}>
                 <PerspectiveControl perspective={perspective} setPerspective={setPerspective}/>
                 <div className={styles.gameHeader}>
-                    {`${game.moves.length}`} moves, {reportTime(game.duration)}
+                    {`${countMutations(game.moves)}`} moves, {reportTime(game.duration)}
                 </div>
                 <div className={styles.moveSequence}>
                     <MoveSequence 
