@@ -3,3 +3,26 @@
   height: 100vh;
   object-fit: contain;
 }
+.list {
+  width: 500px;
+  height: 100%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 1em;
+  cursor: pointer;
+}
+.sortRadios {
+  display: flex;
+  gap: 4px;
+  color: #ccc;
+}
+.selectedSort {
+ background-color: #333;
+}
