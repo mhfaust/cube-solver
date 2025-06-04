@@ -1,10 +1,12 @@
 .mainNav {
+  --icon-size: 30px;
+  
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   box-sizing: content-box;
-  height: 40px;
+  height: var(--icon-size);
   padding: 30px;
   display: flex;
   flex-direction: row;
@@ -12,7 +14,7 @@
 
 .button {
   height: 100%;
-  width: 40px;
+  width: var(--icon-size);
   margin-right: 30px;
   display: flex;
   justify-content: center;
