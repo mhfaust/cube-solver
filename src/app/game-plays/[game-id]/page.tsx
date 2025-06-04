@@ -11,6 +11,7 @@ import PerspectiveControl from '@/components/PerspectiveControl';
 import { useState } from 'react';
 import { ObliquePerspective } from '@/components/ObliqueCube/ObliqueCube';
 import { reportTime } from '@/utils/displayTime';
+import MainNav from '@/components/MainNav';
 
 export default function App() {
 
@@ -29,7 +30,6 @@ export default function App() {
     return (
         <NoSsr>
             <div className={styles.main}>
-                <Link href="/">Back to Cube</Link>
                 <PerspectiveControl perspective={perspective} setPerspective={setPerspective}/>
                 <div className={styles.gameHeader}>
                     {`${game.moves.length}`} moves, {reportTime(game.duration)}
@@ -43,6 +43,7 @@ export default function App() {
                     />
                 </div>
             </div>
+            <MainNav />
         </NoSsr>
     )
 }

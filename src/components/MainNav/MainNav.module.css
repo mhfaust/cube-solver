@@ -7,9 +7,10 @@
   right: 0;
   box-sizing: content-box;
   height: var(--icon-size);
-  padding: 15px;
+  padding: 8px 15px;
   display: flex;
   flex-direction: row;
+  background-color: black;
 }
 
 .button {
