@@ -13,6 +13,7 @@ import NoSsr from '@/components/NoSsr/NoSsr'
 import { useGameControlsStore } from '../store/gameControlsSlice'
 import { useCubeStore } from '../store/cubeSlice'
 import styles from './page.module.css'
+import MainNav from '@/components/MainNav'
 
 export default function App() {
 
@@ -36,9 +37,9 @@ export default function App() {
           {moves.length > 0 && (
             <UndoButton />
           )}
-          {playMode === 'casual' && (
+          {/* {playMode === 'casual' && (
             <Menu />
-          )}
+          )} */}
           {playMode === 'complete' && ( 
             <Completed />
           )}  
@@ -47,6 +48,7 @@ export default function App() {
             <Timer />
           )}
           {SHOW_LOG && <Log />}
+          <MainNav />
         </div>
       </NoSsr>
   )

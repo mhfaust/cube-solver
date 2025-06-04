@@ -1,0 +1,15 @@
+import styles from './{{PascalCaseComponentName}}.module.scss';
+
+type {{PascalCaseComponentName}}Props = {
+  // Add your props here
+};
+
+const {{PascalCaseComponentName}} = ({}: {{PascalCaseComponentName}}Props) => {
+  return (
+    <div className={styles.{{camelCaseComponentName}}}>
+      <h1>{{PascalCaseComponentName}}</h1>
+    </div>
+  );
+};
+
+export default {{PascalCaseComponentName}};

@@ -1,0 +1,28 @@
+.mainNav {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  box-sizing: content-box;
+  height: 40px;
+  padding: 30px;
+  display: flex;
+  flex-direction: row;
+}
+
+.button {
+  height: 100%;
+  width: 40px;
+  margin-right: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cubeIcon, .speedometerIcon, .themesIcon  {
+  fill: #666;
+}
+
+.selectedSvg {
+  fill: #ccc;
+}

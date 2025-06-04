@@ -1,5 +1,13 @@
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useMemo } from "react";
+
+export const routes = {
+    myCube: '/',
+    gamePlays: '/game-plays',
+    gamePlay: (id: string) => `/game-plays/${id}`,
+    theme: '/theme'
+}
+
 
 
 export const useNavigation = () => {
@@ -8,12 +16,21 @@ export const useNavigation = () => {
 
     const goto = useMemo(() => {
         return {
-            myCube: () => push('/'),
-            gamePlays: () => push('/game-plays'),
-            gamePlay: (id: string) => push(`/game-plays/${id}`)
+            myCube: () => push(routes.myCube),
+            gamePlays: () => push(routes.gamePlays),
+            gamePlay: (id: string) => push(routes.gamePlay(id)),
+            theme: () => push('theme')
         }
 
     }, [push]);
 
     return { goto }
+}
+
+export const useIsCurrentRoot =  () => {
+    const pathname = usePathname();
+
+    return (root: string) => {
+        return pathname.startsWith(root);
+    }
 }

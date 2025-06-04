@@ -7,6 +7,7 @@ import { formatDate, reportTime } from '@/utils/displayTime';
 import styles from './game-plays.module.css'
 import { byAscending, byDescending } from '@/utils/sort';
 import Link from 'next/link';
+import MainNav from '@/components/MainNav';
 
 export default function App() {
 
@@ -18,7 +19,6 @@ export default function App() {
     return (
         <NoSsr>
             <div className={styles.main}>
-                <Link href="/">Back to Cube</Link>
                 <div style={{
                     width:'500px', 
                     // height:'100%',
@@ -39,6 +39,7 @@ export default function App() {
                     ))}
                 </div>
             </div>
+            <MainNav />
         </NoSsr>
     )
 }

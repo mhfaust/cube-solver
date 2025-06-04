@@ -1,0 +1,9 @@
+import { render, screen } from '@testing-library/react';
+import {{PascalCaseComponentName}} from './{{PascalCaseComponentName}}';
+
+describe('{{PascalCaseComponentName}}', () => {
+  it('renders without crashing', () => {
+    render(<{{PascalCaseComponentName}} />);
+    expect(screen.getByText('{{PascalCaseComponentName}}')).toBeInTheDocument();
+  });
+});

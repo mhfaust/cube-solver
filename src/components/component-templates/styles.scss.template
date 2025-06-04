@@ -1,0 +1,3 @@
+.{{camelCaseComponentName}} {
+  // Add your styles here
+}

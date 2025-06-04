@@ -1,0 +1,49 @@
+{
+  "templatesDirectory": "component-templates",
+  "directoryCase": "pascal",
+  "defaultTemplateGroup": [
+    "component.tsx.template",
+    "index.ts.template",
+    "styles.scss.template"
+  ],
+  "alternateTemplateGroups": [
+    {
+      "label": "Simple Component",
+      "templates": [
+        "component.tsx.template",
+        "index.ts.template"
+      ]
+    },
+    {
+      "label": "Full Component with Test",
+      "templates": [
+        "component.tsx.template",
+        "index.ts.template",
+        "styles.scss.template",
+        "test.tsx.template"
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "source": "component.tsx.template",
+      "target": "{{PascalCaseComponentName}}.tsx",
+      "label": "Component"
+    },
+    {
+      "source": "index.ts.template",
+      "target": "index.ts",
+      "label": "Index"
+    },
+    {
+      "source": "styles.scss.template",
+      "target": "{{PascalCaseComponentName}}.module.scss",
+      "label": "Styles"
+    },
+    {
+      "source": "test.tsx.template",
+      "target": "{{PascalCaseComponentName}}.test.tsx",
+      "label": "Test"
+    }
+  ]
+}
