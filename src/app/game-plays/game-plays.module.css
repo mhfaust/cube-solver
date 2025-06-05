@@ -4,7 +4,7 @@
   object-fit: contain;
 }
 .list {
-  width: 500px;
+  /* width: 500px; */
   height: 100%;
   margin: auto;
   display: flex;
@@ -28,6 +28,8 @@
 }
 
 .table {
+  width: fit-content;
+  margin: 0 auto;
 }
 .th {
   text-align: left;
