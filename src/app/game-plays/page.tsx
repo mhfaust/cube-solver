@@ -11,7 +11,7 @@ import MainNav from '@/components/MainNav';
 import { countMutations } from '@/utils/history';
 import { useState } from 'react';
 import { clsx } from 'clsx';
-import { useNavigation } from '@/utils/useNavigation';
+import { routes, useNavigation } from '@/utils/useNavigation';
 
 type SortByField = 'duration' | 'moves' | 'date';
 
@@ -35,20 +35,20 @@ export default function App() {
         <NoSsr>
             <div className={styles.main}>
                 <div className={styles.list}>
-                    <table>
+                    <table className={styles.table}>
                         <thead>
-                            <tr>
-                                <th onClick={() => setSortby('duration')}>Duration</th>
-                                <th onClick={() => setSortby('moves')}>Moves</th>
-                                <th onClick={() => setSortby('date')}>Date</th>
+                            <tr className={styles.tr}>
+                                <th onClick={() => setSortby('duration')} className={styles.th}>Duration</th>
+                                <th onClick={() => setSortby('moves')} className={styles.th}>Moves</th>
+                                <th onClick={() => setSortby('date')} className={styles.th}>Date</th>
                             </tr>
                         </thead>
                         <tbody>
                         {recordsSorted.map(({ startTime, moves, duration, id }) => (
-                            <tr key={startTime} className={styles.item} onClick={() => goto.gamePlay(id)}>
-                                <td>{reportTime(duration)}</td>
-                                <td>{countMutations(moves)}</td>
-                                <td>{formatDate(startTime)}</td>
+                            <tr key={startTime}>
+                                <td className={styles.td}>{reportTime(duration)}</td>
+                                <td className={styles.td}><Link href={routes.gamePlay(id)}>{countMutations(moves)}</Link></td>
+                                <td className={styles.td}>{formatDate(startTime)}</td>
                             </tr>
                         ))}
                         </tbody>

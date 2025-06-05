@@ -1,7 +1,7 @@
 .perspectiveControl {
-    position: absolute;
+    /* position: absolute;
     top: 30px;
-    right: 30px;
+    right: 30px; */
     width: 50px;
     display: flex;
     flex-direction: column;

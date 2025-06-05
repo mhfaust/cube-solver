@@ -31,9 +31,9 @@ export default function App() {
     return (
         <NoSsr>
             <div className={styles.main}>
-                <PerspectiveControl perspective={perspective} setPerspective={setPerspective}/>
                 <div className={styles.gameHeader}>
-                    {`${countMutations(game.moves)}`} moves, {reportTime(game.duration)}
+                    <div className={styles.title}>{`${countMutations(game.moves)}`} moves, {reportTime(game.duration)}</div>
+                    <PerspectiveControl perspective={perspective} setPerspective={setPerspective}/>
                 </div>
                 <div className={styles.moveSequence}>
                     <MoveSequence 
