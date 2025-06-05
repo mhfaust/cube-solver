@@ -31,7 +31,7 @@ const Completed = () => {
     
     resetTimer();
     clearMoves();
-    goto.gamePlay(id);
+    goto.gamePlays();
   }
 
   const handleDismissClick = () => {
