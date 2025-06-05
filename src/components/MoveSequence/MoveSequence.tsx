@@ -13,7 +13,7 @@ type MoveSequenceProps = PropsWithChildren<{
     themeName?: ThemeSlice['themeName']
 }>
 
-const cubeSize = 50;
+const cubeSize = 30;
 
 const MoveSequence = ({ initialFaces, sequence, perspective, themeName = 'dark' }: MoveSequenceProps) => {
     if(!sequence.length) {
