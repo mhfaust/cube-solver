@@ -10,7 +10,7 @@ import styles from './game-play.module.css'
 import PerspectiveControl from '@/components/PerspectiveControl';
 import { useState } from 'react';
 import { ObliquePerspective } from '@/components/ObliqueCube/ObliqueCube';
-import { reportTime } from '@/utils/displayTime';
+import { formatDate, reportTime } from '@/utils/displayTime';
 import MainNav from '@/components/MainNav';
 import { countMutations } from '@/utils/history';
 
@@ -20,6 +20,7 @@ export default function App() {
     const gameId = useParams()?.['game-id'];
 
     const game = records.find(game => game.id === gameId);
+
 
     const [perspective, setPerspective] = useState<ObliquePerspective>('top-right')
 
@@ -32,7 +33,10 @@ export default function App() {
         <NoSsr>
             <div className={styles.main}>
                 <div className={styles.gameHeader}>
-                    <div className={styles.title}>{`${countMutations(game.moves)}`} moves, {reportTime(game.duration)}</div>
+                    <div className={styles.headerText}>
+                        <div className={styles.title}>{formatDate(game.moves[game.moves.length - 1].moveTime)}</div>
+                        <div >{`${countMutations(game.moves)}`} moves, {reportTime(game.duration)}</div>
+                    </div>
                     <PerspectiveControl perspective={perspective} setPerspective={setPerspective}/>
                 </div>
                 <div className={styles.moveSequence}>
