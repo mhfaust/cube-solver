@@ -1,7 +1,7 @@
 'use client'
 
 import Block from "@/components/Block"
-import styles from '@/app/page.module.css'
+import styles from '@/app/my-cube/page.module.css'
 import { useIsSolved } from "@/store/selectors"
 import useThemeAssets from "@/themes/useThemeAssets"
 import calculateDialingAngle from "@/touch/calculateDialingAngle"

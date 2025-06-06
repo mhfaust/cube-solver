@@ -1,6 +1,6 @@
-import styles from '@/app/page.module.css'
-import {  } from "../store/selectors"
-import { useLoggerStore } from '../store/loggerSlice'
+import styles from './DebugFingers.module.scss'
+import {  } from "@/store/selectors"
+import { useLoggerStore } from '@/store/loggerSlice'
 
 /**
  * 

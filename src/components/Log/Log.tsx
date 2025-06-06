@@ -1,7 +1,7 @@
-import styles from '@/app/page.module.css'
 import clsx from 'clsx'
 import { useEffect, useRef } from 'react'
-import { useLoggerStore } from '../store/loggerSlice'
+import { useLoggerStore } from '@/store/loggerSlice'
+import styles from './Log.module.css'
 
 
 const Log = () => {

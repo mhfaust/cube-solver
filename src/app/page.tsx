@@ -1,55 +1,28 @@
 
 'use client'
 
-import Cube from '@/components/Cube'
-import Timer from '@/components/Timer'
-import { useEffect } from 'react'
-import { useIsSolved, usePlayMode } from "../store/selectors"
-import Completed from '@/components/Completed'
-import Menu from '@/components/Menu/Menu'
-import UndoButton from '@/components/UndoButton/UndoButton'
-import Log from '@/components/Log'
 import NoSsr from '@/components/NoSsr/NoSsr'
-import { useGameControlsStore } from '../store/gameControlsSlice'
-import { useCubeStore } from '../store/cubeSlice'
 import styles from './page.module.css'
-import MainNav from '@/components/MainNav'
-import { countMutations } from '@/utils/history'
+import Link from 'next/link'
+import CubeIcon from '@/components/CubeIcon'
+import SpeedometerIcon from '@/components/SpeedometerIcon'
+import ThemesIcon from '@/components/ThemesIcon'
 
 export default function App() {
 
-  const {  startTime, stopTimer } = useGameControlsStore()
-  const playMode  = usePlayMode()
-  const isSolved = useIsSolved();
-  const { cubeGrid, moves } = useCubeStore()
-
-  useEffect(() => {
-    if (startTime && isSolved) {
-
-      stopTimer(true)
-    }
-  }, [cubeGrid, isSolved, startTime, stopTimer])
-
-  const SHOW_LOG = false;
-  
   return (
       <NoSsr>
         <div className={styles.main}>
-          {countMutations(moves) > 0 && (
-            <UndoButton />
-          )}
-          {/* {playMode === 'casual' && (
-            <Menu />
-          )} */}
-          {playMode === 'complete' && ( 
-            <Completed />
-          )}  
-          <Cube />
-          {playMode !== 'complete' && (
-            <Timer />
-          )}
-          {SHOW_LOG && <Log />}
-          <MainNav />
+            <h1 className={styles.h1}>Cubism</h1>
+            <Link href="/my-cube" className={styles.link}>
+                <CubeIcon width={40}className={styles.svg}/>  My Cube
+            </Link>
+            <Link href="/game-plays" className={styles.link}>
+                <SpeedometerIcon width={40}className={styles.svg}/>  Best Plays
+            </Link>
+            <Link href="/theme" className={styles.link}>
+                <ThemesIcon width={40} className={styles.svg}/> Theme
+            </Link>
         </div>
       </NoSsr>
   )

@@ -1,0 +1,46 @@
+
+.log {
+  display: flex;
+  flex-direction: column;
+  position: fixed; 
+  bottom: 0; 
+  left: 0; 
+  right: 0; 
+  height: 0;
+  z-index: 1; 
+  overflow: scroll;
+  background-color: white;
+  color: black;
+  transition: height .25s;
+  justify-content: flex-end;
+}
+.log.open {
+  height: 100vh;
+}
+.logMessage {
+  font-size: .6em;
+  padding-top: 3px;
+  border-top: 1px dashed #ccc;
+  margin-top: 3px;
+}
+.logToggle {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 72px;
+  height: 36px;
+  background: red;
+  z-index: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 0px;
+}
+.logToggle.open {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 0px;
+  top: auto;
+  bottom: 0;
+}

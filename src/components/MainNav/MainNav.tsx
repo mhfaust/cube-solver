@@ -1,7 +1,7 @@
 import styles from './MainNav.module.css';
-import SpeedometerIcon from './SpeedometerIcon';
-import ThemesIcon from './ThemesIcon';
-import CubeIcon from './CubeIcon';
+import SpeedometerIcon from '../SpeedometerIcon';
+import ThemesIcon from '../ThemesIcon';
+import CubeIcon from '../CubeIcon';
 import Link from 'next/link';
 import { routes, useIsCurrentRoot } from '@/utils/useNavigation';
 import { clsx } from 'clsx';

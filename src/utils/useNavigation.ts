@@ -2,7 +2,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { useMemo } from "react";
 
 export const routes = {
-    myCube: '/',
+    myCube: '/my-cube',
     gamePlays: '/game-plays',
     gamePlay: (id: string) => `/game-plays/${id}`,
     theme: '/theme'
