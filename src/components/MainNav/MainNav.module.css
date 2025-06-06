@@ -23,6 +23,7 @@
 }
 
 .cubeIcon, .speedometerIcon, .themesIcon  {
+  height: var(--icon-size);
   fill: #666;
 }
 
