@@ -26,8 +26,10 @@ export default function App() {
         date: byDescending(game => game.startTime),
     }
 
+    
     const { records } = useRecordsStore();
     const recordsSorted = records.slice(0).sort(sortStrategy[sortby])
+    const mostRecentPlay = records.sort(byDescending(game => game.startTime))[0];
 
     const { goto } = useNavigation();
 
@@ -45,7 +47,7 @@ export default function App() {
                         </thead>
                         <tbody>
                         {recordsSorted.map(({ startTime, moves, duration, id }) => (
-                            <tr key={startTime}>
+                            <tr key={startTime} className={clsx({ [styles.mostRecent]: startTime === mostRecentPlay.startTime })}>
                                 <td className={styles.td}>{reportTime(duration)}</td>
                                 <td className={styles.td}><Link href={routes.gamePlay(id)}>{countMutations(moves)}</Link></td>
                                 <td className={styles.td}>{formatDate(startTime)}</td>

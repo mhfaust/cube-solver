@@ -37,3 +37,6 @@
 .td, .th {
   padding: 5px;
 }
+.mostRecent {
+  outline: 1px solid green;
+}

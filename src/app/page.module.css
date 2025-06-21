@@ -9,11 +9,16 @@
 }
 
 .h1 {
-  margin-bottom: 8rem;
+  margin-bottom: 5rem;
   color: #ccc;
-  font-size: 2.5rem;
-  /* text-transform: uppercase; */
-} 
+  font-size: 3.4rem;
+  padding: 10px 15px;
+  background-color: #181818;
+}
+
+.ist {
+  color: #999
+}
 
 .link {
   position: relative;
