@@ -3,8 +3,8 @@ import { useMemo } from "react";
 
 export const routes = {
     myCube: '/my-cube',
-    gamePlays: '/game-plays',
-    gamePlay: (id: string) => `/game-plays/${id}`,
+    gamePlays: '/leaderboard',
+    gamePlay: (id: string) => `/leaderboard/${id}`,
     theme: '/theme'
 }
 

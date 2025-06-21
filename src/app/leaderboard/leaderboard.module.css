@@ -30,13 +30,14 @@
 .table {
   width: fit-content;
   margin: 0 auto;
+  border-collapse: collapse;
 }
 .th {
   text-align: left;
 }
 .td, .th {
-  padding: 5px;
+  padding: 5px 10px;
 }
 .mostRecent {
-  outline: 1px solid green;
+  background-color: #333;
 }

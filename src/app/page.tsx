@@ -1,4 +1,3 @@
-
 'use client'
 
 import NoSsr from '@/components/NoSsr/NoSsr'
@@ -17,7 +16,7 @@ export default function App() {
             <Link href="/my-cube" className={styles.link}>
                 <CubeIcon width={40}className={styles.svg}/>  My Cube
             </Link>
-            <Link href="/game-plays" className={styles.link}>
+            <Link href="/leaderboard" className={styles.link}>
                 <SpeedometerIcon width={40}className={styles.svg}/>  Leaderboard
             </Link>
             <Link href="/theme" className={styles.link}>
