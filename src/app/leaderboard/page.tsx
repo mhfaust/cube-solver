@@ -14,8 +14,6 @@ import { routes, useNavigation } from '@/utils/useNavigation';
 
 type SortByField = 'duration' | 'moves' | 'date';
 
-// const sortStrategy: Record<SortByField, (game: CubeHistory, ) => 
-
 export default function App() {
 
     const [sortby, setSortby] = useState<SortByField>('duration');
@@ -28,8 +26,8 @@ export default function App() {
     
     const { records } = useRecordsStore();
     const recordsSorted = records.slice(0).sort(sortStrategy[sortby])
-    const mostRecentPlay = records.sort(byDescending(game => game.startTime))[0];
-    const playedWithinPast10Minutes = Date.now() - mostRecentPlay.startTime < 10 * 60 * 1000;
+    const mostRecentPlay = records.sort(byDescending(game => game.startTime)).at(0);
+    const playedWithinPast10Minutes = mostRecentPlay ? Date.now() - mostRecentPlay.startTime < 10 * 60 * 1000 : false;
 
     const { goto } = useNavigation();
 
@@ -48,7 +46,7 @@ export default function App() {
                         <tbody>
                         {recordsSorted.map(({ startTime, moves, duration, id }) => (
                             <tr key={startTime} className={clsx({ 
-                                [styles.mostRecent]: startTime === mostRecentPlay.startTime && playedWithinPast10Minutes,
+                                [styles.mostRecent]: startTime === mostRecentPlay?.startTime && playedWithinPast10Minutes,
                             })}>
                                 <td className={styles.td}>{reportTime(duration)}</td>
                                 <td className={styles.td}><Link href={routes.gamePlay(id)}>{countMutations(moves)}</Link></td>
