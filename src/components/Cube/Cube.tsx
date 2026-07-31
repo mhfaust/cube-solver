@@ -31,7 +31,7 @@ import { mapAllBlockColors } from "@/utils/mapAllBlockColors";
 import { useLoggerStore } from "@/store/loggerSlice";
 import { useCubeStore } from "@/store/cubeSlice";
 import { useThemeStore } from "@/store/themeSlice";
-import Block from '@/logic/Block/Block';
+import Block from '@/components/Block/Block';
 
 const { PI, abs } = Math;
 const bgGeometry = new PlaneGeometry(50, 50);

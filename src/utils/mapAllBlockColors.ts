@@ -1,6 +1,6 @@
 import { CubeFaces } from "@/logic/newCube";
 import { RIGHT, LEFT, TOP, BOTTOM, FRONT, BACK } from "@/logic/constants";
-import { BlockProps } from "@/logic/Block/Block";
+import { BlockProps } from "@/components/Block/Block";
 
 export type AllBlockColors = Record<0|1|2, Record<0|1|2, Record<0|1|2, BlockProps['initialFaceColors']>>>
 
