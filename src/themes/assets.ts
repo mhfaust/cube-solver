@@ -14,6 +14,7 @@ const green = new Color(0, 0.4, 0)
 const white = new Color(1, 1, 1)
 const yellow = new Color(0.7, 0.7, 0)
 
+//classic
 export const classicColors = {
     [COLOR_A_1]: red, 
     [COLOR_Z_1]: orange, 
