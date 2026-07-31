@@ -1,6 +1,5 @@
 'use client';
 
-import Block from "@/components/Block";
 import styles from '@/app/my-cube/page.module.css';
 import { useIsSolved } from "@/store/selectors";
 import useThemeAssets from "@/themes/useThemeAssets";
@@ -32,6 +31,7 @@ import { mapAllBlockColors } from "@/utils/mapAllBlockColors";
 import { useLoggerStore } from "@/store/loggerSlice";
 import { useCubeStore } from "@/store/cubeSlice";
 import { useThemeStore } from "@/store/themeSlice";
+import Block from '@/logic/Block/Block';
 
 const { PI, abs } = Math;
 const bgGeometry = new PlaneGeometry(50, 50);
