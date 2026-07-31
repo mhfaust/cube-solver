@@ -10,6 +10,9 @@ import { yPos } from '../layerRotations/yPos'
 import { zNeg } from '../layerRotations/zNeg'
 import { zPos } from '../layerRotations/zPos'
 
+/**
+ * Canonical solution-notation lookup used by solver pipelines.
+ */
 export const solutionNotation = {
     up : yNeg(0),
     up_inverted : yPos(0),

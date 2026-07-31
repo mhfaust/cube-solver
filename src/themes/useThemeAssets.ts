@@ -4,7 +4,7 @@
 
 import { useMemo } from "react";
 import { Color, MeshBasicMaterial } from "three";
-import { standardColors, brightColors } from "./assets";
+import { standardColors, brightColors, classicColors } from "./assets";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import {
   COLOR_A_1,
@@ -18,10 +18,18 @@ import { ThemeSlice } from "../store/themeSlice";
 
 const grayScale = (n: number) => new Color(n, n, n);
 
-export const themeNames = ["dark", "light", "neon"] as const;
+export const themeNames = ["classic", "dark", "light", "neon"] as const;
 export type ThemeName = (typeof themeNames)[number];
 
 const themes: Record<ThemeName, Theme> = {
+  classic: {
+    frameColor: grayScale(0.05),
+    backgroundColor: grayScale(0.02),
+    faceColors: classicColors,
+    pointLightIntensity: 7,
+    ambientLightIntensity: 2,
+    boxRoundness: 0.1,
+  },
   dark: {
     frameColor: grayScale(0.05),
     backgroundColor: grayScale(0.02),

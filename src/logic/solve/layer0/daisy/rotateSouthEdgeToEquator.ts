@@ -18,6 +18,12 @@ const canRotate = (faceName: EquatorialEdge, cube: CubeFaces) => {
     return displacements[faceName](cube) !== petalColor
 }
 
+/**
+ * Rotates a south edge into the equator ring while preserving existing top petals.
+ *
+ * @param cube - Starting cube state.
+ * @param param1 - Equatorial face to rotate from.
+ */
 export const rotateSouthEdgeToEquator = (cube: CubeFaces, { faceName }: { faceName: EquatorialEdge }) => {
     const builder = newSequenceBuilder(cube)
     while(!canRotate(faceName, builder.getCube())){

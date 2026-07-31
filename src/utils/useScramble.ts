@@ -11,6 +11,9 @@ const numSpinTypes = Object.keys(oneLayerSpins).length
 
 const SCRAMBLE_ROTATION_TIME = 5 //very fast 
 
+/**
+ * Returns a callback that runs a randomized scramble sequence without recording scramble moves.
+ */
 const useScramble = () => {
   const { clearMoves, executeMove } = useCubeStore()
   return useCallback(() => {

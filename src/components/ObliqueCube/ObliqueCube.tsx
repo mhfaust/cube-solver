@@ -13,6 +13,15 @@ export type ObliqueCubeProps = {
     width: number;
 };
 
+/**
+ * Renders a stylized oblique SVG projection of cube faces for a selected perspective.
+ *
+ * @param props.faces - Cube faces to paint into the template.
+ * @param props.perspective - Vertical/horizontal viewing perspective.
+ * @param props.themeName - Theme key used to resolve face/frame colors.
+ * @param props.height - Rendered SVG height in pixels.
+ * @param props.width - Rendered SVG width in pixels.
+ */
 const ObliqueCube = ({ faces, perspective, themeName, height, width }: ObliqueCubeProps) => {
     
     const { faceColors, frameColor } = useThemeAssets(themeName)

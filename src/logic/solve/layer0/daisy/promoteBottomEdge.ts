@@ -18,6 +18,12 @@ const promotions = [
 
 type P = { row: 0, col: 1 } | { row: 1, col: 0 } | { row: 0, col: 2 } | { row: 2, col: 1 }
 
+/**
+ * Promotes a bottom-edge petal into the daisy by aligning the top displacement first.
+ *
+ * @param cube - Starting cube state.
+ * @param param1 - Bottom-edge coordinate to promote.
+ */
 export const promoteBottomEdge = (cube: CubeFaces, { row, col }: P) => {
     const builder = newSequenceBuilder(cube)
     while(!canPromote(row, col, builder.getCube())){

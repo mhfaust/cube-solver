@@ -11,6 +11,11 @@ import {
 } from '../cubeUtils'
 
 
+/**
+ * Returns a transform that rotates the selected Y layer in negative direction.
+ *
+ * @param y - Layer index.
+ */
 export const yNeg =  (y: 0|1|2) => {
 
     const rowY = row(y)
@@ -24,4 +29,3 @@ export const yNeg =  (y: 0|1|2) => {
         bottom: counterClockwiseIf(y === 2),
     })
 }
-

@@ -1,9 +1,14 @@
 import { CubeFaces } from "@/logic/newCube";
-import { BlockProps } from "../components/Block/Block";
+import { BlockProps } from "@/components/Block/Block";
 import { RIGHT, LEFT, TOP, BOTTOM, FRONT, BACK } from "@/logic/constants";
 
 export type AllBlockColors = Record<0|1|2, Record<0|1|2, Record<0|1|2, BlockProps['initialFaceColors']>>>
 
+/**
+ * Maps solved cube face colors onto every rendered block position and visible side.
+ *
+ * @param faces - Cube face state used to derive per-block face colors.
+ */
 export const mapAllBlockColors = (faces: CubeFaces): AllBlockColors  => ({
     0: {
         0: {

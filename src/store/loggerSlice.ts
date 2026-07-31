@@ -11,6 +11,9 @@ export type LoggerSlice = {
   setFingersOn: (n: number) => void;
 }
 
+/**
+ * Zustand store for transient UI logging and touch-state debug counters.
+ */
 export const useLoggerStore = create<LoggerSlice>()(
     persist(
       (set) => {
@@ -29,4 +32,3 @@ export const useLoggerStore = create<LoggerSlice>()(
       }
     )
 ) 
-

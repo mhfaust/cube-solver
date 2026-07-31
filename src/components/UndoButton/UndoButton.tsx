@@ -5,6 +5,9 @@ import { MoveCode } from "@/utils/moveCodes";
 import { countMutations } from "@/utils/history";
 
 
+/**
+ * Undo control that replays the inverse of the most recent move.
+ */
 const UndoButton = () => {
   const { undoLastMove, moves, isRotating }  = useCubeStore();
   const moveCount = countMutations(moves)

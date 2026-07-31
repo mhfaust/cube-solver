@@ -21,6 +21,11 @@ const southRow = nthRowOfEachFace(['bottom'])
 
 const eyes: [0|1|2, 0|1|2, 0|1|2] = [0,1,2]
 
+/**
+ * Renders a colored multiline string representation of cube faces for terminal output.
+ *
+ * @param cube - Cube face state to render.
+ */
 export const printCube = (cube: CubeFaces) => {
     
     const size = cube['front'].length

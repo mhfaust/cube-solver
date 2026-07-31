@@ -4,6 +4,12 @@ type ArrowProps = {
     moveCode: MoveCode
     width: number;
 }
+/**
+ * Inline SVG arrow used between move-sequence cube snapshots.
+ *
+ * @param props.moveCode - Move label shown in the center circle.
+ * @param props.width - Render width in pixels.
+ */
 export default function Arrow ({ moveCode, width }: ArrowProps) {
   return (
     <svg 

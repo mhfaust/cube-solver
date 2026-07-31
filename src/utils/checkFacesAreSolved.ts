@@ -1,5 +1,10 @@
 import { CubeFaces } from "@/logic/newCube"
 
+/**
+ * Returns true when every face of the cube is a single uniform color.
+ *
+ * @param faces - Cube face state to validate.
+ */
 export const checkFacesAreSolved = (faces: CubeFaces) => {
   return Object.values(faces).every(face => new Set(face.flat(2)).size === 1)
 }

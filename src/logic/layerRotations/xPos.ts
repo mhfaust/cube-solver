@@ -11,6 +11,11 @@ import {
     bottomFace,
 } from '../cubeUtils'
 
+/**
+ * Returns a transform that rotates the selected X layer in positive direction.
+ *
+ * @param x - Layer index.
+ */
 export const xPos = (x: 0|1|2) => {
 
     const xFromEnd = 2 - x as 0|1|2

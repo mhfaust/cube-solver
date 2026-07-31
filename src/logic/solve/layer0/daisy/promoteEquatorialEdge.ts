@@ -31,6 +31,12 @@ const canPromote = (col: 0 | 2, faceName: EquatorialEdge, cube: CubeFaces ) => {
     return displacedTopEdge[faceName as EquatorialEdge][col](cube) !== color  
 }
 
+/**
+ * Promotes an equatorial petal into the daisy after rotating the top layer to a safe slot.
+ *
+ * @param initialCube - Starting cube state.
+ * @param param1 - Equatorial edge face and column to promote.
+ */
 export const promoteEquatorialEdge = (
             initialCube: CubeFaces, 
             { faceName, col }: { faceName: EquatorialEdge, col: 0 | 2 }

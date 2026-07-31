@@ -1,6 +1,9 @@
 import { useRouter, usePathname } from "next/navigation";
 import { useMemo } from "react";
 
+/**
+ * Central route definitions used by navigation helpers and links.
+ */
 export const routes = {
     myCube: '/my-cube',
     gamePlays: '/leaderboard',
@@ -9,7 +12,9 @@ export const routes = {
 }
 
 
-
+/**
+ * Provides memoized route navigation callbacks backed by Next.js router push.
+ */
 export const useNavigation = () => {
 
     const { push } = useRouter();
@@ -27,6 +32,9 @@ export const useNavigation = () => {
     return { goto }
 }
 
+/**
+ * Returns a matcher function that checks whether the current pathname starts with a root path.
+ */
 export const useIsCurrentRoot =  () => {
     const pathname = usePathname();
 

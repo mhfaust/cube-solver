@@ -10,6 +10,11 @@ const colorMap: Record<string, FaceColorCode> = {
     o: COLOR_Z_1
 }
 
+/**
+ * Parses compact face strings into cube-face matrices for tests.
+ *
+ * @param faces - Face strings keyed by face name.
+ */
 export const parseFaces = (faces: Record<FaceName, string>) => {
     return Object.keys(faces).reduce((cube, faceName) => {
         const facesStr = faces[faceName as FaceName];

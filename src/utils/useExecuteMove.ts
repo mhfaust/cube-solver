@@ -6,6 +6,9 @@ import { MutableRefObject } from "react"
 import { CubeFacesTransform } from "@/logic/nextCube"
 import { faceTransformsByNotation } from "@/logic/layerRotations/advancedNotation"
 
+/**
+ * Lookup table of notation to model-space transforms used for persistent cube state.
+ */
 export const modelSpinFunctions: Record<MoveCode, (cubeGrid: CubeGrid) => CubeGrid> = {
 	'U': layerModelRotator('y', 2, '-'),
 	'Ui': layerModelRotator('y', 2, '+'),
@@ -33,6 +36,9 @@ export const modelSpinFunctions: Record<MoveCode, (cubeGrid: CubeGrid) => CubeGr
 	'Si': layerModelRotator('z', 1, '+')
 }
 
+/**
+ * Lookup table of notation to logical face transforms used for cube-face state.
+ */
 export const facesSpinFunctions: Record<MoveCode, CubeFacesTransform> = {
 	'U': faceTransformsByNotation.U, 
 	'Ui': faceTransformsByNotation.Ui,
@@ -60,6 +66,9 @@ export const facesSpinFunctions: Record<MoveCode, CubeFacesTransform> = {
 	'Si': faceTransformsByNotation.Si,
 };
 
+/**
+ * Lookup table of notation to renderer transforms used for animated transitions.
+ */
 export const renderingSpinFunctions: Record<
 	MoveCode, (cubeGrid: CubeGrid, animationTime: number, isRotating: MutableRefObject<boolean>) => void
 > = {

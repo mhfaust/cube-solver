@@ -22,6 +22,9 @@ export type RecordsSlice = {
   pushRecord: (game: CubeHistory) => void;
 }
 
+/**
+ * Zustand store for persisted completed game records.
+ */
 export const useRecordsStore = create<RecordsSlice>()(
     persist(
       (set) => {
@@ -36,4 +39,3 @@ export const useRecordsStore = create<RecordsSlice>()(
       }
     )
 ) 
-

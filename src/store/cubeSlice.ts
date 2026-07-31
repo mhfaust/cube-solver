@@ -46,6 +46,9 @@ export type CubeSlice = {
   undoLastMove: (animationTime: number) => void,
 }  
 
+/**
+ * Zustand store holding cube model state, face state, and move execution helpers.
+ */
 export const useCubeStore = create<CubeSlice>()(
   persist(
     (set, get) => { 

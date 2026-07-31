@@ -4,6 +4,14 @@ import { getBlockPosition } from "@/utils/grid"
 import { MoveCode } from "@/utils/moveCodes"
 import { CubeGrid } from "@/store/cubeSlice"
 
+/**
+ * Resolves a two-finger mixed swipe into a front or back face rotation.
+ *
+ * @param grid - Cube block grid.
+ * @param downPointer - Active finger pointer-down event.
+ * @param upPointer - Active finger pointer-up event.
+ * @param otherDownPointer - Second finger pointer-down event.
+ */
 const spinFrontOrBack = (
   grid: CubeGrid,
   downPointer: ThreeEvent<PointerEvent>,

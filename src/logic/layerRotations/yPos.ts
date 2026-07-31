@@ -11,6 +11,11 @@ import {
 } from '../cubeUtils'
 
 
+/**
+ * Returns a transform that rotates the selected Y layer in positive direction.
+ *
+ * @param y - Layer index.
+ */
 export const yPos = (y: 0|1|2) => {
 
     const rowY = row(y)

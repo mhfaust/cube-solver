@@ -4,6 +4,13 @@ import { AxisDirection, swipeInfo } from "./pointers"
 import { MoveCode } from "@/utils/moveCodes"
 import { CubeGrid } from "@/store/cubeSlice"
 
+/**
+ * Resolves a single-finger swipe on the cube into a row/column layer move.
+ *
+ * @param grid - Cube block grid.
+ * @param downPointer - Pointer-down event.
+ * @param upPointer - Pointer-up event.
+ */
 const spinRowXOrY = (
     grid: CubeGrid, 
     downPointer: ThreeEvent<PointerEvent>, 

@@ -8,6 +8,13 @@ type PerspectiveArrowProps = {
     onClick: MouseEventHandler<SVGSVGElement>
 }
 
+/**
+ * Arrow icon that represents and selects a cube perspective orientation.
+ *
+ * @param props.perspective - Perspective this arrow points to.
+ * @param props.className - CSS classes applied to the SVG.
+ * @param props.onClick - Click handler for selection.
+ */
 const PerspectiveArrow = ({ perspective, className, onClick }: PerspectiveArrowProps) => {
     const [v, h] = perspective.split('-') as [FaceName, FaceName];
     const vScale = v === BOTTOM ? -1 : 1;

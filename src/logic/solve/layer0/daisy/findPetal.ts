@@ -11,6 +11,11 @@ const bottomEdgeCoords: Pick<TileLocator, 'col' | 'row'>[] = [
 
 const eyes: (0|1|2)[] = [0,1,2]
 
+/**
+ * Finds the next unsolved daisy petal candidate from equator, bottom, then north/south edges.
+ *
+ * @param cube - Cube state to inspect.
+ */
 export const findPetal = (cube: CubeFaces): TileLocator | undefined => {
     const petalColor = cube.bottom[1][1]
     //equatorial edges:
@@ -37,4 +42,3 @@ export const findPetal = (cube: CubeFaces): TileLocator | undefined => {
         }
     }
 }
-

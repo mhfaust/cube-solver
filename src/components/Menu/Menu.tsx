@@ -5,6 +5,9 @@ import { MouseEventHandler, useState } from "react";
 import clsx from "clsx";
 import { useThemeStore } from "@/store/themeSlice";
 
+/**
+ * Theme picker menu that toggles available themes and persists the selected value.
+ */
 const Menu = () => {
   const [isOpen, setIsOpen] = useState(false);
 

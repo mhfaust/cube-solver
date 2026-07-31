@@ -5,6 +5,9 @@ import StartStop from "@/components/Timer/StartStop"
 import { stopWatchTime } from "@/utils/displayTime"
 import { useGameControlsStore } from "@/store/gameControlsSlice"
 
+/**
+ * Timer display and control surface for active gameplay sessions.
+ */
 const Timer = () => {
 
   const timerRef = useRef<NodeJS.Timeout>()

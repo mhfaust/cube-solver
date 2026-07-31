@@ -14,6 +14,11 @@ import {
 } from '../cubeUtils'
 
 
+/**
+ * Returns a transform that rotates the selected Z layer in negative direction.
+ *
+ * @param z - Layer index.
+ */
 export const zNeg = (z: 0|1|2) => {
 
     const zFromEnd = 2 - z as 0|1|2

@@ -36,6 +36,11 @@ import { useThemeStore } from "@/store/themeSlice";
 const { PI, abs } = Math;
 const bgGeometry = new PlaneGeometry(50, 50);
 
+/**
+ * Interactive cube scene content with gesture/keyboard handling and animated move execution.
+ *
+ * @param props.canvas - Canvas ref used by the containing scene.
+ */
 const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) => {
 	const { 
 		cubeGrid, 
@@ -298,6 +303,9 @@ const BlocksContainer = ({ canvas }:{ canvas: RefObject<HTMLCanvasElement> }) =>
 	)
 };
 
+/**
+ * Top-level 3D cube canvas container.
+ */
 const Cube = () => { 
 	const canvas = useRef<HTMLCanvasElement>(null);
 	return (

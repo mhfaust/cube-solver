@@ -9,6 +9,9 @@ import { U, Ui, D, Di, L, Li, R, Ri, B, Bi, F, Fi } from '../layerRotations/adva
 
 
 
+/**
+ * Returns terminal keyboard shortcuts mapped to face/cube transform functions.
+ */
 export const keyTransforms = () => ({
     u: U,
     U: Ui,

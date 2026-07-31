@@ -14,6 +14,9 @@ import { useGameControlsStore } from "./gameControlsSlice";
 // export const useIsRotating = () => useAppStore(selectProp('isRotating'));
 // export const useHistory = () => useAppStore(selectProp('history')); 
 
+/**
+ * Selector hook that derives the current gameplay mode from timer state.
+ */
 export const usePlayMode = () => {
   return useGameControlsStore(({ startTime, completionTime }) => {
     return startTime && completionTime
@@ -22,6 +25,9 @@ export const usePlayMode = () => {
   });
 };
 
+/**
+ * Selector hook that returns whether the current cube face state is solved.
+ */
 export const useIsSolved = () => useCubeStore(({ faces }) => {
   return checkFacesAreSolved(faces)
 })

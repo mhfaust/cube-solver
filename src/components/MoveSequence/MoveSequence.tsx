@@ -15,6 +15,14 @@ type MoveSequenceProps = PropsWithChildren<{
 
 const cubeSize = 30;
 
+/**
+ * Recursively renders a cube state walkthrough for a move sequence.
+ *
+ * @param props.initialFaces - Starting cube faces before sequence playback.
+ * @param props.sequence - Ordered move list to visualize.
+ * @param props.perspective - Perspective used to render each cube snapshot.
+ * @param props.themeName - Optional theme used for cube colors.
+ */
 const MoveSequence = ({ initialFaces, sequence, perspective, themeName = 'dark' }: MoveSequenceProps) => {
     if(!sequence.length) {
         return (

@@ -4,6 +4,9 @@ import clsx from 'clsx'
 import { useGameControlsStore } from '@/store/gameControlsSlice';
 import { useCubeStore } from '@/store/cubeSlice';
 
+/**
+ * Start/stop button that scrambles before start and stops the timer during play.
+ */
 const StartStop = () => {
   const { startTime, startTimer, stopTimer } = useGameControlsStore()
   const { initializeGame } = useCubeStore();

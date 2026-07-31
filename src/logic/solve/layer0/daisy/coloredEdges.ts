@@ -4,6 +4,12 @@ import { FaceColorCode, faceNames } from '../../../constants'
 const edgeCoords = [[0,1],[1,0],[1,2],[2,1]]
 
 
+/**
+ * Lists all edge tile coordinates across faces that match a target color.
+ *
+ * @param color - Edge color to search for.
+ * @param cube - Cube state to inspect.
+ */
 export const coloredEdges = (color: FaceColorCode, cube: CubeFaces) => {
     return faceNames.map(faceName => {
         const face = cube[faceName]

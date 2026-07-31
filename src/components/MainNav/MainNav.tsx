@@ -7,6 +7,9 @@ import { routes, useIsCurrentRoot } from '@/utils/useNavigation';
 import { clsx } from 'clsx';
 
 
+/**
+ * Bottom navigation linking to cube, leaderboard, and theme pages.
+ */
 const MainNav = () => {
 
   const isSelected = useIsCurrentRoot();

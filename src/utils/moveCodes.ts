@@ -1,4 +1,6 @@
-
+/**
+ * Supported move notation codes for face, slice, and whole-cube rotations.
+ */
 export const moveCodes =  [
 	'U' , 'Ui' , 'D' , 'Di' , 'E' , 'Ei' ,
 	'R' , 'Ri' , 'L' , 'Li' , 'M' , 'Mi' ,
@@ -12,8 +14,16 @@ const inverseMoves: Record<MoveCode, MoveCode> = {
   'U':'Ui','D':'Di','E':'Ei','R':'Ri','L':'Li','M':'Mi','F':'Fi','B':'Bi','S':'Si','X':'Xi','Y':'Yi','Z':'Zi',
   'Ui':'U','Di':'D','Ei':'E','Ri':'R','Li':'L','Mi':'M','Fi':'F','Bi':'B','Si':'S','Xi':'X','Yi':'Y','Zi':'Z',
 }
+/**
+ * Returns the inverse move for a given notation.
+ *
+ * @param move - Move code to invert.
+ */
 export const inverse = (move: MoveCode) => inverseMoves[move]
 
+/**
+ * Supported keyboard inputs that map to move codes.
+ */
 export const keyCodes = [
 	'u', 'U', 'd', 'D', 'e', 'E',
 	'l', 'L', 'r', 'R', 'm', 'M',
@@ -48,6 +58,11 @@ export const keyCodes = [
 export type KeyCode = typeof keyCodes[number]
 
 const ks = new Set(keyCodes)
+/**
+ * Narrows a string into a supported key code when the key is recognized.
+ *
+ * @param s - Raw keyboard key value.
+ */
 export const asKeyCode = (s: string): KeyCode | undefined => {
 	if(ks.has(s as KeyCode)) {
 		return s as KeyCode
@@ -119,6 +134,9 @@ export const asKeyCode = (s: string): KeyCode | undefined => {
 	// 'z': 'Z',
 	// 'Z': 'Zi'
 // }
+/**
+ * Maps supported keyboard keys to cube move notation.
+ */
 export const keyMoves: Record<KeyCode, MoveCode> = {
 	'u': 'U',
 	'U': 'Ui',
@@ -151,5 +169,4 @@ export const keyMoves: Record<KeyCode, MoveCode> = {
 	'z': 'Z',
 	'Z': 'Zi'
 }
-
 

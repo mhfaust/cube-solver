@@ -3,6 +3,13 @@ import { swipeInfo } from "./pointers"
 import { getBlockPosition } from "@/utils/grid"
 import { CubeGrid } from "@/store/cubeSlice"
 
+/**
+ * Determines whether two swipes are parallel on the same cube row/column and should be treated as coincident.
+ *
+ * @param grid - Cube block grid.
+ * @param finger1 - Start/end events for the first swipe.
+ * @param finger2 - Start/end events for the second swipe.
+ */
 const swipesAreCoincident = (
   grid: CubeGrid,
   finger1: [ThreeEvent<PointerEvent>, ThreeEvent<PointerEvent>], 

@@ -38,4 +38,9 @@ class SequenceBuilder {
     }
 }
 
+/**
+ * Creates a fluent sequence builder that applies notation functions while tracking the move stack.
+ *
+ * @param cube - Initial cube state.
+ */
 export const  newSequenceBuilder = (cube: CubeFaces) => new SequenceBuilder(cube)

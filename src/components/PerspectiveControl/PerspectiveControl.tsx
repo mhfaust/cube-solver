@@ -9,6 +9,12 @@ type PerspectiveControlProps = {
     setPerspective: (p: ObliquePerspective) => void;
 }
 
+/**
+ * Four-way selector for choosing the oblique cube viewing perspective.
+ *
+ * @param props.perspective - Currently selected perspective.
+ * @param props.setPerspective - Callback used to update perspective.
+ */
 const PerspectiveControl = ({
     perspective,
     setPerspective

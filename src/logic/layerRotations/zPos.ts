@@ -14,6 +14,11 @@ import {
 } from '../cubeUtils'
 
 
+/**
+ * Returns a transform that rotates the selected Z layer in positive direction.
+ *
+ * @param z - Layer index.
+ */
 export const zPos = (z: 0|1|2) => {
 
     const lastIndex = 2

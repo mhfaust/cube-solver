@@ -7,6 +7,9 @@ export type ThemeSlice = {
   setThemeName: (name: ThemeName) => void;
 };
 
+/**
+ * Zustand store for the active UI theme selection.
+ */
 export const useThemeStore = create<ThemeSlice>()(
   persist(
     (set) => { return ({

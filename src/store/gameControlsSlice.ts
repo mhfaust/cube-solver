@@ -12,6 +12,9 @@ export type GameControlsSlice = {
 
 export type PlayMode = 'casual' | 'in-play' | 'complete'
 
+/**
+ * Zustand store for game timing lifecycle controls.
+ */
 export const useGameControlsStore = create<GameControlsSlice>()(
     persist(
     (set) => {

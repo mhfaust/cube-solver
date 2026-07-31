@@ -37,6 +37,9 @@ export const Mi =  xNeg(1)
 export const S =  zPos(1)
 export const Si =  zNeg(1)
 
+/**
+ * Move-notation lookup table used by runtime execution and gesture mapping.
+ */
 export const faceTransformsByNotation = {
     U,
     Ui,

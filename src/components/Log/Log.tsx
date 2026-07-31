@@ -4,6 +4,9 @@ import { useLoggerStore } from '@/store/loggerSlice'
 import styles from './Log.module.css'
 
 
+/**
+ * Expandable debug log viewer synchronized with the logger store.
+ */
 const Log = () => {
   
   const { toggleLog, messages, logIsOpen } = useLoggerStore()

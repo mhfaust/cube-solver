@@ -2,6 +2,12 @@ import { ThreeEvent } from "@react-three/fiber"
 import { rotationDirection } from "./rotationDirection"
 import { V } from "@/utils/vectors"
 
+/**
+ * Compares the vector between two fingers before and after movement to determine spin direction.
+ *
+ * @param finger1 - Start/end events for the first finger.
+ * @param finger2 - Start/end events for the second finger.
+ */
 const twoFingerSpinDirection = (
   finger1: [ThreeEvent<PointerEvent>, ThreeEvent<PointerEvent>], 
   finger2: [ThreeEvent<PointerEvent>, ThreeEvent<PointerEvent>]
